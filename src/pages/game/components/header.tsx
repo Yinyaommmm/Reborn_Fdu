@@ -3,7 +3,7 @@ import { FC } from "react";
 import { useMobileFullscreen } from "@/hooks/useMobileFullScreen";
 
 const GameHeader: FC = () => {
-    const { isFullscreen, enterFullscreen, exitFullscreen, isSupported } =
+    const { isFullscreen, enterFullscreen, exitFullscreen } =
         useMobileFullscreen();
     return (
         <div className="relative w-full h-[8vh] bg-gray-300 z-50">
