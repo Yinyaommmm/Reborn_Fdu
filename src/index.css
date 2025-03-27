@@ -5,3 +5,7 @@ body, html {
     -webkit-overflow-scrolling: auto; /* 旧版属性 */
     overflow: hidden;
   }
+
+@theme {
+  --color-decorate-border: #060706;
+}

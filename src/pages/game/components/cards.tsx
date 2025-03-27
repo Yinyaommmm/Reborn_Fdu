@@ -133,6 +133,7 @@ const GameCards: FC = () => {
                             opacity: { duration: 0.5 },
                         }}
                         customZIndex={3 - index}
+                        border={activeIndex === index}
                     >
                         {card}
                     </GameCard>
