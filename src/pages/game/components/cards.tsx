@@ -13,8 +13,10 @@ import { calYFromDeltaX } from "@/utils/circle";
 
 const viewportWidth = window.innerWidth;
 const slideDistanceScale = 2;
-const rightExit = calYFromDeltaX(viewportWidth, -8, 1000);
 const radius = 10000;
+const xExit = viewportWidth;
+const rightExit = calYFromDeltaX(radius, -8, xExit);
+const leftExit = calYFromDeltaX(radius, -8, -xExit);
 const rights = [24, 24, 24];
 const tops = [0, 0, 0];
 const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
@@ -26,6 +28,9 @@ const GameCards: FC = () => {
     const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
     const [activeIndex, setActiveIndex] = useState(0);
     const [isAnimating, setIsAnimating] = useState(false);
+    const [exitDirection, setExitDirection] = useState<"right" | "left">(
+        "right",
+    );
 
     const x = useMotionValue(0);
     const delta = useTransform(x, (value) => {
@@ -45,10 +50,14 @@ const GameCards: FC = () => {
         setCards((prev) => [...prev.slice(1), prev[prev.length - 1] + 1]);
         // 重置动画状态
         setTimeout(() => {
+            console.log("nihao1");
+
             setActiveIndex(0);
             setIsAnimating(false);
         }, 500);
     };
+
+    console.log(exitDirection);
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
@@ -61,6 +70,9 @@ const GameCards: FC = () => {
             if (!isDragging.get() || isAnimating) return;
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
+            console.log(deltaX);
+            if (deltaX > 0) setExitDirection("right");
+            else setExitDirection("left");
             x.set(deltaX * slideDistanceScale);
             if (
                 deltaX * slideDistanceScale >= triggerDistance ||
@@ -124,7 +136,11 @@ const GameCards: FC = () => {
                         }}
                         backgroundColor={colors[card % 3]}
                         exit={{
-                            transform: `translateX(1000px) translateY(${-rightExit.deltaY}px) rotate(${rightExit.rotate}deg)`,
+                            transform:
+                                exitDirection === "right"
+                                    ? `translateX(${xExit}px) translateY(${-rightExit.deltaY}px) rotate(${rightExit.rotate}deg)`
+                                    : `translateX(${-xExit}px) translateY(${-leftExit.deltaY}px) rotate(${leftExit.rotate}deg)`,
+                            transition: { duration: 0.4 },
                         }}
                         transition={{
                             duration: 0.3,
