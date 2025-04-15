@@ -9,6 +9,7 @@ import { FC, useEffect, useState } from "react";
 
 import GameCard from "./card";
 
+import { $Game } from "@/store/game";
 import { calYFromDeltaX } from "@/utils/circle";
 
 const viewportWidth = window.innerWidth;
@@ -17,7 +18,7 @@ const radius = 10000;
 const xExit = viewportWidth;
 const rightExit = calYFromDeltaX(radius, -8, xExit);
 const leftExit = calYFromDeltaX(radius, -8, -xExit);
-const rights = [24, 24, 24];
+const rights = [32, 32, 32];
 const tops = [0, 0, 0];
 const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
 const activeRotate = 8;
@@ -27,7 +28,12 @@ const triggerDistance = viewportWidth / 3;
 const GameCards: FC = () => {
     const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
     const [activeIndex, setActiveIndex] = useState(0);
-    const [isAnimating, setIsAnimating] = useState(false);
+    const isAnimating = $Game.use((state) => state.isCardAnimating);
+    const setIsAnimating = (v: boolean) => {
+        $Game.update("update isAnimating", (draft) => {
+            draft.isCardAnimating = v;
+        });
+    };
     const [exitDirection, setExitDirection] = useState<"right" | "left">(
         "right",
     );
@@ -50,11 +56,9 @@ const GameCards: FC = () => {
         setCards((prev) => [...prev.slice(1), prev[prev.length - 1] + 1]);
         // 重置动画状态
         setTimeout(() => {
-            console.log("nihao1");
-
             setActiveIndex(0);
             setIsAnimating(false);
-        }, 500);
+        }, 1000);
     };
 
     console.log(exitDirection);
@@ -70,14 +74,10 @@ const GameCards: FC = () => {
             if (!isDragging.get() || isAnimating) return;
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
-            console.log(deltaX);
             if (deltaX > 0) setExitDirection("right");
             else setExitDirection("left");
             x.set(deltaX * slideDistanceScale);
-            if (
-                deltaX * slideDistanceScale >= triggerDistance ||
-                deltaX * slideDistanceScale <= -triggerDistance
-            ) {
+            if (deltaX >= triggerDistance || deltaX <= -triggerDistance) {
                 handleSwipeComplete();
                 isDragging.set(false);
                 x.set(0);
@@ -108,7 +108,7 @@ const GameCards: FC = () => {
     }, [isAnimating]);
 
     return (
-        <div className="relative h-[60vh] mt-[15vw] w-full">
+        <div className="relative h-[60vh] mt-[10vw] w-full">
             <AnimatePresence mode="popLayout">
                 {cards.slice(0, 3).map((card, index) => (
                     <GameCard
