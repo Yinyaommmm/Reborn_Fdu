@@ -98,7 +98,7 @@ export const GameChoices: FC = () => {
     }, [exitDirection, isChoiceAnimating]);
 
     return (
-        <div className="relative mt-[4vh]">
+        <div className="relative mt-[0vh]">
             <AnimatePresence mode="sync">
                 {!exitX && (
                     <motion.div
