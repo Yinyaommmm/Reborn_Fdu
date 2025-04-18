@@ -4,7 +4,7 @@ import { useMobileFullscreen } from "@/hooks/useMobileFullScreen";
 import { useViewport } from "@/hooks/useViewPort";
 
 const GameHeader: FC = () => {
-    const { isFullscreen, enterFullscreen, exitFullscreen } =
+    const { isFullscreen, enterFullscreen, exitFullscreen, isSupported } =
         useMobileFullscreen();
     const { vw, vh } = useViewport();
     return (
@@ -15,7 +15,7 @@ const GameHeader: FC = () => {
                     isFullscreen ? exitFullscreen() : enterFullscreen()
                 }
             >
-                全屏
+                {isSupported() ? "全屏" : "不支持"}
             </button>
             <p>
                 当前视口：{vw}px x {vh}px
