@@ -8,20 +8,22 @@ import {
     ResultA,
     ResultLevelMap,
     ResultB,
-    ResutlBLevelMap,
-    ResutlBLevel,
     BgCategoryMap,
     BgCategory,
     ValidMainProps,
     MainProp,
+    ResultBLevelMap,
+    ResultBLevelType,
 } from "../type/type";
 
 import { ReadErrorFactory } from "@/error/read-error";
 import {
     BaseProbability,
     RequirePropLevel,
+    ResultBLevel,
     ResultLevel,
     ResultLevelGear,
+    ValidResultBLevel,
     ValidResultLevelGear,
 } from "@/type/config";
 
@@ -81,9 +83,10 @@ export function createEvtFromStroyEvent(
         storyEvt.B管理M,
         index,
     );
-    evt.isHighlight = storyEvt.高光事件 == "是";
-    evt.bgCategory = BgCategoryMap.get(storyEvt.背景图类别) ?? BgCategory.NONE;
-    evt.specialEffect = storyEvt.特殊影响;
+    evt.isHighlight = extractIsHighlight(storyEvt.高光事件, index);
+
+    evt.bgCategory = extractBgCategory(storyEvt.背景图类别, index);
+    evt.specialEffect = extractSpecialEffect(storyEvt.特殊影响, index);
     return evt;
 }
 function extractID(storyID: string, index: number) {
@@ -366,7 +369,6 @@ function extractEndingB(storyEndingB: string, index: number): string {
     }
     return storyEndingB.trim();
 }
-
 function extractResultA(
     storyH: string,
     storyL: string,
@@ -434,14 +436,84 @@ function extractResultA(
 
     return res;
 }
-
-// 待处理TODO
-function extractResultB(H: string, L: string, A: string, C: string, M: string) {
+function extractResultB(
+    storyH: string,
+    storyL: string,
+    storyA: string,
+    storyC: string,
+    storyM: string,
+    index: number,
+): ResultB {
     const res = new ResultB();
-    res.H = ResutlBLevelMap.get(H) ?? ResutlBLevel.Same;
-    res.L = ResutlBLevelMap.get(L) ?? ResutlBLevel.Same;
-    res.A = ResultLevelMap.get(A as ResultLevelGear) ?? ResultLevel.get("0")!;
-    res.C = ResultLevelMap.get(C as ResultLevelGear) ?? ResultLevel.get("0")!;
-    res.M = ResultLevelMap.get(M as ResultLevelGear) ?? ResultLevel.get("0")!;
+    const getResultBLevel = (value: string, prop: string): ResultBLevel => {
+        if (value === "") {
+            return ResultBLevelMap.get("Same")!;
+        }
+        if (!ValidResultBLevel.includes(value)) {
+            throw ReadErrorFactory(
+                index,
+                "resultB",
+                `无效的 ${prop} 奖励等级：${value}`,
+            );
+        }
+        const level = ResultBLevelMap.get(value as ResultBLevelType)!;
+        return level;
+    };
+
+    const getResultLevel = (value: string, prop: string): [number, number] => {
+        if (value === "") {
+            return ResultLevelMap.get("0")!;
+        }
+        if (!ValidResultLevelGear.includes(value)) {
+            throw ReadErrorFactory(
+                index,
+                "resultB",
+                `无效的 ${prop} 奖励等级：${value}`,
+            );
+        }
+        const level = ResultLevelMap.get(value as ResultLevelGear)!;
+        return level;
+    };
+
+    res.H = getResultBLevel(storyH.toString(), "H");
+    res.L = getResultBLevel(storyL.toString(), "L");
+    res.A = getResultLevel(storyA.toString(), "A");
+    res.C = getResultLevel(storyC.toString(), "C");
+    res.M = getResultLevel(storyM.toString(), "M");
+
     return res;
+}
+function extractIsHighlight(storyIsHighlight: string, index: number): boolean {
+    if (storyIsHighlight === "是") return true;
+    if (storyIsHighlight === "否" || storyIsHighlight === "") return false;
+
+    throw ReadErrorFactory(
+        index,
+        "isHighlight",
+        `无效的高光事件值：${storyIsHighlight}，应为“是”或“否”`,
+    );
+}
+function extractBgCategory(storyBgCategory: string, index: number): BgCategory {
+    const value = BgCategoryMap.get(storyBgCategory);
+    if (storyBgCategory === "") {
+        return BgCategoryMap.get("无")!;
+    }
+    if (!value) {
+        throw ReadErrorFactory(
+            index,
+            "bgCategory",
+            `无效的背景图类别：${storyBgCategory}`,
+        );
+    }
+    return value;
+}
+function extractSpecialEffect(
+    storySpecialEffect: string,
+    index: number,
+): string {
+    const trimmed = storySpecialEffect.trim();
+    if (trimmed !== "") {
+        console.log(`第${index}活动存在specialEffect：${trimmed}`);
+    }
+    return trimmed;
 }

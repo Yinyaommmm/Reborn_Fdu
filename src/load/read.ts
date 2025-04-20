@@ -18,6 +18,6 @@ export const ReadExcelFromPublic = async () => {
     console.log("origin", jsonArr);
     console.log(
         "convert",
-        events.map((item) => item.resultA),
+        events.map((item) => item.specialEffect),
     );
 };

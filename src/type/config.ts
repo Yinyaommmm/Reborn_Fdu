@@ -40,14 +40,24 @@ export const ResultLevel: Map<ResultLevelGear, [number, number]> = new Map([
     ["3", [3, 3]],
     ["4", [4, 4]],
 ]);
+
 // TODO: 幸运值影响掷骰子次数档位
 
 // TODO: 幸运值将影响创造值能否影响区间下限的概率档位
 
 // 选项B结算时继承A的比例
-export enum ResutlBLevel {
-    Same,
-    Half,
-    Punish,
-    HeavyPunish,
+export enum ResultBLevel {
+    Same = 1,
+    Half = 0.5,
+    Punish = 0.3,
+    HeavyPunish = 0.1,
+    None = 0,
 }
+
+export const ValidResultBLevel = [
+    "Same",
+    "Half",
+    "Punish",
+    "HeavyPunish",
+    "NONE",
+];

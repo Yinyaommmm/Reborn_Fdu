@@ -1,4 +1,9 @@
-import { BaseProbability, RequirePropLevel, ResultLevel } from "./config";
+import {
+    BaseProbability,
+    RequirePropLevel,
+    ResultBLevel,
+    ResultLevel,
+} from "./config";
 
 export interface StoryEvent {
     A创造C: string;
@@ -94,24 +99,27 @@ export class ResultA {
     C: [number, number] = ResultLevel.get("0")!;
     M: [number, number] = ResultLevel.get("0")!;
 }
-export enum ResutlBLevel {
-    Same,
-    Half,
-    Punish,
-    HeavyPunish,
-}
-export const ResutlBLevelMap = new Map<string, ResutlBLevel>(
-    Object.entries(ResutlBLevel)
-        .filter(([key]) => isNaN(Number(key))) // 只保留字符串键
-        .map(([key, value]) => [key, value as ResutlBLevel]),
-);
+
 export class ResultB {
-    H: ResutlBLevel = ResutlBLevel.Same;
-    L: ResutlBLevel = ResutlBLevel.Same;
+    H: ResultBLevel = ResultBLevel.Same;
+    L: ResultBLevel = ResultBLevel.Same;
     A: [number, number] = ResultLevel.get("0")!;
     C: [number, number] = ResultLevel.get("0")!;
     M: [number, number] = ResultLevel.get("0")!;
 }
+export type ResultBLevelType =
+    | "Same"
+    | "Half"
+    | "Punish"
+    | "HeavyPunish"
+    | "NONE";
+export const ResultBLevelMap = new Map<ResultBLevelType, ResultBLevel>([
+    ["Same", ResultBLevel.Same],
+    ["Half", ResultBLevel.Half],
+    ["Punish", ResultBLevel.Punish],
+    ["HeavyPunish", ResultBLevel.HeavyPunish],
+    ["NONE", ResultBLevel.None],
+]);
 export enum BgCategory {
     NONE,
     CAMPUS,
