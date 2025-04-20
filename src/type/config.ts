@@ -13,6 +13,14 @@ export enum RequirePropLevel {
 }
 
 // 事件触发基础概率
+export type ProbilityGear = "TRIVIAL" | "EASY" | "MEDIUM" | "HARD" | "VERYHARD";
+export const ValidProbilityGear = [
+    "TRIVIAL",
+    "EASY",
+    "MEDIUM",
+    "HARD",
+    "VERYHARD",
+];
 export enum BaseProbability {
     TRIVIAL = 1,
     EASY = 0.6,

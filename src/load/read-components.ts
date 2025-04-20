@@ -1,10 +1,9 @@
 import {
     StoryEvent,
-    Event,
+    ReadableEvent,
     EventCategoryMap,
     EventCategory,
     RequirePropLevelMap,
-    BaseProbabilityMap,
     ResultA,
     ResultLevelMap,
     ResultB,
@@ -18,11 +17,12 @@ import {
 
 import { ReadErrorFactory } from "@/error/read-error";
 import {
-    BaseProbability,
+    ProbilityGear,
     RequirePropLevel,
     ResultBLevel,
     ResultLevel,
     ResultLevelGear,
+    ValidProbilityGear,
     ValidResultBLevel,
     ValidResultLevelGear,
 } from "@/type/config";
@@ -30,8 +30,8 @@ import {
 export function createEvtFromStroyEvent(
     storyEvt: StoryEvent,
     index: number,
-): Event {
-    const evt = new Event();
+): ReadableEvent {
+    const evt = new ReadableEvent();
     evt.id = extractID(storyEvt.编号, index);
     evt.title = extractTitle(storyEvt.主题, index);
     evt.required = extractRequired(storyEvt.可选性, index);
@@ -300,16 +300,16 @@ function extractPrerequisites(storyPrereq: string, index: number): number[] {
 function extractBaseProbability(
     storyBaseProb: string,
     index: number,
-): BaseProbability {
-    const mapped = BaseProbabilityMap.get(storyBaseProb.replace(" ", ""));
-    if (!mapped) {
+): ProbilityGear {
+    const bp = storyBaseProb.replace(" ", "");
+    if (!ValidProbilityGear.includes(bp)) {
         throw ReadErrorFactory(
             index,
             "baseProbability",
             `基础概率“${storyBaseProb}”无效`,
         );
     }
-    return mapped;
+    return bp as ProbilityGear;
 }
 function extractUpgrade(storyUpgrade: string, index: number): boolean {
     if (

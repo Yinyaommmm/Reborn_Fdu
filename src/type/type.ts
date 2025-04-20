@@ -1,5 +1,6 @@
 import {
     BaseProbability,
+    ProbilityGear,
     RequirePropLevel,
     ResultBLevel,
     ResultLevel,
@@ -147,7 +148,8 @@ export const BgCategoryMap = new Map<string, BgCategory>([
     ["旅游打卡地", BgCategory.TOUR],
 ]);
 
-export class Event {
+// ReadableEvent: 从excel中粗加工得到的事件，但并不是最终可用方便使用的事件
+export class ReadableEvent {
     id: number = 0;
     title: string = "无主题";
     required: boolean = false;
@@ -170,7 +172,7 @@ export class Event {
 
     prerequisites: number[] = [];
 
-    baseProbability: BaseProbability = BaseProbability.TRIVIAL;
+    baseProbability: ProbilityGear = "TRIVIAL";
     upgrade: boolean = false;
 
     choiceA: string = "";

@@ -1,7 +1,7 @@
 import * as XLSX from "xlsx";
 
 import { createEvtFromStroyEvent } from "./read-components";
-import { StoryEvent, Event } from "../type/type";
+import { StoryEvent, ReadableEvent } from "../type/type";
 
 export const ReadExcelFromPublic = async () => {
     const res = await fetch("/419.xlsx");
@@ -12,12 +12,8 @@ export const ReadExcelFromPublic = async () => {
     const jsonArr: StoryEvent[] = XLSX.utils.sheet_to_json(worksheet, {
         defval: "",
     });
-    const events: Event[] = jsonArr.map((item, index) =>
+    const events: ReadableEvent[] = jsonArr.map((item, index) =>
         createEvtFromStroyEvent(item, index),
     );
-    console.log("origin", jsonArr);
-    console.log(
-        "convert",
-        events.map((item) => item.specialEffect),
-    );
+    return events;
 };

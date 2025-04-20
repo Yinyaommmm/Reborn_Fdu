@@ -1,11 +1,11 @@
 import "./App.css";
-import { ReadExcelFromPublic } from "./load/read";
+import { GameModule } from "./game/game";
 import Game from "./pages/game";
 import { $UI } from "./store/ui";
 
 function App() {
     const route = $UI.use((state) => state.route);
-    ReadExcelFromPublic();
+    GameModule.gamestart();
     return <>{route === "game" && <Game />}</>;
 }
 
