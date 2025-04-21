@@ -1,0 +1,5 @@
+.game-background {
+    background-image: url("/png/background.png");
+    background-size: 110vw auto;
+    background-position: 0% 100%;
+}

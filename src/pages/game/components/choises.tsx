@@ -1,15 +1,15 @@
 import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useState } from "react";
 
+import { useViewport } from "@/hooks/useViewPort";
 import { $Game } from "@/store/game";
 
-const viewportWidth = window.innerWidth;
-const viewportHeight = window.innerHeight;
-const height = Math.ceil(0.08 * viewportHeight);
-const slideDistanceScale = 1;
-const triggerDistance = viewportWidth / 3;
-
 export const GameChoices: FC = () => {
+    const { vw: viewportWidth, vh: viewportHeight } = useViewport();
+    const height = Math.ceil(0.08 * viewportHeight);
+    const slideDistanceScale = 1;
+    const triggerDistance = viewportWidth / 3;
+
     const [exitDirection, setExitDirection] = useState<"right" | "left">(
         "right",
     );
@@ -98,7 +98,7 @@ export const GameChoices: FC = () => {
     }, [exitDirection, isChoiceAnimating]);
 
     return (
-        <div className="relative mt-[0vh]">
+        <div className="relative mt-[3vh]">
             <AnimatePresence mode="sync">
                 {!exitX && (
                     <motion.div
@@ -115,6 +115,35 @@ export const GameChoices: FC = () => {
                         }}
                         key="choice-1"
                     >
+                        <div
+                            className="absolute bg-decorate-border h-decorate top-[8%] -left-[2%]"
+                            style={{ width: `100%` }}
+                        />
+                        <div
+                            className="absolute bg-decorate-border h-decorate top-[8%] -left-[2%] rotate-45  origin-top-left"
+                            style={{ width: height / 2 }}
+                        />
+                        <div className="absolute bg-decorate-border w-decorate top-[27%] right-[2%] h-[65%]" />
+                        <div
+                            className="absolute bg-decorate-border h-decorate top-[108%] -left-[2%]"
+                            style={{
+                                width: `75%`,
+                            }}
+                        >
+                            <div
+                                className="absolute bg-decorate-border h-decorate top-0 -right-[6%]"
+                                style={{
+                                    width: `1%`,
+                                }}
+                            />
+                            <div
+                                className="absolute bg-decorate-border h-decorate top-0 -right-[26%]"
+                                style={{
+                                    width: `15%`,
+                                }}
+                            />
+                        </div>
+
                         <div className="h-full flex flex-col justify-between">
                             <div
                                 className="w-0 h-0"
@@ -134,27 +163,11 @@ export const GameChoices: FC = () => {
                         <div className="bg-[#79B] text-white h-full w-[60vw] p-2 flex items-center">
                             选项 1
                         </div>
-                        <div>
-                            <div
-                                className="w-0 h-0"
-                                style={{
-                                    borderBottom: `${height / 2}px solid #79B`,
-                                    borderRight: `${height / 2}px solid transparent`,
-                                }}
-                            />
-                            <div
-                                className="w-0 h-0"
-                                style={{
-                                    borderTop: `${height / 2}px solid #79B`,
-                                    borderRight: `${height / 2}px solid transparent`,
-                                }}
-                            />
-                        </div>
                     </motion.div>
                 )}
                 {!exitY && (
                     <motion.div
-                        className="absolute top-[11vh] pr-[3vw] flex items-center w-full justify-end"
+                        className="absolute top-[12vh] mr-[3vw] flex items-center justify-end frosted-glass"
                         style={{
                             height,
                             ...(exitDirection === "left" ? { right: x } : {}),
@@ -167,22 +180,35 @@ export const GameChoices: FC = () => {
                         }}
                         key="choice-2"
                     >
-                        <div>
+                        <div
+                            className="absolute bg-decorate-border h-decorate bottom-[8%] -right-[2%]"
+                            style={{ width: `100%` }}
+                        />
+                        <div
+                            className="absolute bg-decorate-border h-decorate bottom-[8%] -right-[2%] rotate-45  origin-bottom-right"
+                            style={{ width: height / 2 }}
+                        />
+                        <div className="absolute bg-decorate-border w-decorate bottom-[27%] left-[2%] h-[65%]" />
+                        <div
+                            className="absolute bg-decorate-border h-decorate bottom-[108%] -right-[2%]"
+                            style={{
+                                width: `75%`,
+                            }}
+                        >
                             <div
-                                className="w-0 h-0"
+                                className="absolute bg-decorate-border h-decorate bottom-0 -left-[6%]"
                                 style={{
-                                    borderBottom: `${height / 2}px solid #BD7E94`,
-                                    borderLeft: `${height / 2}px solid transparent`,
+                                    width: `1%`,
                                 }}
                             />
                             <div
-                                className="w-0 h-0"
+                                className="absolute bg-decorate-border h-decorate bottom-0 -left-[26%]"
                                 style={{
-                                    borderTop: `${height / 2}px solid #BD7E94`,
-                                    borderLeft: `${height / 2}px solid transparent`,
+                                    width: `15%`,
                                 }}
                             />
                         </div>
+
                         <div className="bg-[#BD7E94] text-white h-full w-[60vw] p-2 flex items-center justify-end">
                             选项 2
                         </div>

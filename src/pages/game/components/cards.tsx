@@ -9,21 +9,9 @@ import { FC, useEffect, useState } from "react";
 
 import GameCard from "./card";
 
+import { useViewport } from "@/hooks/useViewPort";
 import { $Game } from "@/store/game";
 import { calYFromDeltaX } from "@/utils/circle";
-
-const viewportWidth = window.innerWidth;
-const slideDistanceScale = 2;
-const radius = 10000;
-const xExit = viewportWidth;
-const rightExit = calYFromDeltaX(radius, -8, xExit);
-const leftExit = calYFromDeltaX(radius, -8, -xExit);
-const rights = [32, 32, 32];
-const tops = [0, 0, 0];
-const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
-const activeRotate = 8;
-const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
-const triggerDistance = viewportWidth / 3;
 
 const GameCards: FC = () => {
     const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
@@ -37,6 +25,18 @@ const GameCards: FC = () => {
     const [exitDirection, setExitDirection] = useState<"right" | "left">(
         "right",
     );
+    const { vw: viewportWidth } = useViewport();
+    const slideDistanceScale = 2;
+    const radius = 10000;
+    const xExit = viewportWidth;
+    const rightExit = calYFromDeltaX(radius, -8, xExit);
+    const leftExit = calYFromDeltaX(radius, -8, -xExit);
+    const rights = [32, 32, 32];
+    const tops = [0, 0, 0];
+    const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
+    const activeRotate = 8;
+    const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
+    const triggerDistance = viewportWidth / 3;
 
     const x = useMotionValue(0);
     const delta = useTransform(x, (value) => {
