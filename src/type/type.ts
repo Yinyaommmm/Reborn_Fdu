@@ -1,4 +1,10 @@
-import { BaseProbability, RequirePropLevel, ResultLevel } from "./config";
+import {
+    BaseProbability,
+    ProbilityGear,
+    RequirePropLevel,
+    ResultBLevel,
+    ResultLevel,
+} from "./config";
 
 export interface StoryEvent {
     A创造C: string;
@@ -29,7 +35,7 @@ export interface StoryEvent {
     类别: string; // e.g. "培养方案"
     结局A: string;
     结局B: string;
-    编号: number;
+    编号: string;
     背景图类别: string;
     选项A: string;
     选项B: string;
@@ -57,15 +63,12 @@ export const EventCategoryMap = new Map<string, EventCategory>([
     ["幸运事件", EventCategory.XYSJ],
 ]);
 
-export const RequirePropLevelMap = new Map<string, RequirePropLevel>();
-new Map([
-    ["", RequirePropLevel.D],
-    ["D", RequirePropLevel.D],
-    ["C", RequirePropLevel.C],
-    ["B", RequirePropLevel.B],
-    ["A", RequirePropLevel.A],
-    ["S", RequirePropLevel.S],
-]);
+export const RequirePropLevelMap = new Map<string, RequirePropLevel>(
+    Object.entries(RequirePropLevel)
+        .filter(([key]) => isNaN(Number(key))) // 只保留字符串键
+        .map(([key, value]) => [key, value as RequirePropLevel]),
+);
+
 export const MinimumRequirePropFactory = () => {
     return {
         H: RequirePropLevel.D,
@@ -75,23 +78,12 @@ export const MinimumRequirePropFactory = () => {
         M: RequirePropLevel.D,
     };
 };
-export enum Prop {
-    None,
-    H,
-    L,
-    A,
-    C,
-    M,
-}
-export const PropMap = new Map<string, Prop>();
-new Map([
-    ["", Prop.None],
-    ["H", Prop.H],
-    ["L", Prop.L],
-    ["A", Prop.A],
-    ["C", Prop.C],
-    ["M", Prop.M],
-]);
+
+// 属性和主属性
+export type Prop = "H" | "L" | "A" | "C" | "M";
+export const ValidProps = ["H", "L", "A", "C", "M"];
+export type MainProp = "NONE" | Prop;
+export const ValidMainProps = ["NONE", "H", "L", "A", "C", "M"];
 
 export const BaseProbabilityMap = new Map<string, BaseProbability>(
     Object.entries(BaseProbability)
@@ -99,37 +91,36 @@ export const BaseProbabilityMap = new Map<string, BaseProbability>(
         .map(([key, value]) => [key, value as BaseProbability]),
 );
 
-export const ResultLevelMap = new Map<string, ResultLevel>(
-    Object.entries(ResultLevel)
-        .filter(([key]) => isNaN(Number(key))) // 只保留字符串键
-        .map(([key, value]) => [key, value as ResultLevel]),
-);
+export const ResultLevelMap = ResultLevel;
 
 export class ResultA {
     H: [number, number] = [0, 0];
     L: [number, number] = [0, 0];
-    A: ResultLevel = ResultLevel.X;
-    C: ResultLevel = ResultLevel.X;
-    M: ResultLevel = ResultLevel.X;
+    A: [number, number] = ResultLevel.get("0")!;
+    C: [number, number] = ResultLevel.get("0")!;
+    M: [number, number] = ResultLevel.get("0")!;
 }
-export enum ResutlBLevel {
-    Same,
-    Half,
-    Punish,
-    HeavyPunish,
-}
-export const ResutlBLevelMap = new Map<string, ResutlBLevel>(
-    Object.entries(ResutlBLevel)
-        .filter(([key]) => isNaN(Number(key))) // 只保留字符串键
-        .map(([key, value]) => [key, value as ResutlBLevel]),
-);
+
 export class ResultB {
-    H: ResutlBLevel = ResutlBLevel.Same;
-    L: ResutlBLevel = ResutlBLevel.Same;
-    A: ResultLevel = ResultLevel.X;
-    C: ResultLevel = ResultLevel.X;
-    M: ResultLevel = ResultLevel.X;
+    H: ResultBLevel = ResultBLevel.Same;
+    L: ResultBLevel = ResultBLevel.Same;
+    A: [number, number] = ResultLevel.get("0")!;
+    C: [number, number] = ResultLevel.get("0")!;
+    M: [number, number] = ResultLevel.get("0")!;
 }
+export type ResultBLevelType =
+    | "Same"
+    | "Half"
+    | "Punish"
+    | "HeavyPunish"
+    | "NONE";
+export const ResultBLevelMap = new Map<ResultBLevelType, ResultBLevel>([
+    ["Same", ResultBLevel.Same],
+    ["Half", ResultBLevel.Half],
+    ["Punish", ResultBLevel.Punish],
+    ["HeavyPunish", ResultBLevel.HeavyPunish],
+    ["NONE", ResultBLevel.None],
+]);
 export enum BgCategory {
     NONE,
     CAMPUS,
@@ -157,7 +148,8 @@ export const BgCategoryMap = new Map<string, BgCategory>([
     ["旅游打卡地", BgCategory.TOUR],
 ]);
 
-export class Event {
+// ReadableEvent: 从excel中粗加工得到的事件，但并不是最终可用方便使用的事件
+export class ReadableEvent {
     id: number = 0;
     title: string = "无主题";
     required: boolean = false;
@@ -176,15 +168,15 @@ export class Event {
         C: RequirePropLevel;
         M: RequirePropLevel;
     } = MinimumRequirePropFactory();
-    mainProp: Prop = Prop.H;
+    mainProp: MainProp = "NONE";
 
     prerequisites: number[] = [];
 
-    baseProbability: BaseProbability = BaseProbability.TRIVIAL;
+    baseProbability: ProbilityGear = "TRIVIAL";
     upgrade: boolean = false;
 
     choiceA: string = "";
-    endingA: { succ: string; fail: string } = { succ: "", fail: "" };
+    endingA: string[] = ["", ""];
     resultA: ResultA = new ResultA();
 
     choiceB: string = "";
