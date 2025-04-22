@@ -165,7 +165,7 @@ export const GameChoices: FC = () => {
                             />
                         </div>
                         <div className="bg-[#79B] text-white h-full w-[60vw] p-2 flex items-center">
-                            选项 1
+                            认真聆听校领导和学生代表发言。
                         </div>
                     </motion.div>
                 )}
@@ -215,7 +215,7 @@ export const GameChoices: FC = () => {
                         </div>
 
                         <div className="bg-[#BD7E94] text-white h-full w-[60vw] p-2 flex items-center justify-end">
-                            选项 2
+                            拍照打卡，发一篇大红书。
                         </div>
                         <div className="h-full flex flex-col justify-between">
                             <div

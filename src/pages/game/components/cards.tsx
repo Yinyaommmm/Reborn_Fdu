@@ -9,6 +9,7 @@ import { FC, useEffect, useState } from "react";
 
 import GameCard from "./card";
 
+import Image from "@/components/image";
 import { useViewport } from "@/hooks/useViewPort";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
@@ -164,8 +165,16 @@ const GameCards: FC = () => {
                         }}
                         customZIndex={3 - index}
                         border={activeIndex === index}
+                        title="大一上"
                     >
-                        {card}
+                        <div className="w-full h-full flex items-center justify-center flex-col gap-4">
+                            <div className="w-[90%] p-2 bg-white ml-2 mt-2">
+                                <Image src="/png/event-bg.png" />
+                            </div>
+                            <div className="px-4 text-sm ml-2">
+                                「开学典礼」即将开始。嘿，新同学，别发呆啦，今天是个重要的日子，可不能迟到，穿上书院服，跟上班级队伍去体育场参加开学典礼吧！
+                            </div>
+                        </div>
                     </GameCard>
                 ))}
             </AnimatePresence>
