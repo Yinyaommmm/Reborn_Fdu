@@ -78,7 +78,8 @@ export const GameChoices: FC = () => {
             if (!isDragging.get() || isChoiceAnimating) return;
             isDragging.set(false);
             animate(x, 0, {
-                type: "spring",
+                type: "tween",
+                ease: "easeInOut",
                 stiffness: 300,
                 damping: 20,
             });
@@ -98,7 +99,7 @@ export const GameChoices: FC = () => {
     }, [exitDirection, isChoiceAnimating]);
 
     return (
-        <div className="relative mt-[3vh]">
+        <div className="relative mt-[2vh]">
             <AnimatePresence mode="sync">
                 {!exitX && (
                     <motion.div
@@ -109,6 +110,7 @@ export const GameChoices: FC = () => {
                         }}
                         initial={{ left: -viewportWidth }}
                         animate={{ left: 0 }}
+                        transition={{ type: "tween", ease: "easeInOut" }}
                         exit={{
                             left: viewportWidth,
                             transition: { duration: 0.4 },
@@ -174,6 +176,7 @@ export const GameChoices: FC = () => {
                         }}
                         initial={{ right: -viewportWidth }}
                         animate={{ right: 0 }}
+                        transition={{ type: "tween", ease: "easeInOut" }}
                         exit={{
                             right: viewportWidth,
                             transition: { duration: 0.4 },

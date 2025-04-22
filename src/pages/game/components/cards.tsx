@@ -88,7 +88,7 @@ const GameCards: FC = () => {
             if (!isDragging.get() || isAnimating) return;
             isDragging.set(false);
             animate(x, 0, {
-                type: "spring",
+                type: "tween",
                 stiffness: 300,
                 damping: 20,
             });
@@ -143,6 +143,8 @@ const GameCards: FC = () => {
                             transition: { duration: 0.4 },
                         }}
                         transition={{
+                            type: "tween",
+                            ease: "easeInOut",
                             duration: 0.3,
                             top: { duration: 0.5 },
                             right: { duration: 0.5 },

@@ -23,7 +23,7 @@ const GameCard: FC<GameCardProps> = (props) => {
     return (
         <motion.div
             className={twMerge("w-[80vw] aspect-[0.75]", className)}
-            transition={{ duration: 0.6 }}
+            transition={{ type: "tween", ease: "easeInOut", duration: 0.6 }}
             style={{ zIndex: customZIndex, ...style }}
             {...rest}
         >

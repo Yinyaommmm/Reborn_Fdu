@@ -9,7 +9,7 @@ body, html {
 @theme {
   --color-decorate-border: #060706;
 
-  --border-width-decorate: 0.5px;
-  --height-decorate: 0.5px;
-  --width-decorate: 0.5px;
+  --border-width-decorate: 1px;
+  --height-decorate: 1px;
+  --width-decorate: 1px;
 }
