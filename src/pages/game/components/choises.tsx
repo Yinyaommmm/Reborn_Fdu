@@ -1,15 +1,15 @@
 import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useState } from "react";
 
+import { useViewport } from "@/hooks/useViewPort";
 import { $Game } from "@/store/game";
 
-const viewportWidth = window.innerWidth;
-const viewportHeight = window.innerHeight;
-const height = Math.ceil(0.08 * viewportHeight);
-const slideDistanceScale = 1;
-const triggerDistance = viewportWidth / 3;
-
 export const GameChoices: FC = () => {
+    const { vw: viewportWidth, vh: viewportHeight } = useViewport();
+    const height = Math.ceil(0.08 * viewportHeight);
+    const slideDistanceScale = 1;
+    const triggerDistance = viewportWidth / 3;
+
     const [exitDirection, setExitDirection] = useState<"right" | "left">(
         "right",
     );
@@ -32,16 +32,17 @@ export const GameChoices: FC = () => {
             setTimeout(() => {
                 setExitX(false);
                 x.set(0);
-                setIsChoiceAnimating(false);
-            }, 1000);
+            }, 200);
         } else {
             setExitY(true);
             setTimeout(() => {
                 setExitY(false);
                 x.set(0);
-                setIsChoiceAnimating(false);
-            }, 1000);
+            }, 200);
         }
+        setTimeout(() => {
+            setIsChoiceAnimating(false);
+        }, 500);
     };
 
     useEffect(() => {
@@ -78,9 +79,11 @@ export const GameChoices: FC = () => {
             if (!isDragging.get() || isChoiceAnimating) return;
             isDragging.set(false);
             animate(x, 0, {
-                type: "spring",
+                type: "tween",
+                ease: "easeInOut",
                 stiffness: 300,
                 damping: 20,
+                duration: 0.2,
             });
         };
 
@@ -98,7 +101,7 @@ export const GameChoices: FC = () => {
     }, [exitDirection, isChoiceAnimating]);
 
     return (
-        <div className="relative mt-[0vh]">
+        <div className="relative mt-[2vh]">
             <AnimatePresence mode="sync">
                 {!exitX && (
                     <motion.div
@@ -109,12 +112,42 @@ export const GameChoices: FC = () => {
                         }}
                         initial={{ left: -viewportWidth }}
                         animate={{ left: 0 }}
+                        transition={{ type: "tween", ease: "easeInOut" }}
                         exit={{
                             left: viewportWidth,
-                            transition: { duration: 0.4 },
+                            transition: { duration: 0.1 },
                         }}
                         key="choice-1"
                     >
+                        <div
+                            className="absolute bg-decorate-border h-decorate top-[8%] -left-[2%]"
+                            style={{ width: `100%` }}
+                        />
+                        <div
+                            className="absolute bg-decorate-border h-decorate top-[8%] -left-[2%] rotate-45  origin-top-left"
+                            style={{ width: height / 2 }}
+                        />
+                        <div className="absolute bg-decorate-border w-decorate top-[27%] right-[2%] h-[65%]" />
+                        <div
+                            className="absolute bg-decorate-border h-decorate top-[108%] -left-[2%]"
+                            style={{
+                                width: `75%`,
+                            }}
+                        >
+                            <div
+                                className="absolute bg-decorate-border h-decorate top-0 -right-[6%]"
+                                style={{
+                                    width: `1%`,
+                                }}
+                            />
+                            <div
+                                className="absolute bg-decorate-border h-decorate top-0 -right-[26%]"
+                                style={{
+                                    width: `15%`,
+                                }}
+                            />
+                        </div>
+
                         <div className="h-full flex flex-col justify-between">
                             <div
                                 className="w-0 h-0"
@@ -132,59 +165,57 @@ export const GameChoices: FC = () => {
                             />
                         </div>
                         <div className="bg-[#79B] text-white h-full w-[60vw] p-2 flex items-center">
-                            选项 1
-                        </div>
-                        <div>
-                            <div
-                                className="w-0 h-0"
-                                style={{
-                                    borderBottom: `${height / 2}px solid #79B`,
-                                    borderRight: `${height / 2}px solid transparent`,
-                                }}
-                            />
-                            <div
-                                className="w-0 h-0"
-                                style={{
-                                    borderTop: `${height / 2}px solid #79B`,
-                                    borderRight: `${height / 2}px solid transparent`,
-                                }}
-                            />
+                            认真聆听校领导和学生代表发言。
                         </div>
                     </motion.div>
                 )}
                 {!exitY && (
                     <motion.div
-                        className="absolute top-[11vh] pr-[3vw] flex items-center w-full justify-end"
+                        className="absolute top-[12vh] mr-[3vw] flex items-center justify-end frosted-glass"
                         style={{
                             height,
                             ...(exitDirection === "left" ? { right: x } : {}),
                         }}
                         initial={{ right: -viewportWidth }}
                         animate={{ right: 0 }}
+                        transition={{ type: "tween", ease: "easeInOut" }}
                         exit={{
                             right: viewportWidth,
-                            transition: { duration: 0.4 },
+                            transition: { duration: 0.1 },
                         }}
                         key="choice-2"
                     >
-                        <div>
+                        <div
+                            className="absolute bg-decorate-border h-decorate bottom-[8%] -right-[2%]"
+                            style={{ width: `100%` }}
+                        />
+                        <div
+                            className="absolute bg-decorate-border h-decorate bottom-[8%] -right-[2%] rotate-45  origin-bottom-right"
+                            style={{ width: height / 2 }}
+                        />
+                        <div className="absolute bg-decorate-border w-decorate bottom-[27%] left-[2%] h-[65%]" />
+                        <div
+                            className="absolute bg-decorate-border h-decorate bottom-[108%] -right-[2%]"
+                            style={{
+                                width: `75%`,
+                            }}
+                        >
                             <div
-                                className="w-0 h-0"
+                                className="absolute bg-decorate-border h-decorate bottom-0 -left-[6%]"
                                 style={{
-                                    borderBottom: `${height / 2}px solid #BD7E94`,
-                                    borderLeft: `${height / 2}px solid transparent`,
+                                    width: `1%`,
                                 }}
                             />
                             <div
-                                className="w-0 h-0"
+                                className="absolute bg-decorate-border h-decorate bottom-0 -left-[26%]"
                                 style={{
-                                    borderTop: `${height / 2}px solid #BD7E94`,
-                                    borderLeft: `${height / 2}px solid transparent`,
+                                    width: `15%`,
                                 }}
                             />
                         </div>
+
                         <div className="bg-[#BD7E94] text-white h-full w-[60vw] p-2 flex items-center justify-end">
-                            选项 2
+                            拍照打卡，发一篇大红书。
                         </div>
                         <div className="h-full flex flex-col justify-between">
                             <div

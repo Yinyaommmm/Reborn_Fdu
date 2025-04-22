@@ -9,21 +9,11 @@ import { FC, useEffect, useState } from "react";
 
 import GameCard from "./card";
 
+import Image from "@/components/image";
+import { useViewport } from "@/hooks/useViewPort";
+import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 import { calYFromDeltaX } from "@/utils/circle";
-
-const viewportWidth = window.innerWidth;
-const slideDistanceScale = 2;
-const radius = 10000;
-const xExit = viewportWidth;
-const rightExit = calYFromDeltaX(radius, -8, xExit);
-const leftExit = calYFromDeltaX(radius, -8, -xExit);
-const rights = [32, 32, 32];
-const tops = [0, 0, 0];
-const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
-const activeRotate = 8;
-const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
-const triggerDistance = viewportWidth / 3;
 
 const GameCards: FC = () => {
     const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
@@ -37,6 +27,18 @@ const GameCards: FC = () => {
     const [exitDirection, setExitDirection] = useState<"right" | "left">(
         "right",
     );
+    const { vw: viewportWidth } = useViewport();
+    const slideDistanceScale = 2;
+    const radius = 10000;
+    const xExit = viewportWidth;
+    const rightExit = calYFromDeltaX(radius, -8, xExit);
+    const leftExit = calYFromDeltaX(radius, -8, -xExit);
+    const rights = [32, 32, 32];
+    const tops = [0, 0, 0];
+    const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
+    const activeRotate = 8;
+    const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
+    const triggerDistance = viewportWidth / 3;
 
     const x = useMotionValue(0);
     const delta = useTransform(x, (value) => {
@@ -50,15 +52,26 @@ const GameCards: FC = () => {
 
     const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) rotate(${rotate}deg)`;
 
+    const handleChoose = () => {
+        $Data.update("choose", (draft) => {
+            draft.honesty += Math.floor(Math.random() * 5) + 1;
+            draft.academic += Math.floor(Math.random() * 5) + 1;
+            draft.creativity += Math.floor(Math.random() * 5) + 1;
+            draft.lucky += Math.floor(Math.random() * 5) + 1;
+            draft.management += Math.floor(Math.random() * 5) + 1;
+        });
+    };
+
     const handleSwipeComplete = () => {
         setIsAnimating(true);
         // 更新卡片队列
         setCards((prev) => [...prev.slice(1), prev[prev.length - 1] + 1]);
+        handleChoose();
         // 重置动画状态
         setTimeout(() => {
             setActiveIndex(0);
             setIsAnimating(false);
-        }, 1000);
+        }, 500);
     };
 
     console.log(exitDirection);
@@ -88,7 +101,7 @@ const GameCards: FC = () => {
             if (!isDragging.get() || isAnimating) return;
             isDragging.set(false);
             animate(x, 0, {
-                type: "spring",
+                type: "tween",
                 stiffness: 300,
                 damping: 20,
             });
@@ -143,6 +156,8 @@ const GameCards: FC = () => {
                             transition: { duration: 0.4 },
                         }}
                         transition={{
+                            type: "tween",
+                            ease: "easeInOut",
                             duration: 0.3,
                             top: { duration: 0.5 },
                             right: { duration: 0.5 },
@@ -150,8 +165,16 @@ const GameCards: FC = () => {
                         }}
                         customZIndex={3 - index}
                         border={activeIndex === index}
+                        title="大一上"
                     >
-                        {card}
+                        <div className="w-full h-full flex items-center justify-center flex-col gap-4">
+                            <div className="w-[90%] p-2 bg-white ml-2 mt-2">
+                                <Image src="/png/event-bg.png" />
+                            </div>
+                            <div className="px-4 text-sm ml-2">
+                                「开学典礼」即将开始。嘿，新同学，别发呆啦，今天是个重要的日子，可不能迟到，穿上书院服，跟上班级队伍去体育场参加开学典礼吧！
+                            </div>
+                        </div>
                     </GameCard>
                 ))}
             </AnimatePresence>

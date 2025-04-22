@@ -8,4 +8,8 @@ body, html {
 
 @theme {
   --color-decorate-border: #060706;
+
+  --border-width-decorate: 1px;
+  --height-decorate: 1px;
+  --width-decorate: 1px;
 }
