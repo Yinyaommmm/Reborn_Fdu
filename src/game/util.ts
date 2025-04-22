@@ -1,6 +1,6 @@
 import { FiveProps, StandardEvent } from "./type";
 
-import { RequirePropLevel } from "@/type/config";
+import { RequirePropLevel, ResultBLevel } from "@/type/config";
 
 export function timeLogger(
     target: any,
@@ -117,16 +117,22 @@ export function resoluteACM_ChoiceA(
     const propRange = [...range]; // 构造深拷贝，防止修改原范围
     if (resType === "F") {
         propRange[1] = (propRange[0] + propRange[1]) / 2;
-        console.log(
-            "resoluteAM_ChoiceA失败导致范围范围砍一半" + prop,
-            propRange,
-        );
-    } else {
-        const luckEnchance = luckEnchanceACM(luck);
-        if (resType === "BigS" || Math.random() < luckEnchance) {
+        propRange[0] = 0;
+        if (Math.random() < luckEnchanceACM(luck)) {
             // 触发保底
-            propRange[0] =
-                propRange[0] +
+            propRange[0] +=
+                (propRange[1] - propRange[0]) * Math.min(creativity / 100, 1);
+            console.log("resoluteAM_ChoiceA失败,触发了保底" + prop, propRange);
+        } else {
+            console.log(
+                "resoluteAM_ChoiceA失败,且未触发保底" + prop,
+                propRange,
+            );
+        }
+    } else {
+        if (resType === "BigS" || Math.random() < luckEnchanceACM(luck)) {
+            // 触发保底
+            propRange[0] +=
                 (propRange[1] - propRange[0]) * Math.min(creativity / 100, 1);
             console.log("resoluteAM_ChoiceA触发保底 prop:" + prop, propRange);
         } else {
@@ -136,9 +142,7 @@ export function resoluteACM_ChoiceA(
             );
         }
     }
-
-    const ARes = randRangeArr(propRange);
-    return ARes;
+    return randRangeArr(propRange);
 }
 
 // 考虑到C等级为0会使用主属性值增加
@@ -163,5 +167,67 @@ export function resolutC_ChoiceA(
         } else {
             return resoluteACM_ChoiceA(luck, creativity, evt, "C", resType);
         }
+    }
+}
+
+export function HLRangeConvert_ChoiceB(
+    gear: ResultBLevel,
+    [min, max]: number[],
+): number[] {
+    if (gear === ResultBLevel.None) {
+        return [0, 0];
+    } else if (gear === ResultBLevel.Half) {
+        return [min * 0.5, max * 0.5];
+    } else if (gear === ResultBLevel.Same) {
+        return [min, max];
+    } else if (gear === ResultBLevel.Punish) {
+        return [-8, -8];
+    }
+    console.log("warning! unexpected gear");
+    return [0, 0];
+}
+
+export function resoluteACM_ChoiceB(
+    luck: number,
+    creativity: number,
+    evt: StandardEvent,
+    prop: "A" | "C" | "M",
+): number {
+    const range =
+        prop === "A"
+            ? evt.getARange_ChoiceB()
+            : prop === "C"
+              ? evt.getCRange_ChoiceB()
+              : evt.getMRange_ChoiceB();
+    const propRange = [...range]; // 构造深拷贝，防止修改原范围
+    if (Math.random() < luckEnchanceACM(luck)) {
+        // 触发保底
+        propRange[0] +=
+            (propRange[1] - propRange[0]) * Math.min(creativity / 100, 1);
+        console.log("resoluteACM_ChoiceB触发保底 prop:" + prop, propRange);
+    } else {
+        console.log("resoluteACM_ChoiceB没有触发保底 prop:" + prop, propRange);
+    }
+
+    return randRangeArr(propRange);
+}
+
+export function resolutC_ChoiceB(
+    deltaProps: FiveProps,
+    luck: number,
+    creativity: number,
+    evt: StandardEvent,
+) {
+    const mainProp = evt.getMainProp();
+
+    if (
+        evt.getCRange_ChoiceA()[0] === 0 &&
+        evt.getCRange_ChoiceA()[1] === 0 &&
+        mainProp !== "NONE"
+    ) {
+        console.log("缺少C等级并且存在主属性: C的值使用mainprop的0.3");
+        return deltaProps[mainProp] * 0.3;
+    } else {
+        return resoluteACM_ChoiceB(luck, creativity, evt, "C");
     }
 }

@@ -85,7 +85,7 @@ export function createEvtFromStroyEvent(
     );
     evt.isHighlight = extractIsHighlight(storyEvt.高光事件, index);
 
-    evt.bgCategory = extractBgCategory(storyEvt.背景图类别, index);
+    evt.bgCategory = extractBgCategory(storyEvt.背景图, index);
     evt.specialEffect = extractSpecialEffect(storyEvt.特殊影响, index);
     return evt;
 }
@@ -364,10 +364,17 @@ function extractChoiceB(storyChoiceB: string, index: number): string {
     return storyChoiceB.trim();
 }
 function extractEndingB(storyEndingB: string, index: number): string {
+    if (storyEndingB === "") {
+        return "";
+    }
     if (typeof storyEndingB !== "string") {
         throw ReadErrorFactory(index, "endingB", "选项B必须是字符串");
     }
-    return storyEndingB.trim();
+    if (storyEndingB.startsWith("#")) {
+        return storyEndingB.slice(1).trim();
+    } else {
+        return storyEndingB.trim();
+    }
 }
 function extractResultA(
     storyH: string,
@@ -446,6 +453,7 @@ function extractResultB(
 ): ResultB {
     const res = new ResultB();
     const getResultBLevel = (value: string, prop: string): ResultBLevel => {
+        value = value.trim();
         if (value === "") {
             return ResultBLevelMap.get("Same")!;
         }
@@ -453,7 +461,7 @@ function extractResultB(
             throw ReadErrorFactory(
                 index,
                 "resultB",
-                `无效的 ${prop} 奖励等级：${value}`,
+                `无效的 ${prop} 奖励等级:${value}`,
             );
         }
         const level = ResultBLevelMap.get(value as ResultBLevelType)!;
@@ -494,15 +502,15 @@ function extractIsHighlight(storyIsHighlight: string, index: number): boolean {
     );
 }
 function extractBgCategory(storyBgCategory: string, index: number): BgCategory {
-    const value = BgCategoryMap.get(storyBgCategory);
     if (storyBgCategory === "") {
-        return BgCategoryMap.get("无")!;
+        return BgCategoryMap.get("常规")!;
     }
-    if (!value) {
+    const value = BgCategoryMap.get(storyBgCategory);
+    if (value === undefined) {
         throw ReadErrorFactory(
             index,
             "bgCategory",
-            `无效的背景图类别：${storyBgCategory}`,
+            `无效的背景图类别:${storyBgCategory}`,
         );
     }
     return value;

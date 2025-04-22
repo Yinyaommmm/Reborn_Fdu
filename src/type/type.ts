@@ -36,7 +36,7 @@ export interface StoryEvent {
     结局A: string;
     结局B: string;
     编号: string;
-    背景图类别: string;
+    背景图: string;
     选项A: string;
     选项B: string;
     重复性: string;
@@ -118,34 +118,42 @@ export const ResultBLevelMap = new Map<ResultBLevelType, ResultBLevel>([
     ["Same", ResultBLevel.Same],
     ["Half", ResultBLevel.Half],
     ["Punish", ResultBLevel.Punish],
-    ["HeavyPunish", ResultBLevel.HeavyPunish],
+    // ["HeavyPunish", ResultBLevel.HeavyPunish],
     ["NONE", ResultBLevel.None],
 ]);
+// export enum BgCategory {
+//     NONE,
+//     CAMPUS,
+//     CLASSROOM,
+//     GYM,
+//     PLAYGROUND,
+//     LAB,
+//     OFFICE,
+//     PRACTICE,
+//     AUDITORIUM,
+//     DORMITORY,
+//     TOUR,
+// }
+// export const BgCategoryMap = new Map<string, BgCategory>([
+//     ["无", BgCategory.NONE],
+//     ["校园", BgCategory.CAMPUS],
+//     ["教室", BgCategory.CLASSROOM],
+//     ["体育馆", BgCategory.GYM],
+//     ["操场", BgCategory.PLAYGROUND],
+//     ["实验室", BgCategory.LAB],
+//     ["办公室", BgCategory.OFFICE],
+//     ["实践场地", BgCategory.PRACTICE],
+//     ["礼堂", BgCategory.AUDITORIUM],
+//     ["寝室", BgCategory.DORMITORY],
+//     ["旅游打卡地", BgCategory.TOUR],
+// ]);
 export enum BgCategory {
-    NONE,
-    CAMPUS,
-    CLASSROOM,
-    GYM,
-    PLAYGROUND,
-    LAB,
-    OFFICE,
-    PRACTICE,
-    AUDITORIUM,
-    DORMITORY,
-    TOUR,
+    REGULAR,
+    CLOSEUP,
 }
 export const BgCategoryMap = new Map<string, BgCategory>([
-    ["无", BgCategory.NONE],
-    ["校园", BgCategory.CAMPUS],
-    ["教室", BgCategory.CLASSROOM],
-    ["体育馆", BgCategory.GYM],
-    ["操场", BgCategory.PLAYGROUND],
-    ["实验室", BgCategory.LAB],
-    ["办公室", BgCategory.OFFICE],
-    ["实践场地", BgCategory.PRACTICE],
-    ["礼堂", BgCategory.AUDITORIUM],
-    ["寝室", BgCategory.DORMITORY],
-    ["旅游打卡地", BgCategory.TOUR],
+    ["常规", BgCategory.REGULAR],
+    ["特写", BgCategory.CLOSEUP],
 ]);
 
 // ReadableEvent: 从excel中粗加工得到的事件，但并不是最终可用方便使用的事件
@@ -184,6 +192,6 @@ export class ReadableEvent {
     resultB: ResultB = new ResultB();
 
     isHighlight: boolean = false;
-    bgCategory: BgCategory = BgCategory.NONE;
+    bgCategory: BgCategory = BgCategory.REGULAR;
     specialEffect: string = "";
 }
