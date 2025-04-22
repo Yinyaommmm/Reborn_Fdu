@@ -10,6 +10,7 @@ import { FC, useEffect, useState } from "react";
 import GameCard from "./card";
 
 import { useViewport } from "@/hooks/useViewPort";
+import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 import { calYFromDeltaX } from "@/utils/circle";
 
@@ -50,10 +51,21 @@ const GameCards: FC = () => {
 
     const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) rotate(${rotate}deg)`;
 
+    const handleChoose = () => {
+        $Data.update("choose", (draft) => {
+            draft.honesty += Math.floor(Math.random() * 5) + 1;
+            draft.academic += Math.floor(Math.random() * 5) + 1;
+            draft.creativity += Math.floor(Math.random() * 5) + 1;
+            draft.lucky += Math.floor(Math.random() * 5) + 1;
+            draft.management += Math.floor(Math.random() * 5) + 1;
+        });
+    };
+
     const handleSwipeComplete = () => {
         setIsAnimating(true);
         // 更新卡片队列
         setCards((prev) => [...prev.slice(1), prev[prev.length - 1] + 1]);
+        handleChoose();
         // 重置动画状态
         setTimeout(() => {
             setActiveIndex(0);

@@ -9,9 +9,9 @@ export interface DataModel {
 }
 
 export const $Data = model<DataModel>("DATA", {
-    honesty: 0,
-    lucky: 0,
-    academic: 0,
-    creativity: 0,
-    management: 0,
+    honesty: 7,
+    lucky: 12,
+    academic: 2,
+    creativity: 19,
+    management: 10,
 });
