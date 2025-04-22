@@ -41,17 +41,19 @@ export enum UpgradeProbability {
 // 事件属性A C M结算档位[TODO ：暂未决定]
 export type ResultLevelGear = "0" | "1" | "2" | "3" | "4";
 export const ValidResultLevelGear = ["0", "1", "2", "3", "4"];
+
+// TODO : 暂未设定
 export const ResultLevel: Map<ResultLevelGear, [number, number]> = new Map([
     ["0", [0, 0]],
-    ["1", [1, 1]],
-    ["2", [2, 2]],
-    ["3", [3, 3]],
-    ["4", [4, 4]],
+    ["1", [0.5, 1.5]],
+    ["2", [1.5, 2.5]],
+    ["3", [2.5, 3.5]],
+    ["4", [3.5, 4.5]],
 ]);
 
-// TODO: 幸运值影响掷骰子次数档位
+// 幸运值影响掷骰子次数档位:直接放到util函数里去了
 
-// TODO: 幸运值将影响创造值能否影响区间下限的概率档位
+// 幸运值将影响创造值能否影响区间下限的概率档位：也放到util里去了
 
 // 选项B结算时继承A的比例
 export enum ResultBLevel {

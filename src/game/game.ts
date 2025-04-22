@@ -12,19 +12,18 @@ export class GameModule {
 
         const system = new GameSystem(player, standardEvents);
         system.setYear(5);
-        const evtId = 71;
+        const evtId = 1;
         console.log("--------------");
         console.log(system);
         console.log("系统年份" + system.getYear());
-        console.log("人属性", player.getElectionBuff());
+        console.log("人属性", player.props);
         console.log(
-            "事件" + evtId + "结果结算",
-            system.resoluteEvent(evtId, "F"),
-        );
-        console.log("人属性", player.getElectionBuff());
-        console.log(
-            "事件" + evtId + "结果结算",
-            system.caclEventResultType(evtId),
+            "事件" + evtId + " resoluteEvent_ChoiceA结果结算",
+            system.resoluteEvent_ChoiceA(evtId, {
+                succProb: 0.5,
+                rand: 0.8,
+                resType: "F",
+            }),
         );
     }
 }
