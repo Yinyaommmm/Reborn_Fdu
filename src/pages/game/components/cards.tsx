@@ -70,7 +70,7 @@ const GameCards: FC = () => {
         setTimeout(() => {
             setActiveIndex(0);
             setIsAnimating(false);
-        }, 1000);
+        }, 500);
     };
 
     console.log(exitDirection);

@@ -32,16 +32,17 @@ export const GameChoices: FC = () => {
             setTimeout(() => {
                 setExitX(false);
                 x.set(0);
-                setIsChoiceAnimating(false);
-            }, 1000);
+            }, 200);
         } else {
             setExitY(true);
             setTimeout(() => {
                 setExitY(false);
                 x.set(0);
-                setIsChoiceAnimating(false);
-            }, 1000);
+            }, 200);
         }
+        setTimeout(() => {
+            setIsChoiceAnimating(false);
+        }, 500);
     };
 
     useEffect(() => {
@@ -82,6 +83,7 @@ export const GameChoices: FC = () => {
                 ease: "easeInOut",
                 stiffness: 300,
                 damping: 20,
+                duration: 0.2,
             });
         };
 
@@ -113,7 +115,7 @@ export const GameChoices: FC = () => {
                         transition={{ type: "tween", ease: "easeInOut" }}
                         exit={{
                             left: viewportWidth,
-                            transition: { duration: 0.4 },
+                            transition: { duration: 0.1 },
                         }}
                         key="choice-1"
                     >
@@ -179,7 +181,7 @@ export const GameChoices: FC = () => {
                         transition={{ type: "tween", ease: "easeInOut" }}
                         exit={{
                             right: viewportWidth,
-                            transition: { duration: 0.4 },
+                            transition: { duration: 0.1 },
                         }}
                         key="choice-2"
                     >
