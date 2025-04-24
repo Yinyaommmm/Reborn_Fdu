@@ -131,14 +131,12 @@ const GameCards: FC = () => {
                             rotateY: index === activeIndex ? "0deg" : "180deg",
                             right: 200,
                             top: -1000,
-                            opacity: 0,
                             rotate: index === activeIndex ? "-8deg" : "-2deg",
                         }}
                         animate={{
                             rotateY: index === activeIndex ? "0deg" : "180deg",
                             right: rights[index - activeIndex],
                             top: tops[index - activeIndex],
-                            opacity: 1,
                             rotate: rotates[index - activeIndex],
                         }}
                         style={{
