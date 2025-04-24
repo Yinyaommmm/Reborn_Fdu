@@ -1,2 +1,2 @@
 pnpm build 
-scp -r dist user2@10.176.42.151:/home/user2/LabCode/FacePolice/ 
+scp -r dist root@124.220.2.31:/usr/local/xzt/
