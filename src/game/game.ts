@@ -12,19 +12,11 @@ export class GameModule {
 
         const system = new GameSystem(player, standardEvents);
         system.setYear(5);
-        const evtId = 71;
+        const evtId = 49;
         console.log("--------------");
         console.log(system);
         console.log("系统年份" + system.getYear());
-        console.log("人属性", player.getElectionBuff());
-        console.log(
-            "事件" + evtId + "结果结算",
-            system.resoluteEvent(evtId, "F"),
-        );
-        console.log("人属性", player.getElectionBuff());
-        console.log(
-            "事件" + evtId + "结果结算",
-            system.caclEventResultType(evtId),
-        );
+        console.log("人属性", player.props);
+        console.log("事件" + evtId + " choose b", system.chooseB(evtId));
     }
 }

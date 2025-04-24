@@ -1,16 +1,38 @@
-import { clampProb } from "./util";
+import {
+    clampProb,
+    HLRangeConvert_ChoiceB,
+    randRangeArr,
+    resolutC_ChoiceA,
+    resolutC_ChoiceB,
+    resoluteACM_ChoiceA,
+    resoluteACM_ChoiceB,
+    resolutL_ChoicA,
+} from "./util";
 
 import { GameErrorFactory } from "@/error/game-error";
 import { BaseProbability, UpgradeProbability } from "@/type/config";
 import { EventCategory, MainProp, Prop, ReadableEvent } from "@/type/type";
-interface FiveProps {
+export interface FiveProps {
     H: number;
     L: number;
     A: number;
     C: number;
     M: number;
 }
-export type EvtResultType = "BigS" | "S" | "F";
+const zeroFiveProps: () => FiveProps = () => {
+    return {
+        H: 0,
+        L: 0,
+        A: 0,
+        C: 0,
+        M: 0,
+    };
+};
+export interface EvtResultType {
+    succProb: number;
+    rand: number;
+    resType: "BigS" | "S" | "F";
+}
 export interface ResoluteEventRes {
     deltaProps: FiveProps;
     endingText: string;
@@ -37,7 +59,7 @@ export class Player {
         return res / 100;
     }
     constructor(
-        private _props: FiveProps = { H: 0, L: 0, A: 0, C: 0, M: 0 },
+        private _props: FiveProps = zeroFiveProps(),
         private electionBuff = 0, // 竞选失败带来的下次额外加成
     ) {}
 
@@ -87,11 +109,39 @@ export class Player {
         this._props = values;
     }
     fixedInit() {
-        this._props = { H: 10, L: 20, A: 25, C: 30, M: 40 };
+        this._props = { H: 10, L: 20, A: 25, C: 80, M: 40 };
     }
 }
 
 export class StandardEvent {
+    getEndingB(): string {
+        return this._readableEvt.endingB;
+    }
+    getMRange_ChoiceB() {
+        return this._readableEvt.resultB.M;
+    }
+    getCRange_ChoiceB() {
+        return this._readableEvt.resultB.C;
+    }
+    getARange_ChoiceB() {
+        return this._readableEvt.resultB.A;
+    }
+    isEqualRight() {
+        return this._readableEvt.equalRights;
+    }
+    getEndingA(resType: "BigS" | "S" | "F"): string {
+        const ending = this._readableEvt.endingA;
+        if (resType === "BigS") {
+            if (ending.length < 3) {
+                console.log("BigS的A结局不是三个");
+            }
+            return ending[0];
+        } else if (resType === "S") {
+            return ending.length < 3 ? ending[0] : ending[1];
+        } else {
+            return ending.length < 3 ? ending[1] : ending[2];
+        }
+    }
     getCategory() {
         return this._readableEvt.category;
     }
@@ -104,6 +154,27 @@ export class StandardEvent {
         } else {
             return BaseProbability[this._readableEvt.baseProbability];
         }
+    }
+    getHRange_ChoiceA() {
+        return this._readableEvt.resultA.H;
+    }
+    getLRange_ChoiceA() {
+        return this._readableEvt.resultA.L;
+    }
+    getARange_ChoiceA() {
+        return this._readableEvt.resultA.A;
+    }
+    getCRange_ChoiceA() {
+        return this._readableEvt.resultA.C;
+    }
+    getMRange_ChoiceA() {
+        return this._readableEvt.resultA.M;
+    }
+    getHGear_ChoiceB() {
+        return this._readableEvt.resultB.H;
+    }
+    getLGear_ChoiceB() {
+        return this._readableEvt.resultB.L;
     }
 
     private shouldUpgrade() {
@@ -143,6 +214,7 @@ export class GameSystem {
                 ? this.player.getElectionBuff()
                 : 0;
         console.log(
+            "calcStandardSuccProb",
             "evt" + evtProb,
             "humanBuff" + humanBuffProb,
             "election" + electionBuffProb,
@@ -150,50 +222,100 @@ export class GameSystem {
         return clampProb(evtProb + humanBuffProb + electionBuffProb);
     }
     // 计算人物执行某事件的结果
-    caclEventResultType(evtID: number): EvtResultType {
+    private calcEventResultType(evtID: number): EvtResultType {
         const prob = this.calcStandardSuccProb(evtID);
         const rand = Math.random();
-        console.log("prob", prob, "rand", rand);
+        const evtResType: EvtResultType = {
+            succProb: prob,
+            rand,
+            resType: "F",
+        };
         if (rand <= prob) {
             if (
                 this.allEvents[evtID].getCategory() === EventCategory.SZTZ &&
                 rand <= prob / 2
             ) {
-                return "BigS";
+                evtResType.resType = "BigS";
             } else {
-                return "S";
+                evtResType.resType = "S";
             }
-        } else {
-            return "F";
         }
+        return evtResType;
     }
 
     // 事件结算(Event Resolution)
-    resoluteEvent(evtID: number, res: EvtResultType): ResoluteEventRes {
+    private resoluteEvent_ChoiceA(
+        evtID: number,
+        res: EvtResultType,
+    ): ResoluteEventRes {
         const evt = this.allEvents[evtID];
-        // 竞选事件失败补偿
+        const luck = this.player.props.L;
+        const crty = this.player.props.C;
+        const resType = res.resType;
+        const deltaProps: FiveProps = zeroFiveProps();
+        deltaProps.H = randRangeArr(evt.getHRange_ChoiceA());
+        deltaProps.L = resolutL_ChoicA(luck, evt, resType);
+        deltaProps.A = resoluteACM_ChoiceA(luck, crty, evt, "A", resType);
+        deltaProps.M = resoluteACM_ChoiceA(luck, crty, evt, "M", resType);
+        deltaProps.C = resolutC_ChoiceA(deltaProps, luck, crty, evt, resType);
+        console.log("ChoiceA 中间随机结果", res);
+        console.log("还缺结算成功记录特殊影响");
+        return {
+            deltaProps,
+            endingText: evt.getEndingA(resType),
+        };
+    }
+
+    chooseA(evtID: number) {
+        const res = this.calcEventResultType(evtID);
+        return this.resoluteEvent_ChoiceA(evtID, res);
+    }
+    chooseB(evtID: number) {
+        const evt = this.allEvents[evtID];
+        if (evt.isEqualRight()) {
+            console.log("等权重, 转换成A的结算");
+            return this.chooseA(evtID);
+        }
+        return this.resoluteEvent_ChoiceB(evtID);
+    }
+
+    // 真的选了一个B选项，非等权重
+    resoluteEvent_ChoiceB(evtID: number): ResoluteEventRes {
+        const evt = this.allEvents[evtID];
+        if (evt.isEqualRight()) {
+            console.log("Warning!,等权重选项不应该调用这个函数");
+        }
+        const deltaProps = zeroFiveProps();
+        const luck = this.player.props.L;
+        const crty = this.player.props.C;
+        // 竞选事件下次一定补偿
         if (evt.getCategory() === EventCategory.JXPY) {
-            if (res === "F") {
-                this.player.setElectionBuff();
-                console.log("进行了竞选失败补偿");
-            }
+            this.player.setElectionBuff();
+            console.log("进行了竞选失败补偿");
         }
 
         // H 属性结算
-
-        // l属性结算
-
+        const newHRange = HLRangeConvert_ChoiceB(
+            evt.getHGear_ChoiceB(),
+            evt.getHRange_ChoiceA(),
+        );
+        console.log("resoluteEvent_ChoiceB newHRange", newHRange);
+        deltaProps.H = randRangeArr(newHRange);
+        // L属性结算
+        const newLRange = HLRangeConvert_ChoiceB(
+            evt.getLGear_ChoiceB(),
+            evt.getLRange_ChoiceA(),
+        );
+        console.log("resoluteEvent_ChoiceB newLRange", newLRange);
+        deltaProps.L = randRangeArr(newLRange);
         // A C M属性结算
+        deltaProps.A = resoluteACM_ChoiceB(luck, crty, evt, "A");
+        deltaProps.M = resoluteACM_ChoiceB(luck, crty, evt, "M");
+        deltaProps.C = resolutC_ChoiceB(deltaProps, luck, crty, evt);
 
         return {
-            deltaProps: {
-                H: 0,
-                L: 0,
-                A: 0,
-                C: 0,
-                M: 0,
-            },
-            endingText: "",
+            deltaProps,
+            endingText: evt.getEndingB(),
         };
     }
 }
