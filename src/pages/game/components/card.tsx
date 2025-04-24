@@ -23,8 +23,12 @@ const GameCard: FC<GameCardProps> = (props) => {
     } = props;
 
     return (
+        // <div className="perspective-[1000px]">
         <motion.div
-            className={twMerge("w-[80vw] aspect-[0.75]", className)}
+            className={twMerge(
+                "w-[80vw] aspect-[0.75] rotate-y-180",
+                className,
+            )}
             transition={{ type: "tween", ease: "easeInOut", duration: 0.6 }}
             style={{ zIndex: customZIndex, ...style }}
             {...rest}
@@ -58,6 +62,7 @@ const GameCard: FC<GameCardProps> = (props) => {
                 <span className="text-white text-5xl">Back</span>
             </div>
         </motion.div>
+        // </div>
     );
 };
 

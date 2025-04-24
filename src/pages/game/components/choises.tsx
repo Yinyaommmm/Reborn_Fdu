@@ -1,5 +1,5 @@
 import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import { useViewport } from "@/hooks/useViewPort";
 import { $Game } from "@/store/game";
@@ -16,44 +16,25 @@ export const GameChoices: FC = () => {
     const touchStartX = useMotionValue(0);
     const isDragging = useMotionValue(false);
     const x = useMotionValue(0);
-    const [exitX, setExitX] = useState<boolean>(false);
-    const [exitY, setExitY] = useState<boolean>(false);
-    const isChoiceAnimating = $Game.use((state) => state.isChoiceAnimating);
-    const setIsChoiceAnimating = (v: boolean) => {
-        $Game.update("set isChoiceAnimating", (draft) => {
-            draft.isChoiceAnimating = v;
-        });
-    };
+    const [showEnding, setShowEnding] = useState<boolean>(false);
+    const touchClickRef = useRef<boolean>(false);
+
+    const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
+    const currentCard = $Game.use((state) => state.currentCard);
 
     const handleSwipeComplete = () => {
-        setIsChoiceAnimating(true);
-        if (exitDirection === "right") {
-            setExitX(true);
-            setTimeout(() => {
-                setExitX(false);
-                x.set(0);
-            }, 200);
-        } else {
-            setExitY(true);
-            setTimeout(() => {
-                setExitY(false);
-                x.set(0);
-            }, 200);
-        }
-        setTimeout(() => {
-            setIsChoiceAnimating(false);
-        }, 500);
+        setShowEnding(true);
     };
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
-            if (isChoiceAnimating) return;
+            if (showEnding) return;
             isDragging.set(true);
             touchStartX.set(e.touches[0].clientX);
         };
 
         const handleTouchMove = (e: TouchEvent) => {
-            if (!isDragging.get() || isChoiceAnimating) return;
+            if (!isDragging.get() || showEnding) return;
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
             console.log(deltaX);
@@ -76,7 +57,7 @@ export const GameChoices: FC = () => {
         };
 
         const handleTouchEnd = () => {
-            if (!isDragging.get() || isChoiceAnimating) return;
+            if (!isDragging.get() || showEnding) return;
             isDragging.set(false);
             animate(x, 0, {
                 type: "tween",
@@ -98,12 +79,32 @@ export const GameChoices: FC = () => {
             window.removeEventListener("touchmove", handleTouchMove);
             window.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [exitDirection, isChoiceAnimating]);
+    }, [exitDirection, showEnding]);
+
+    useEffect(() => {
+        const handleTouchStart = () => {
+            if (!showEnding) return;
+            touchClickRef.current = true;
+        };
+        const handleTouchEnd = () => {
+            if (!showEnding || !touchClickRef.current) return;
+            touchClickRef.current = false;
+            setShowEnding(false);
+        };
+
+        window.addEventListener("touchstart", handleTouchStart);
+        window.addEventListener("touchend", handleTouchEnd);
+
+        return () => {
+            window.removeEventListener("touchstart", handleTouchStart);
+            window.removeEventListener("touchend", handleTouchEnd);
+        };
+    }, [showEnding]);
 
     return (
         <div className="relative mt-[2vh]">
-            <AnimatePresence mode="sync">
-                {!exitX && (
+            <AnimatePresence mode="wait">
+                {!showEnding && (
                     <motion.div
                         className="absolute top-0 ml-[3vw] flex items-center"
                         style={{
@@ -113,10 +114,17 @@ export const GameChoices: FC = () => {
                         initial={{ left: -viewportWidth }}
                         animate={{ left: 0 }}
                         transition={{ type: "tween", ease: "easeInOut" }}
-                        exit={{
-                            left: viewportWidth,
-                            transition: { duration: 0.1 },
-                        }}
+                        exit={
+                            exitDirection === "right"
+                                ? {
+                                      left: viewportWidth,
+                                      transition: { duration: 0.1 },
+                                  }
+                                : {
+                                      opacity: 0,
+                                      transition: { duration: 0.1 },
+                                  }
+                        }
                         key="choice-1"
                     >
                         <div
@@ -169,9 +177,9 @@ export const GameChoices: FC = () => {
                         </div>
                     </motion.div>
                 )}
-                {!exitY && (
+                {!showEnding && (
                     <motion.div
-                        className="absolute top-[12vh] mr-[3vw] flex items-center justify-end frosted-glass"
+                        className="absolute top-[12vh] mr-[3vw] flex items-center justify-end"
                         style={{
                             height,
                             ...(exitDirection === "left" ? { right: x } : {}),
@@ -179,10 +187,17 @@ export const GameChoices: FC = () => {
                         initial={{ right: -viewportWidth }}
                         animate={{ right: 0 }}
                         transition={{ type: "tween", ease: "easeInOut" }}
-                        exit={{
-                            right: viewportWidth,
-                            transition: { duration: 0.1 },
-                        }}
+                        exit={
+                            exitDirection === "left"
+                                ? {
+                                      right: viewportWidth,
+                                      transition: { duration: 0.1 },
+                                  }
+                                : {
+                                      opacity: 0,
+                                      transition: { duration: 0.1 },
+                                  }
+                        }
                         key="choice-2"
                     >
                         <div
@@ -232,6 +247,34 @@ export const GameChoices: FC = () => {
                                     borderRight: `${height / 2}px solid transparent`,
                                 }}
                             />
+                        </div>
+                    </motion.div>
+                )}
+                {showEnding && (
+                    <motion.div
+                        className="absolute px-[4vw] w-full"
+                        key={"ending"}
+                        style={{ height: Math.ceil(0.2 * viewportHeight) }}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ type: "tween", ease: "easeInOut" }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <div
+                            className="relative py-4 px-8 h-full box-border flex items-center justify-center"
+                            style={{
+                                backgroundColor: colors[(currentCard - 1) % 3],
+                            }}
+                        >
+                            <div>
+                                加油！期待你在大学里勇敢追逐、实现心中理想。
+                            </div>
+                            <div className="absolute top-[5%] left-[2%] w-full bg-decorate-border h-decorate" />
+                            <div className="absolute top-[105%] left-[2%] w-full bg-decorate-border h-decorate" />
+                            <div className="absolute top-[5%] -right-[2%] h-[40%] w-decorate bg-decorate-border" />
+                            <div className="absolute top-[59%] -right-[2%] h-[2%] w-decorate bg-decorate-border" />
+                            <div className="absolute top-[75%] -right-[2%] h-[30%] w-decorate bg-decorate-border" />
+                            <div className="absolute top-[25%] left-[2%] h-[80%] w-decorate bg-decorate-border" />
                         </div>
                     </motion.div>
                 )}

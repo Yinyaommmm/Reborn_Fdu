@@ -5,7 +5,7 @@ import {
     useTransform,
     AnimatePresence,
 } from "motion/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useRef, useState } from "react";
 
 import GameCard from "./card";
 
@@ -17,7 +17,10 @@ import { calYFromDeltaX } from "@/utils/circle";
 
 const GameCards: FC = () => {
     const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
-    const [activeIndex, setActiveIndex] = useState(0);
+    const [activeIndex] = useState(0);
+    const [showEnding, setShowEnding] = useState(false);
+    const touchClickRef = useRef<boolean>(false);
+
     const isAnimating = $Game.use((state) => state.isCardAnimating);
     const setIsAnimating = (v: boolean) => {
         $Game.update("update isAnimating", (draft) => {
@@ -50,7 +53,7 @@ const GameCards: FC = () => {
     const touchStartX = useMotionValue(0);
     const isDragging = useMotionValue(false);
 
-    const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) rotate(${rotate}deg)`;
+    const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) rotate(${rotate}deg) rotateY(0deg)`;
 
     const handleChoose = () => {
         $Data.update("choose", (draft) => {
@@ -65,11 +68,19 @@ const GameCards: FC = () => {
     const handleSwipeComplete = () => {
         setIsAnimating(true);
         // 更新卡片队列
-        setCards((prev) => [...prev.slice(1), prev[prev.length - 1] + 1]);
+
+        setCards((prev) =>
+            prev[prev.length - 1] + 1 <= 10
+                ? [...prev.slice(1), prev[prev.length - 1] + 1]
+                : [...prev.slice(1)],
+        );
+        $Game.update("set cardIndex", (draft) => {
+            draft.currentCard = draft.currentCard + 1;
+        });
         handleChoose();
         // 重置动画状态
+        setShowEnding(true);
         setTimeout(() => {
-            setActiveIndex(0);
             setIsAnimating(false);
         }, 500);
     };
@@ -78,13 +89,13 @@ const GameCards: FC = () => {
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
-            if (isAnimating) return;
+            if (isAnimating || showEnding) return;
             isDragging.set(true);
             touchStartX.set(e.touches[0].clientX);
         };
 
         const handleTouchMove = (e: TouchEvent) => {
-            if (!isDragging.get() || isAnimating) return;
+            if (!isDragging.get() || isAnimating || showEnding) return;
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
             if (deltaX > 0) setExitDirection("right");
@@ -98,7 +109,7 @@ const GameCards: FC = () => {
         };
 
         const handleTouchEnd = () => {
-            if (!isDragging.get() || isAnimating) return;
+            if (!isDragging.get() || isAnimating || showEnding) return;
             isDragging.set(false);
             animate(x, 0, {
                 type: "tween",
@@ -118,7 +129,31 @@ const GameCards: FC = () => {
             window.removeEventListener("touchmove", handleTouchMove);
             window.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [isAnimating]);
+    }, [isAnimating, showEnding]);
+
+    useEffect(() => {
+        const handleTouchStart = () => {
+            if (!showEnding) return;
+            touchClickRef.current = true;
+        };
+        const handleTouchEnd = () => {
+            if (!showEnding || !touchClickRef.current) return;
+            touchClickRef.current = false;
+            setShowEnding(false);
+            setIsAnimating(true);
+            setTimeout(() => {
+                setIsAnimating(false);
+            }, 300);
+        };
+
+        window.addEventListener("touchstart", handleTouchStart);
+        window.addEventListener("touchend", handleTouchEnd);
+
+        return () => {
+            window.removeEventListener("touchstart", handleTouchStart);
+            window.removeEventListener("touchend", handleTouchEnd);
+        };
+    }, [showEnding]);
 
     return (
         <div className="relative h-[60vh] mt-[10vw] w-full">
@@ -128,20 +163,28 @@ const GameCards: FC = () => {
                         key={card}
                         className="absolute perspective-[1000px] transform-3d"
                         initial={{
-                            rotateY: index === activeIndex ? "0deg" : "180deg",
+                            rotateY:
+                                !showEnding && index === activeIndex
+                                    ? "0deg"
+                                    : "180deg",
                             right: 200,
                             top: -1000,
                             rotate: index === activeIndex ? "-8deg" : "-2deg",
                         }}
                         animate={{
-                            rotateY: index === activeIndex ? "0deg" : "180deg",
+                            rotateY:
+                                !showEnding && index === activeIndex
+                                    ? "0deg"
+                                    : "180deg",
                             right: rights[index - activeIndex],
                             top: tops[index - activeIndex],
                             rotate: rotates[index - activeIndex],
                         }}
                         style={{
                             transform:
-                                index === activeIndex && !isAnimating
+                                !showEnding &&
+                                index === activeIndex &&
+                                !isAnimating
                                     ? transform
                                     : undefined,
                         }}

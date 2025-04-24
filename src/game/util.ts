@@ -3,6 +3,7 @@ import { FiveProps, StandardEvent } from "./type";
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
 
 export function timeLogger(
+    //@ts-ignore
     target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor,
