@@ -1,15 +1,8 @@
-import {
-    clampProb,
-    HLRangeConvert_ChoiceB,
-    randRangeArr,
-    resolutC_ChoiceA,
-    resolutC_ChoiceB,
-    resoluteACM_ChoiceA,
-    resoluteACM_ChoiceB,
-    resolutL_ChoicA,
-} from "./util";
+import { RsltModule } from "./resolute";
+import { clampProb, HLRangeConvert_ChoiceB, randRangeArr } from "./util";
 
 import { GameErrorFactory } from "@/error/game-error";
+import { Logger } from "@/logger/logger";
 import { BaseProbability, UpgradeProbability } from "@/type/config";
 import { EventCategory, MainProp, Prop, ReadableEvent } from "@/type/type";
 export interface FiveProps {
@@ -133,7 +126,7 @@ export class StandardEvent {
         const ending = this._readableEvt.endingA;
         if (resType === "BigS") {
             if (ending.length < 3) {
-                console.log("BigS的A结局不是三个");
+                console.warn("BigS的A结局不是三个");
             }
             return ending[0];
         } else if (resType === "S") {
@@ -185,11 +178,16 @@ export class StandardEvent {
 
 // 对外暴露接口
 export class GameSystem {
+    public logger: Logger;
+    private rsltMod: RsltModule;
     constructor(
         private player: Player,
         private allEvents: StandardEvent[],
         private year = 1,
-    ) {}
+    ) {
+        this.logger = new Logger("GameSyS", true);
+        this.rsltMod = new RsltModule(this);
+    }
     getYear() {
         return this.year;
     }
@@ -213,7 +211,7 @@ export class GameSystem {
             evt.getCategory() === EventCategory.JXPY
                 ? this.player.getElectionBuff()
                 : 0;
-        console.log(
+        this.logger.info(
             "calcStandardSuccProb",
             "evt" + evtProb,
             "humanBuff" + humanBuffProb,
@@ -254,12 +252,30 @@ export class GameSystem {
         const resType = res.resType;
         const deltaProps: FiveProps = zeroFiveProps();
         deltaProps.H = randRangeArr(evt.getHRange_ChoiceA());
-        deltaProps.L = resolutL_ChoicA(luck, evt, resType);
-        deltaProps.A = resoluteACM_ChoiceA(luck, crty, evt, "A", resType);
-        deltaProps.M = resoluteACM_ChoiceA(luck, crty, evt, "M", resType);
-        deltaProps.C = resolutC_ChoiceA(deltaProps, luck, crty, evt, resType);
-        console.log("ChoiceA 中间随机结果", res);
-        console.log("还缺结算成功记录特殊影响");
+        deltaProps.L = this.rsltMod.rsltL_ChoiceA(luck, evt, resType);
+        deltaProps.A = this.rsltMod.rsltACM_ChoiceA(
+            luck,
+            crty,
+            evt,
+            "A",
+            resType,
+        );
+        deltaProps.M = this.rsltMod.rsltACM_ChoiceA(
+            luck,
+            crty,
+            evt,
+            "M",
+            resType,
+        );
+        deltaProps.C = this.rsltMod.rsltC_ChoiceA(
+            deltaProps,
+            luck,
+            crty,
+            evt,
+            resType,
+        );
+        this.logger.info("ChoiceA 中间随机结果", res);
+        this.logger.warn("还缺结算成功记录特殊影响");
         return {
             deltaProps,
             endingText: evt.getEndingA(resType),
@@ -273,7 +289,7 @@ export class GameSystem {
     chooseB(evtID: number) {
         const evt = this.allEvents[evtID];
         if (evt.isEqualRight()) {
-            console.log("等权重, 转换成A的结算");
+            this.logger.info("等权重, 转换成A的结算");
             return this.chooseA(evtID);
         }
         return this.resoluteEvent_ChoiceB(evtID);
@@ -283,7 +299,7 @@ export class GameSystem {
     resoluteEvent_ChoiceB(evtID: number): ResoluteEventRes {
         const evt = this.allEvents[evtID];
         if (evt.isEqualRight()) {
-            console.log("Warning!,等权重选项不应该调用这个函数");
+            this.logger.bug("Warning!,等权重选项不应该调用这个函数");
         }
         const deltaProps = zeroFiveProps();
         const luck = this.player.props.L;
@@ -291,7 +307,7 @@ export class GameSystem {
         // 竞选事件下次一定补偿
         if (evt.getCategory() === EventCategory.JXPY) {
             this.player.setElectionBuff();
-            console.log("进行了竞选失败补偿");
+            this.logger.info("进行了竞选失败补偿");
         }
 
         // H 属性结算
@@ -299,19 +315,19 @@ export class GameSystem {
             evt.getHGear_ChoiceB(),
             evt.getHRange_ChoiceA(),
         );
-        console.log("resoluteEvent_ChoiceB newHRange", newHRange);
+        this.logger.info("resoluteEvent_ChoiceB new'H'Range", newHRange);
         deltaProps.H = randRangeArr(newHRange);
         // L属性结算
         const newLRange = HLRangeConvert_ChoiceB(
             evt.getLGear_ChoiceB(),
             evt.getLRange_ChoiceA(),
         );
-        console.log("resoluteEvent_ChoiceB newLRange", newLRange);
+        this.logger.info("resoluteEvent_ChoiceB new'L'Range", newLRange);
         deltaProps.L = randRangeArr(newLRange);
         // A C M属性结算
-        deltaProps.A = resoluteACM_ChoiceB(luck, crty, evt, "A");
-        deltaProps.M = resoluteACM_ChoiceB(luck, crty, evt, "M");
-        deltaProps.C = resolutC_ChoiceB(deltaProps, luck, crty, evt);
+        deltaProps.A = this.rsltMod.rsltACM_ChoiceB(luck, crty, evt, "A");
+        deltaProps.M = this.rsltMod.rsltACM_ChoiceB(luck, crty, evt, "M");
+        deltaProps.C = this.rsltMod.rsltC_ChoiceB(deltaProps, luck, crty, evt);
 
         return {
             deltaProps,
