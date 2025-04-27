@@ -47,5 +47,5 @@ export default [
             ],
         },
     },
-    { ignores: ["dist/"] },
+    { ignores: ["dist/", "src/data/"] },
 ];

@@ -3,7 +3,7 @@ import { FiveProps, StandardEvent } from "./type";
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
 
 export function timeLogger(
-    target: any,
+    _target: any,
     propertyKey: string,
     descriptor: PropertyDescriptor,
 ): PropertyDescriptor | void {
