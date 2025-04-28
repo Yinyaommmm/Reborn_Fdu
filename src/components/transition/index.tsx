@@ -1,6 +1,6 @@
-import { motion, Variants } from "motion/react";
+import { motion, MotionStyle, Variants } from "motion/react";
 import { useState, useEffect, FC, useMemo } from "react";
-
+import "./index.css";
 interface CircleTransitionProps {
     isActive: boolean;
     cx: number;
@@ -65,30 +65,26 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
         }
     }, [phase, duration, onComplete]);
 
-    // define clip-path variants
+    if (!phase) return null;
+
     const variants: Variants = {
-        enterStart: {
-            clipPath: `circle(0px at ${cx}px ${cy}px)`,
-        },
-        enterEnd: {
-            clipPath: `circle(${maxRadius}px at ${cx}px ${cy}px)`,
-        },
-        exitStart: {
-            clipPath: `circle(${exitMaxRadius}px at ${exitX}px ${exitY}px)`,
-        },
-        exitEnd: {
-            clipPath: `circle(0px at ${exitX}px ${exitY}px)`,
-        },
+        enterStart: { "--r": `${maxRadius}px` },
+        enterEnd: { "--r": `0px` },
+        exitStart: { "--r": `0px` },
+        exitEnd: { "--r": `${exitMaxRadius}px` },
     };
-
-    if (phase === null) return null;
-
-    console.log(phase, maxRadius, exitMaxRadius);
 
     return (
         <motion.div
-            className="fixed top-0 left-0 w-screen h-screen z-10"
-            style={{ backgroundColor: color }}
+            className="overlay pointer-events-none fixed top-0 left-0 w-screen h-screen z-50"
+            style={
+                {
+                    "--cx": `${cx}px`,
+                    "--cy": `${cy}px`,
+                    "--r": `${phase === "enter" ? maxRadius : 0}px`,
+                    backgroundColor: color,
+                } as MotionStyle
+            }
             initial={phase === "enter" ? "enterStart" : "exitStart"}
             animate={phase === "enter" ? "enterEnd" : "exitEnd"}
             variants={variants}

@@ -11,5 +11,5 @@ export const $UI = model<UIModel>("UI", {
     messageContent: "",
     messageType: "success",
     messageDisplay: false,
-    route: "birth",
+    route: "game",
 });

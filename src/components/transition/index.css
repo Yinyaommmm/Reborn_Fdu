@@ -1,0 +1,12 @@
+.overlay {
+    mask-image: radial-gradient(
+      circle at var(--cx) var(--cy),
+      transparent var(--r),
+      black calc(var(--r) + 1px)
+    );
+    -webkit-mask-image: radial-gradient(
+      circle at var(--cx) var(--cy),
+      transparent var(--r),
+      black calc(var(--r) + 1px)
+    );
+  }

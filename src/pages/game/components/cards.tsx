@@ -10,6 +10,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import GameCard from "./card";
 
 import Image from "@/components/image";
+import { useCircularTransition } from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
@@ -20,6 +21,7 @@ const GameCards: FC = () => {
     const [activeIndex] = useState(0);
     const [showEnding, setShowEnding] = useState(false);
     const touchClickRef = useRef<boolean>(false);
+    const { trigger, TransitionComponent } = useCircularTransition();
 
     const isAnimating = $Game.use((state) => state.isCardAnimating);
     const setIsAnimating = (v: boolean) => {
@@ -70,7 +72,7 @@ const GameCards: FC = () => {
         // 更新卡片队列
 
         setCards((prev) =>
-            prev[prev.length - 1] + 1 <= 10
+            prev[prev.length - 1] + 1 <= 4
                 ? [...prev.slice(1), prev[prev.length - 1] + 1]
                 : [...prev.slice(1)],
         );
@@ -85,7 +87,7 @@ const GameCards: FC = () => {
         }, 500);
     };
 
-    console.log(exitDirection);
+    console.log(exitDirection, cards.length);
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
@@ -136,8 +138,12 @@ const GameCards: FC = () => {
             if (!showEnding) return;
             touchClickRef.current = true;
         };
-        const handleTouchEnd = () => {
+        const handleTouchEnd = (e: TouchEvent) => {
             if (!showEnding || !touchClickRef.current) return;
+            if (cards.length === 0) {
+                trigger(e);
+                return;
+            }
             touchClickRef.current = false;
             setShowEnding(false);
             setIsAnimating(true);
@@ -153,11 +159,12 @@ const GameCards: FC = () => {
             window.removeEventListener("touchstart", handleTouchStart);
             window.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [showEnding]);
+    }, [showEnding, cards.length]);
 
     return (
         <div className="relative h-[60vh] mt-[10vw] w-full">
-            <AnimatePresence mode="popLayout">
+            <TransitionComponent></TransitionComponent>
+            <AnimatePresence mode="sync">
                 {cards.slice(0, 3).map((card, index) => (
                     <GameCard
                         key={card}
