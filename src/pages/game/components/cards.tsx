@@ -1,5 +1,4 @@
 import {
-    useMotionTemplate,
     animate,
     useMotionValue,
     useTransform,
@@ -55,8 +54,6 @@ const GameCards: FC = () => {
     const touchStartX = useMotionValue(0);
     const isDragging = useMotionValue(false);
 
-    const transform = useMotionTemplate`translateX(${x}px) translateY(${y}px) rotate(${rotate}deg) rotateY(0deg)`;
-
     const handleChoose = () => {
         $Data.update("choose", (draft) => {
             draft.honesty += Math.floor(Math.random() * 5) + 1;
@@ -84,10 +81,9 @@ const GameCards: FC = () => {
         setShowEnding(true);
         setTimeout(() => {
             setIsAnimating(false);
+            x.set(0);
         }, 500);
     };
-
-    console.log(exitDirection, cards.length);
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
@@ -106,7 +102,6 @@ const GameCards: FC = () => {
             if (deltaX >= triggerDistance || deltaX <= -triggerDistance) {
                 handleSwipeComplete();
                 isDragging.set(false);
-                x.set(0);
             }
         };
 
@@ -188,20 +183,26 @@ const GameCards: FC = () => {
                             rotate: rotates[index - activeIndex],
                         }}
                         style={{
-                            transform:
-                                !showEnding &&
-                                index === activeIndex &&
-                                !isAnimating
-                                    ? transform
-                                    : undefined,
+                            ...(!showEnding &&
+                            index === activeIndex &&
+                            !isAnimating
+                                ? { x, y, rotate }
+                                : undefined),
                         }}
                         backgroundColor={colors[card % 3]}
                         exit={{
-                            transform:
-                                exitDirection === "right"
-                                    ? `translateX(${xExit}px) translateY(${-rightExit.deltaY}px) rotate(${rightExit.rotate}deg)`
-                                    : `translateX(${-xExit}px) translateY(${-leftExit.deltaY}px) rotate(${leftExit.rotate}deg)`,
                             transition: { duration: 0.4 },
+                            ...(exitDirection === "right"
+                                ? {
+                                      x: xExit,
+                                      y: -rightExit.deltaY,
+                                      rotate: rightExit.rotate,
+                                  }
+                                : {
+                                      x: -xExit,
+                                      y: -leftExit.deltaY,
+                                      rotate: leftExit.rotate,
+                                  }),
                         }}
                         transition={{
                             type: "tween",

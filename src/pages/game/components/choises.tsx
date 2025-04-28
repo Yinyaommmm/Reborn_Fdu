@@ -37,7 +37,6 @@ export const GameChoices: FC = () => {
             if (!isDragging.get() || showEnding) return;
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
-            console.log(deltaX);
             if (deltaX > 0 && exitDirection !== "right") {
                 setExitDirection("right");
                 x.set(0);
@@ -103,7 +102,7 @@ export const GameChoices: FC = () => {
 
     return (
         <div className="relative mt-[2vh]">
-            <AnimatePresence mode="wait">
+            <AnimatePresence mode="sync">
                 {!showEnding && (
                     <motion.div
                         className="absolute top-0 ml-[3vw] flex items-center"
