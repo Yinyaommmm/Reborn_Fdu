@@ -1,11 +1,10 @@
 import { GameSystem, Player, StandardEvent } from "./type";
 
+import { events as readablEvents } from "@/data/events_loaded";
 import { timeLogger } from "@/game/util";
-import { ReadExcelFromPublic } from "@/load/read";
 export class GameModule {
     @timeLogger
     static async gamestart() {
-        const readablEvents = await ReadExcelFromPublic();
         const standardEvents = readablEvents.map((e) => new StandardEvent(e));
         const player = new Player();
         player.fixedInit();
