@@ -1,5 +1,13 @@
+import { ReactNode } from "react";
+
 import { RsltModule } from "./resolute";
-import { clampProb, HLRangeConvert_ChoiceB, randRangeArr } from "./util";
+import {
+    clampProb,
+    formatDialog,
+    getTwoRandomItems,
+    HLRangeConvert_ChoiceB,
+    randRangeArr,
+} from "./util";
 
 import { GameErrorFactory } from "@/error/game-error";
 import { Logger } from "@/logger/logger";
@@ -105,7 +113,27 @@ export class Player {
         this._props = { H: 10, L: 20, A: 25, C: 80, M: 40 };
     }
 }
-
+export class EventForShow {
+    category: EventCategory = EventCategory.CGQY;
+    title: string = "这里是title";
+    imgSrc: string = "图片地址";
+    mainText: ReactNode = "这里是主要内容";
+    choiceAText: string = "A选项文本";
+    choiceBText: string = "B选项文本";
+    // endingAText: string[] = ["A结局1", "A结局2"];
+    // endingBText: string = "B结局";
+}
+export class EventLog {
+    // 时间、事件、选择、结果
+    year: number = -1;
+    index: number = -1;
+    evtID: number = -1;
+    choose: "A" | "B" = "A";
+    result: ResoluteEventRes = {
+        deltaProps: zeroFiveProps(),
+        endingText: "",
+    };
+}
 export class StandardEvent {
     getEndingB(): string {
         return this._readableEvt.endingB;
@@ -173,13 +201,48 @@ export class StandardEvent {
     private shouldUpgrade() {
         return this._readableEvt.upgrade;
     }
+
+    forShow(): EventForShow {
+        const e = new EventForShow();
+        e.title = this._readableEvt.title;
+        e.imgSrc = "todo:暂未确定src";
+        e.choiceAText = this._readableEvt.choiceA;
+        e.choiceBText = this._readableEvt.choiceB;
+        if (this._readableEvt.repalceDialog.length === 0) {
+            e.mainText = this._readableEvt.mainDialog;
+        } else {
+            // 设置二级事件的随机序号
+            if (this._readableEvt.randIdice.length == 0) {
+                this._readableEvt.randIdice = getTwoRandomItems(
+                    this._readableEvt.repalceDialog,
+                );
+            }
+            const [idx1, idx2] = this._readableEvt.randIdice;
+            const c1 = this._readableEvt.repalceDialog[idx1];
+            const c2 = this._readableEvt.repalceDialog[idx2];
+            const tmpMainText = this._readableEvt.mainDialog.replace(
+                "$$",
+                `${c1}` + "和" + c2,
+            );
+            e.mainText = formatDialog(tmpMainText, c1, c2);
+            if (this.getCategory() === EventCategory.SZTZ) {
+                e.choiceAText = `选择${c1}`;
+                e.choiceBText = `选择${c2}`;
+            }
+        }
+        // e.endingAText = this._readableEvt.endingA;
+        // e.endingBText = this._readableEvt.endingB;
+        return e;
+    }
     constructor(private _readableEvt: ReadableEvent) {}
 }
 
 // 对外暴露接口
 export class GameSystem {
     public logger: Logger;
+    private eventLog: EventLog[] = [];
     private rsltMod: RsltModule;
+
     constructor(
         private player: Player,
         private allEvents: StandardEvent[],
@@ -196,6 +259,9 @@ export class GameSystem {
             throw GameErrorFactory("setYear", "学年超限");
         }
         this.year = y;
+    }
+    getEventLog() {
+        return this.eventLog;
     }
     // 计算人物在当前某事件的成功概率，默认已经可以触发事件
     private calcStandardSuccProb(evtID: number) {
@@ -282,11 +348,11 @@ export class GameSystem {
         };
     }
 
-    chooseA(evtID: number) {
+    private chooseA(evtID: number) {
         const res = this.calcEventResultType(evtID);
         return this.resoluteEvent_ChoiceA(evtID, res);
     }
-    chooseB(evtID: number) {
+    private chooseB(evtID: number) {
         const evt = this.allEvents[evtID];
         if (evt.isEqualRight()) {
             this.logger.info("等权重, 转换成A的结算");
@@ -294,9 +360,8 @@ export class GameSystem {
         }
         return this.resoluteEvent_ChoiceB(evtID);
     }
-
     // 真的选了一个B选项，非等权重
-    resoluteEvent_ChoiceB(evtID: number): ResoluteEventRes {
+    private resoluteEvent_ChoiceB(evtID: number): ResoluteEventRes {
         const evt = this.allEvents[evtID];
         if (evt.isEqualRight()) {
             this.logger.bug("Warning!,等权重选项不应该调用这个函数");
@@ -333,5 +398,25 @@ export class GameSystem {
             deltaProps,
             endingText: evt.getEndingB(),
         };
+    }
+    // 前端展示事件调用该函数
+    showEvt(evtID: number) {
+        return this.allEvents[evtID].forShow();
+    }
+    resoluteEvt(evtID: number, choice: "A" | "B", index: number) {
+        let res: ResoluteEventRes;
+        if (choice === "A") {
+            res = this.chooseA(evtID);
+        } else {
+            res = this.chooseB(evtID);
+        }
+        this.eventLog.push({
+            year: this.year,
+            index,
+            evtID,
+            choose: choice,
+            result: res,
+        });
+        return res;
     }
 }

@@ -194,4 +194,6 @@ export class ReadableEvent {
     isHighlight: boolean = false;
     bgCategory: BgCategory = BgCategory.REGULAR;
     specialEffect: string = "";
+
+    randIdice: number[] = [];
 }

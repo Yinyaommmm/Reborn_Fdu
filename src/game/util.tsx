@@ -1,3 +1,5 @@
+import React, { ReactNode } from "react";
+
 import { StandardEvent } from "./type";
 
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
@@ -97,4 +99,68 @@ export function HLRangeConvert_ChoiceB(
     }
     console.log("warning! unexpected gear");
     return [0, 0];
+}
+
+export function getTwoRandomItems<T>(arr: T[]) {
+    if (arr.length < 2) {
+        throw new Error("数组至少需要 2 个元素");
+    }
+
+    // 生成两个不同的随机索引
+    const index1 = Math.floor(Math.random() * arr.length);
+    let index2;
+    do {
+        index2 = Math.floor(Math.random() * arr.length);
+    } while (index2 === index1); // 确保 index2 ≠ index1
+
+    return [index1, index2];
+}
+
+export function formatDialog(
+    dialog: string,
+    c1: string,
+    c2: string,
+): React.ReactNode {
+    const parts: React.ReactNode[] = [];
+
+    const match = dialog.match(/(.*?)「(.*?)」(.*)/);
+    const applyUnderline = (text: string): ReactNode[] => {
+        const result: React.ReactNode[] = [];
+        let remaining = text;
+
+        while (remaining) {
+            const idx1 = remaining.indexOf(c1);
+            const idx2 = remaining.indexOf(c2);
+
+            if (idx1 === -1 && idx2 === -1) {
+                result.push(remaining);
+                break;
+            }
+
+            const nextIdx =
+                idx1 !== -1 && (idx2 === -1 || idx1 < idx2) ? idx1 : idx2;
+            const target = nextIdx === idx1 ? c1 : c2;
+
+            if (nextIdx > 0) {
+                result.push(remaining.slice(0, nextIdx));
+            }
+
+            result.push(<u key={`${target}-${result.length}`}>{target}</u>);
+            remaining = remaining.slice(nextIdx + target.length);
+        }
+
+        return result;
+    };
+    if (match) {
+        const [, before, highlight, after] = match;
+
+        parts.push(...applyUnderline(before));
+        parts.push(<b key="highlight">「{highlight}」</b>);
+        parts.push(...applyUnderline(after));
+    } else {
+        // 没有「」的情况，也处理下划线
+        parts.push(...applyUnderline(dialog));
+    }
+
+    return <>{parts}</>;
 }
