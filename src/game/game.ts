@@ -11,11 +11,11 @@ export class GameModule {
 
         const system = new GameSystem(player, standardEvents);
         system.setYear(5);
-        const evtId = 49;
+        const evtId = 3;
         console.log("--------------");
-        console.log(system);
-        console.log("系统年份" + system.getYear());
-        console.log("人属性", player.props);
-        console.log("事件" + evtId + " choose b", system.chooseB(evtId));
+        console.log("记录日志", system.resoluteEvt(evtId, "A", 1));
+        console.log("记录日志", system.resoluteEvt(4, "B", 2));
+        console.log("记录日志", system.resoluteEvt(5, "A", 3));
+        console.log("记录日志", system.getEventLog());
     }
 }

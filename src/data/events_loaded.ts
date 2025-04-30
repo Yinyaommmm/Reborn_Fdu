@@ -69,7 +69,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 1,
@@ -142,7 +143,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 2,
@@ -214,7 +216,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 3,
@@ -294,7 +297,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 4,
@@ -365,7 +369,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 5,
@@ -437,7 +442,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 6,
@@ -509,7 +515,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 7,
@@ -581,7 +588,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 8,
@@ -653,7 +661,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 9,
@@ -725,7 +734,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 10,
@@ -797,7 +807,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 11,
@@ -869,7 +880,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 12,
@@ -941,7 +953,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 13,
@@ -1013,7 +1026,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 14,
@@ -1086,7 +1100,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": "政治身份：党员"
+    "specialEffect": "政治身份：党员",
+    "randIdice": []
   },
   {
     "id": 15,
@@ -1158,7 +1173,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": "升学去向：研究生"
+    "specialEffect": "升学去向：研究生",
+    "randIdice": []
   },
   {
     "id": 16,
@@ -1232,7 +1248,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": "升学去向：研究生"
+    "specialEffect": "升学去向：研究生",
+    "randIdice": []
   },
   {
     "id": 17,
@@ -1304,7 +1321,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": "升学去向：研究生"
+    "specialEffect": "升学去向：研究生",
+    "randIdice": []
   },
   {
     "id": 18,
@@ -1376,7 +1394,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": "升学去向：研究生"
+    "specialEffect": "升学去向：研究生",
+    "randIdice": []
   },
   {
     "id": 19,
@@ -1460,7 +1479,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": "毕业去向：选调"
+    "specialEffect": "毕业去向：选调",
+    "randIdice": []
   },
   {
     "id": 20,
@@ -1544,7 +1564,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": "毕业去向：企业"
+    "specialEffect": "毕业去向：企业",
+    "randIdice": []
   },
   {
     "id": 21,
@@ -1616,7 +1637,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 22,
@@ -1687,7 +1709,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 23,
@@ -1758,7 +1781,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 24,
@@ -1836,7 +1860,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 25,
@@ -1920,7 +1945,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 26,
@@ -1999,7 +2025,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 27,
@@ -2085,7 +2112,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": "毕业去向：退学"
+    "specialEffect": "毕业去向：退学",
+    "randIdice": []
   },
   {
     "id": 28,
@@ -2162,7 +2190,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 29,
@@ -2239,7 +2268,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 30,
@@ -2316,7 +2346,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 31,
@@ -2397,7 +2428,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 32,
@@ -2469,7 +2501,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 33,
@@ -2560,7 +2593,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 34,
@@ -2649,7 +2683,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 35,
@@ -2727,7 +2762,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 36,
@@ -2805,7 +2841,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 37,
@@ -2898,7 +2935,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 38,
@@ -2989,7 +3027,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 39,
@@ -3078,7 +3117,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 40,
@@ -3169,7 +3209,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 41,
@@ -3241,7 +3282,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 42,
@@ -3313,7 +3355,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 43,
@@ -3385,7 +3428,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": "升学去向：研究生"
+    "specialEffect": "升学去向：研究生",
+    "randIdice": []
   },
   {
     "id": 44,
@@ -3480,7 +3524,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 45,
@@ -3566,7 +3611,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 46,
@@ -3647,7 +3693,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 47,
@@ -3731,7 +3778,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 48,
@@ -3821,7 +3869,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 49,
@@ -3911,7 +3960,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 50,
@@ -4003,7 +4053,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 51,
@@ -4099,7 +4150,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 52,
@@ -4180,7 +4232,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 53,
@@ -4262,7 +4315,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 54,
@@ -4345,7 +4399,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 55,
@@ -4426,7 +4481,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 56,
@@ -4506,7 +4562,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 57,
@@ -4581,7 +4638,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 58,
@@ -4666,7 +4724,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 59,
@@ -4755,7 +4814,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 60,
@@ -4840,7 +4900,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 61,
@@ -4914,7 +4975,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 62,
@@ -4988,7 +5050,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 63,
@@ -5061,7 +5124,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 64,
@@ -5141,7 +5205,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 65,
@@ -5225,7 +5290,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": "毕业去向：出国"
+    "specialEffect": "毕业去向：出国",
+    "randIdice": []
   },
   {
     "id": 66,
@@ -5300,7 +5366,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 67,
@@ -5378,7 +5445,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 68,
@@ -5456,7 +5524,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 69,
@@ -5532,7 +5601,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 70,
@@ -5610,7 +5680,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 71,
@@ -5691,7 +5762,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 72,
@@ -5764,7 +5836,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 73,
@@ -5837,7 +5910,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 74,
@@ -5913,7 +5987,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 75,
@@ -5989,7 +6064,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 76,
@@ -6063,7 +6139,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 77,
@@ -6141,7 +6218,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 78,
@@ -6216,7 +6294,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 79,
@@ -6299,7 +6378,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 80,
@@ -6371,7 +6451,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 81,
@@ -6443,7 +6524,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 82,
@@ -6514,7 +6596,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 83,
@@ -6586,7 +6669,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 84,
@@ -6657,7 +6741,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 85,
@@ -6729,7 +6814,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 86,
@@ -6801,7 +6887,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 87,
@@ -6873,7 +6960,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 88,
@@ -6947,7 +7035,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": "毕业去向：辅导员"
+    "specialEffect": "毕业去向：辅导员",
+    "randIdice": []
   },
   {
     "id": 89,
@@ -7019,7 +7108,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": "毕业去向：青椒"
+    "specialEffect": "毕业去向：青椒",
+    "randIdice": []
   },
   {
     "id": 90,
@@ -7103,7 +7193,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": "毕业去向：企业"
+    "specialEffect": "毕业去向：企业",
+    "randIdice": []
   },
   {
     "id": 91,
@@ -7174,7 +7265,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 1,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 92,
@@ -7254,7 +7346,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 93,
@@ -7334,7 +7427,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 94,
@@ -7417,7 +7511,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 95,
@@ -7493,7 +7588,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 96,
@@ -7577,7 +7673,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 97,
@@ -7651,7 +7748,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 98,
@@ -7746,7 +7844,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 99,
@@ -7826,7 +7925,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 100,
@@ -7906,7 +8006,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 101,
@@ -7982,7 +8083,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 102,
@@ -8069,7 +8171,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 103,
@@ -8156,7 +8259,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 104,
@@ -8242,7 +8346,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 105,
@@ -8331,7 +8436,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 106,
@@ -8419,7 +8525,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 107,
@@ -8508,7 +8615,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 108,
@@ -8592,7 +8700,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 109,
@@ -8677,7 +8786,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 110,
@@ -8762,7 +8872,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 111,
@@ -8848,7 +8959,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 112,
@@ -8929,7 +9041,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 113,
@@ -9010,7 +9123,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 114,
@@ -9096,7 +9210,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 115,
@@ -9186,7 +9301,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 116,
@@ -9273,7 +9389,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 117,
@@ -9353,7 +9470,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 118,
@@ -9433,7 +9551,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 119,
@@ -9509,7 +9628,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 120,
@@ -9585,7 +9705,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 121,
@@ -9659,7 +9780,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 122,
@@ -9737,7 +9859,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 123,
@@ -9821,7 +9944,8 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 124,
@@ -9907,7 +10031,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 125,
@@ -9993,7 +10118,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 126,
@@ -10079,7 +10205,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 127,
@@ -10160,7 +10287,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 128,
@@ -10248,7 +10376,8 @@ export const events = [
     },
     "isHighlight": true,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   },
   {
     "id": 129,
@@ -10332,6 +10461,7 @@ export const events = [
     },
     "isHighlight": false,
     "bgCategory": 0,
-    "specialEffect": ""
+    "specialEffect": "",
+    "randIdice": []
   }
 ] as ReadableEvent[];
