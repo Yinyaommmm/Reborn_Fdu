@@ -72,7 +72,9 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
                     <div className="absolute -top-[10%] left-[3%] w-full h-full border-decorate border-decorate-border -z-10" />
                     <div className="w-full h-full bg-white py-2 px-3 flex flex-col justify-between">
                         <div>
-                            <div className="text-sm font-semibold">{name}</div>
+                            <div className="text-sm font-semibold mb-1">
+                                {name}
+                            </div>
                             <div className="text-sm">{description}</div>
                         </div>
                         <div>
