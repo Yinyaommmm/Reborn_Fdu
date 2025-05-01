@@ -2,11 +2,18 @@ import { HTMLMotionProps, motion } from "motion/react";
 import { FC, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
+import { tools } from "../types/props";
+
 import Image from "@/components/image";
 
 export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
-    const [id, setId] = useState<number>(0);
+    const [name, setName] = useState("暂未选择");
+    const [description, setDescription] = useState<string | undefined>(
+        undefined,
+    );
+    const [passive, setPassive] = useState<string | undefined>(undefined);
+    const [active, setActive] = useState<string | undefined>(undefined);
 
     return (
         <motion.div
@@ -23,77 +30,60 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
                 </div>
             </div>
             <div className="relative mt-[8%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
+                {tools.slice(0, 4).map((tool, index) => (
+                    <Image
+                        className="relative h-full aspect-square"
+                        src={tool.src}
+                        adjustHeight
+                        adjustWidth={false}
+                        key={`choose-props-${index}`}
+                        onClick={() => {
+                            setName(tool.name);
+                            setDescription(tool.description);
+                            setPassive(tool.passive);
+                            setActive(tool.active);
+                        }}
+                    >
+                        <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
+                    </Image>
+                ))}
             </div>
             <div className="relative mt-[5%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
-                <Image
-                    className="relative h-full aspect-square"
-                    src="png/data-icon.png"
-                    adjustHeight
-                    adjustWidth={false}
-                >
-                    <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
-                </Image>
+                {tools.slice(4, 8).map((tool, index) => (
+                    <Image
+                        className="relative h-full aspect-square"
+                        src={tool.src}
+                        adjustHeight
+                        adjustWidth={false}
+                        key={`choose-props-${index}`}
+                        onClick={() => {
+                            setName(tool.name);
+                            setDescription(tool.description);
+                            setPassive(tool.passive);
+                            setActive(tool.active);
+                        }}
+                    >
+                        <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
+                    </Image>
+                ))}
             </div>
-            <div className="relative mt-[10%] px-[8%] w-full box-border h-[20%]">
+            <div className="relative mt-[10%] px-[8%] w-full box-border h-[25%]">
                 <div className="relative w-full h-full">
                     <div className="absolute -top-[10%] left-[3%] w-full h-full border-decorate border-decorate-border -z-10" />
-                    <div className="w-full h-full bg-white"></div>
+                    <div className="w-full h-full bg-white py-2 px-3 flex flex-col justify-between">
+                        <div>
+                            <div className="text-sm font-semibold">{name}</div>
+                            <div className="text-sm">{description}</div>
+                        </div>
+                        <div>
+                            {passive && (
+                                <div className="text-xs">被动: {passive}</div>
+                            )}
+                            {active && (
+                                <div className="text-xs">主动: {active}</div>
+                            )}
+                        </div>
+                    </div>
                 </div>
             </div>
         </motion.div>
