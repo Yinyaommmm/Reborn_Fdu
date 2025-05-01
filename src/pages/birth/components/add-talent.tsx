@@ -4,11 +4,19 @@ import { twMerge } from "tailwind-merge";
 
 import { Talent } from "./Talent";
 
+import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
 
 export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
     const [points, setPoints] = useState<number>(20);
+    const [sex, setSex] = useState<number>(1);
+    const [prefer, setPrefer] = useState<number>(1);
+    const [honesty, setHonesty] = useState<number>(0);
+    const [lucky, setLucky] = useState<number>(0);
+    const [academic, setAcademic] = useState<number>(0);
+    const [creativity, setCreativity] = useState<number>(0);
+    const [management, setManagement] = useState<number>(0);
 
     return (
         <motion.div
@@ -30,9 +38,31 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         个人档案
                         <div className="absolute top-0 left-0 bg-white w-full h-full rotate-[8deg] z-[-1]" />
                     </div>
-                    <div className="w-full mt-3 text-xs">学号: 52019050514</div>
-                    <div className="w-full mt-4 text-xs">性别:</div>
-                    <div className="w-full mt-4 text-xs">偏好:</div>
+                    <div className="w-full mt-3 text-sm">学号: 52019050514</div>
+                    <div className="w-full mt-4 text-sm flex items-center gap-2">
+                        <div className="mr-4">性别:</div>
+                        <IconArrowButton
+                            className="text-[#7897B5] text-2xl"
+                            onClick={() => setSex((prev) => (prev + 1) % 2)}
+                        />
+                        {sex === 0 ? "男" : "女"}
+                        <IconArrowButton
+                            className="text-[#C6796C] text-2xl -scale-x-100"
+                            onClick={() => setSex((prev) => (prev + 1) % 2)}
+                        />
+                    </div>
+                    <div className="w-full mt-4 text-sm flex items-center gap-2">
+                        <div className="mr-4">偏好:</div>
+                        <IconArrowButton
+                            className="text-[#7897B5] text-2xl"
+                            onClick={() => setPrefer((prev) => (prev + 1) % 2)}
+                        />
+                        {prefer === 0 ? "专注科研" : "均衡发展"}
+                        <IconArrowButton
+                            className="text-[#C6796C] text-2xl -scale-x-100"
+                            onClick={() => setPrefer((prev) => (prev + 1) % 2)}
+                        />
+                    </div>
                 </div>
             </div>
             <div className="mt-[6%] px-[8%] flex items-end gap-4">
@@ -45,37 +75,92 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
                     src="png/data-icon.png"
-                    value={0}
+                    value={lucky}
                     title="幸运"
-                    onChange={() => {}}
+                    onAdd={() => {
+                        if (points > 0) {
+                            setLucky((prev) => prev + 1);
+                            setPoints((prev) => prev - 1);
+                        }
+                    }}
+                    onMinus={() => {
+                        if (lucky > 0) {
+                            setLucky((prev) => prev - 1);
+                            setPoints((prev) => prev + 1);
+                        }
+                    }}
                 />
                 <Talent
                     src="png/data-icon.png"
-                    value={0}
-                    title="幸运"
-                    onChange={() => {}}
+                    value={honesty}
+                    title="诚信"
+                    onAdd={() => {
+                        if (points > 0) {
+                            setHonesty((prev) => prev + 1);
+                            setPoints((prev) => prev - 1);
+                        }
+                    }}
+                    onMinus={() => {
+                        if (honesty > 0) {
+                            setHonesty((prev) => prev - 1);
+                            setPoints((prev) => prev + 1);
+                        }
+                    }}
                 />
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
                     src="png/data-icon.png"
-                    value={0}
-                    title="幸运"
-                    onChange={() => {}}
+                    value={academic}
+                    title="学术"
+                    onAdd={() => {
+                        if (points > 0) {
+                            setAcademic((prev) => prev + 1);
+                            setPoints((prev) => prev - 1);
+                        }
+                    }}
+                    onMinus={() => {
+                        if (academic > 0) {
+                            setAcademic((prev) => prev - 1);
+                            setPoints((prev) => prev + 1);
+                        }
+                    }}
                 />
                 <Talent
                     src="png/data-icon.png"
-                    value={0}
-                    title="幸运"
-                    onChange={() => {}}
+                    value={creativity}
+                    title="创造"
+                    onAdd={() => {
+                        if (points > 0) {
+                            setCreativity((prev) => prev + 1);
+                            setPoints((prev) => prev - 1);
+                        }
+                    }}
+                    onMinus={() => {
+                        if (creativity > 0) {
+                            setCreativity((prev) => prev - 1);
+                            setPoints((prev) => prev + 1);
+                        }
+                    }}
                 />
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
                     src="png/data-icon.png"
-                    value={0}
-                    title="幸运"
-                    onChange={() => {}}
+                    value={management}
+                    title="管理"
+                    onAdd={() => {
+                        if (points > 0) {
+                            setManagement((prev) => prev + 1);
+                            setPoints((prev) => prev - 1);
+                        }
+                    }}
+                    onMinus={() => {
+                        if (management > 0) {
+                            setManagement((prev) => prev - 1);
+                            setPoints((prev) => prev + 1);
+                        }
+                    }}
                 />
             </div>
         </motion.div>

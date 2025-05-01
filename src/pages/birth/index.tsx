@@ -8,8 +8,12 @@ export const Birth: FC = () => {
     const [step, setStep] = useState<number>(1);
 
     return (
-        <div className="w-screen h-screen game-background pt-[2vh] box-border">
-            <div className="h-[24vh] w-full"></div>
+        <div className="relative w-screen h-screen game-background box-border">
+            <div
+                className="absolute w-full h-full bg-cover bg-center mt-[3vh]"
+                style={{ backgroundImage: "url(png/calender.png)" }}
+            />
+            <div className="h-[30vh]" />
             <div className="relative w-full">
                 <div className="absolute top-[1%] left-0 bg-[#D8B79D] ml-[8%] w-[85%] h-[60vh] -rotate-1"></div>
                 <div className="absolute flex items-center top-0 lef-0 -rotate-6 gap-4 ml-[10%]">
