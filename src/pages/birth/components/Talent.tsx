@@ -33,13 +33,13 @@ export const Talent: FC<TalentProps> = (props) => {
                 <div>{title}</div>
                 <div className="flex items-center gap-2">
                     <IconArrowButton
-                        className="text-[#7897B5] text-2xl"
+                        className="text-[#7897B5] text-xl"
                         onClick={onClickLeft}
                         onTouchEnd={onTouchEndLeft}
                     />
                     {value}
                     <IconArrowButton
-                        className="text-[#C6796C] text-2xl -scale-x-100"
+                        className="text-[#C6796C] text-xl -scale-x-100"
                         onClick={onClickRight}
                         onTouchEnd={onTouchEndRight}
                     />

@@ -17,9 +17,9 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             {...rest}
         >
             <div className="relative pt-[10%] px-[8%] w-full flex justify-between gap-4">
-                <div className="relative border-decorate border-decorate-border py-1 px-3 box-border w-[30%] text-center text-sm">
+                <div className="relative border-decorate border-decorate-border py-1 px-3 box-border w-[30%] text-center text-base font-cursive">
                     道具
-                    <div className="absolute top-0 left-0 bg-white w-full h-full rotate-[8deg] z-[-1]" />
+                    <div className="absolute top-0 left-0 bg-white w-full h-full rotate-[6deg] z-[-1]" />
                 </div>
             </div>
             <div className="relative mt-[8%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">

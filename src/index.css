@@ -12,4 +12,14 @@ body, html {
   --border-width-decorate: 1px;
   --height-decorate: 1px;
   --width-decorate: 1px;
+  
+  --font-cursive: 'CursiveFont';
+}
+
+/* index.css（或 App.css） */
+@font-face {
+  font-family: 'CursiveFont';
+  src: url('./assets/font/cursive-font.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }

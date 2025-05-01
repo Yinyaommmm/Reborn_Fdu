@@ -4,8 +4,16 @@ import { FC, useState } from "react";
 import { AddTalent } from "./components/add-talent";
 import { ChooseProps } from "./components/choose-props";
 
+import { useFastClick } from "@/hooks/useFastClick";
+
 export const Birth: FC = () => {
     const [step, setStep] = useState<number>(1);
+    const { onClick: onClickStep1, onTouchEnd: onTouchEnd1 } = useFastClick(
+        () => setStep(1),
+    );
+    const { onClick: onClickStep2, onTouchEnd: onTouchEnd2 } = useFastClick(
+        () => setStep(2),
+    );
 
     return (
         <div className="relative w-screen h-screen game-background box-border">
@@ -20,23 +28,19 @@ export const Birth: FC = () => {
                     <motion.div
                         className="bg-[#C6796C] px-4 py-2 text-white"
                         animate={{ translateY: step === 1 ? "-70%" : "-40%" }}
-                        onClick={() => setStep(1)}
+                        onClick={onClickStep1}
+                        onTouchEnd={onTouchEnd1}
                     >
-                        <div
-                            className="absolute top-[10%] left-[6%] w-full h-full border-decorate border-decorate-border -z-10"
-                            onClick={() => setStep(1)}
-                        />
+                        <div className="absolute top-[10%] left-[6%] w-full h-full border-decorate border-decorate-border -z-10" />
                         STEP 1
                     </motion.div>
                     <motion.div
                         className="bg-[#7897B5] px-4 py-2 text-white"
                         animate={{ translateY: step === 2 ? "-70%" : "-40%" }}
-                        onClick={() => setStep(2)}
+                        onClick={onClickStep2}
+                        onTouchEnd={onTouchEnd2}
                     >
-                        <div
-                            className="absolute top-[10%] left-[6%] w-full h-full border-decorate border-decorate-border -z-10"
-                            onClick={() => setStep(2)}
-                        />
+                        <div className="absolute top-[10%] left-[6%] w-full h-full border-decorate border-decorate-border -z-10" />
                         STEP 2
                     </motion.div>
                 </div>
