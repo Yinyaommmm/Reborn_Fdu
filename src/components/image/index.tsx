@@ -93,7 +93,7 @@ const Image: FC<ImageProps> = (props) => {
         <div ref={imageWrapperRef} {...rest} style={wrapperStyle}>
             <div
                 className={twMerge(
-                    "w-full aspect-video bg-gray-100",
+                    "w-full aspect-square bg-gray-100",
                     isImageLoaded ? "hidden" : "block",
                 )}
                 style={wrapperStyle}

@@ -10,9 +10,15 @@ export const GameChoices: FC = () => {
     const slideDistanceScale = 1;
     const triggerDistance = viewportWidth / 3;
 
-    const [exitDirection, setExitDirection] = useState<"right" | "left">(
-        "right",
-    );
+    const trigger = $Game.use((state) => state.trigger);
+
+    const exitDirection = $Game.use((state) => state.exitDirection);
+    const setExitDirection = (v: "right" | "left") => {
+        $Game.update("update exitDirection", (draft) => {
+            draft.exitDirection = v;
+        });
+    };
+
     const touchStartX = useMotionValue(0);
     const isDragging = useMotionValue(false);
     const x = useMotionValue(0);
@@ -25,6 +31,12 @@ export const GameChoices: FC = () => {
     const handleSwipeComplete = () => {
         setShowEnding(true);
     };
+
+    useEffect(() => {
+        if (trigger) {
+            handleSwipeComplete();
+        }
+    }, [trigger]);
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
@@ -100,6 +112,8 @@ export const GameChoices: FC = () => {
         };
     }, [showEnding]);
 
+    useEffect(() => {}, []);
+
     return (
         <div className="relative mt-[2vh]">
             <AnimatePresence mode="sync">
@@ -125,6 +139,12 @@ export const GameChoices: FC = () => {
                                   }
                         }
                         key="choice-1"
+                        onClick={() => {
+                            $Game.update("trigger", (draft) => {
+                                draft.trigger = true;
+                                draft.exitDirection = "right";
+                            });
+                        }}
                     >
                         <div
                             className="absolute bg-decorate-border h-decorate top-[8%] -left-[2%]"
@@ -198,6 +218,12 @@ export const GameChoices: FC = () => {
                                   }
                         }
                         key="choice-2"
+                        onClick={() => {
+                            $Game.update("trigger", (draft) => {
+                                draft.trigger = true;
+                                draft.exitDirection = "left";
+                            });
+                        }}
                     >
                         <div
                             className="absolute bg-decorate-border h-decorate bottom-[8%] -right-[2%]"

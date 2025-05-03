@@ -5,6 +5,7 @@ import { Logger } from "@/logger/logger";
 
 export class RsltModule {
     private logger: Logger;
+    // @ts-ignore
     constructor(private gameSys: GameSystem) {
         // this.logger = new Logger("RsltMod", gameSys.logger.getEnable());
         this.logger = new Logger("RsltMod", false);

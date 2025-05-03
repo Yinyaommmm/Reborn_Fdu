@@ -28,9 +28,9 @@ const GameCards: FC = () => {
             draft.isCardAnimating = v;
         });
     };
-    const [exitDirection, setExitDirection] = useState<"right" | "left">(
-        "right",
-    );
+    const exitDirection = $Game.use((state) => state.exitDirection);
+    const choiceTrigger = $Game.use((state) => state.trigger);
+
     const { vw: viewportWidth } = useViewport();
     const slideDistanceScale = 2;
     const radius = 10000;
@@ -86,6 +86,15 @@ const GameCards: FC = () => {
     };
 
     useEffect(() => {
+        if (choiceTrigger) {
+            handleSwipeComplete();
+            $Game.update("solve trigger", (draft) => {
+                draft.trigger = false;
+            });
+        }
+    }, [choiceTrigger]);
+
+    useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
             if (isAnimating || showEnding) return;
             isDragging.set(true);
@@ -96,8 +105,8 @@ const GameCards: FC = () => {
             if (!isDragging.get() || isAnimating || showEnding) return;
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
-            if (deltaX > 0) setExitDirection("right");
-            else setExitDirection("left");
+            // if (deltaX > 0) setExitDirection("right");
+            // else setExitDirection("left");
             x.set(deltaX * slideDistanceScale);
             if (deltaX >= triggerDistance || deltaX <= -triggerDistance) {
                 handleSwipeComplete();
@@ -203,6 +212,7 @@ const GameCards: FC = () => {
                                       y: -leftExit.deltaY,
                                       rotate: leftExit.rotate,
                                   }),
+                            zIndex: 50,
                         }}
                         transition={{
                             type: "tween",
