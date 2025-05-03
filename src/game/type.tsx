@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 
 import { RsltModule } from "./resolute";
+import { TimelineModule } from "./timeline";
 import {
     clampProb,
     formatDialog,
@@ -76,6 +77,11 @@ export class Player {
         this._props.A += deltaVals.A;
         this._props.C += deltaVals.C;
         this._props.M += deltaVals.M;
+        this._props.H = Math.min(100, this._props.H);
+        this._props.L = Math.min(100, this._props.L);
+        this._props.A = Math.min(100, this._props.A);
+        this._props.C = Math.min(100, this._props.C);
+        this._props.M = Math.min(100, this._props.M);
     }
     randomInit() {
         const keys: Prop[] = ["H", "L", "A", "C", "M"];
@@ -110,7 +116,7 @@ export class Player {
         this._props = values;
     }
     fixedInit() {
-        this._props = { H: 10, L: 20, A: 25, C: 80, M: 40 };
+        this._props = { H: 10, L: 20, A: 10, C: 10, M: 10 };
     }
 }
 export class EventForShow {
@@ -134,6 +140,7 @@ export class EventLog {
         endingText: "",
     };
 }
+
 export class StandardEvent {
     getEndingB(): string {
         return this._readableEvt.endingB;
@@ -242,7 +249,7 @@ export class GameSystem {
     public logger: Logger;
     private eventLog: EventLog[] = [];
     private rsltMod: RsltModule;
-
+    private timelineMod: TimelineModule;
     constructor(
         private player: Player,
         private allEvents: StandardEvent[],
@@ -250,6 +257,11 @@ export class GameSystem {
     ) {
         this.logger = new Logger("GameSyS", true);
         this.rsltMod = new RsltModule(this);
+        this.timelineMod = new TimelineModule(
+            this.allEvents,
+            this.player,
+            this,
+        );
     }
     getYear() {
         return this.year;
@@ -399,7 +411,7 @@ export class GameSystem {
             endingText: evt.getEndingB(),
         };
     }
-    // 前端展示事件调用该函数
+    // 前端展示事件调用该函数，根据信息去绘制展示该活动的页面
     showEvt(evtID: number) {
         return this.allEvents[evtID].forShow();
     }
@@ -410,6 +422,7 @@ export class GameSystem {
         } else {
             res = this.chooseB(evtID);
         }
+        // 记录日志
         this.eventLog.push({
             year: this.year,
             index,
@@ -417,6 +430,13 @@ export class GameSystem {
             choose: choice,
             result: res,
         });
+        // 人物属性
+
+        this.player.changeProps(res.deltaProps);
         return res;
+    }
+
+    nextEvt() {
+        return this.timelineMod.getNextEventID();
     }
 }
