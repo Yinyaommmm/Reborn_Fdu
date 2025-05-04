@@ -4,36 +4,36 @@ import { StandardEvent } from "./type";
 
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
 
-export function timeLogger(
-    _target: any,
-    propertyKey: string,
-    descriptor: PropertyDescriptor,
-): PropertyDescriptor | void {
-    const originalMethod = descriptor.value;
+// export function timeLogger<T extends (...args: unknown[]) => unkn>(
+//     _target: object,
+//     propertyKey: string | symbol,
+//     descriptor: TypedPropertyDescriptor<T>,
+// ): TypedPropertyDescriptor<T> | void {
+//     const originalMethod = descriptor.value!;
 
-    descriptor.value = function (...args: any[]) {
-        const start = performance.now();
-        const result = originalMethod.apply(this, args);
+//     descriptor.value = function (...args: Parameters<T>): ReturnType<T> {
+//         const start = performance.now();
+//         const result = originalMethod.apply(this, args);
 
-        if (result instanceof Promise) {
-            return result.then((res) => {
-                const end = performance.now();
-                console.log(
-                    `${propertyKey} executed in ${(end - start).toFixed(2)} ms`,
-                );
-                return res;
-            });
-        } else {
-            const end = performance.now();
-            console.log(
-                `${propertyKey} executed in ${(end - start).toFixed(2)} ms`,
-            );
-            return result;
-        }
-    };
+//         if (result instanceof Promise) {
+//             return result.then((res) => {
+//                 const end = performance.now();
+//                 console.log(
+//                     `${String(propertyKey)} executed in ${(end - start).toFixed(2)} ms`,
+//                 );
+//                 return res;
+//             }) as ReturnType<T>;
+//         } else {
+//             const end = performance.now();
+//             console.log(
+//                 `${String(propertyKey)} executed in ${(end - start).toFixed(2)} ms`,
+//             );
+//             return result;
+//         }
+//     } as T;
 
-    return descriptor;
-}
+//     return descriptor;
+// }
 
 export function clamp(value: number, min: number, max: number): number {
     return Math.max(min, Math.min(max, value));
@@ -101,17 +101,44 @@ export function HLRangeConvert_ChoiceB(
     return [0, 0];
 }
 
-export function getTwoRandomItems<T>(arr: T[]) {
+export function getTwoRandomItems<T>(arr: T[], beforeRandIdice: number[]) {
     if (arr.length < 2) {
+        console.warn("getTwoRandomItems", arr, beforeRandIdice);
         throw new Error("数组至少需要 2 个元素");
+    }
+    // console.log("getTwoRandomItems", "func", arr, beforeRandIdice);
+    if (arr.length === 2) {
+        return [0, 1];
+    } else if (arr.length === 3) {
+        const allPairs: [number, number][] = [
+            [0, 1],
+            [0, 2],
+            [1, 2],
+        ];
+        const start = Math.floor(Math.random() * 3);
+        for (let offset = 0; offset !== 3; offset++) {
+            const pairIdx = (offset + start) % 3;
+            if (
+                !allPairs[pairIdx].includes(beforeRandIdice[0]) ||
+                !allPairs[pairIdx].includes(beforeRandIdice[1])
+            ) {
+                return allPairs[pairIdx];
+            }
+        }
     }
 
     // 生成两个不同的随机索引
-    const index1 = Math.floor(Math.random() * arr.length);
+    const last1 = beforeRandIdice[0] || null;
+    const last2 = beforeRandIdice[1] || null;
+    let index1;
+    do {
+        index1 = Math.floor(Math.random() * arr.length);
+    } while (index1 === last1 || index1 === last2);
     let index2;
     do {
         index2 = Math.floor(Math.random() * arr.length);
-    } while (index2 === index1); // 确保 index2 ≠ index1
+        // 确保 index2 ≠ index1 和 last1 last2
+    } while (index2 === last1 || index2 === last2 || index2 === index1);
 
     return [index1, index2];
 }

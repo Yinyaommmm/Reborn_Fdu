@@ -1,3 +1,4 @@
+import { log } from "console";
 import { ReactNode } from "react";
 
 import { RsltModule } from "./resolute";
@@ -38,9 +39,11 @@ export interface EvtResultType {
 export interface ResoluteEventRes {
     deltaProps: FiveProps;
     endingText: string;
+    resType: "BigS" | "S" | "F" | "B"; // 引入B选项;
 }
 
 export class Player {
+    private _mainProp: "A" | "M" = "A";
     getElectionBuff() {
         return this.electionBuff;
     }
@@ -118,6 +121,13 @@ export class Player {
     fixedInit() {
         this._props = { H: 10, L: 20, A: 10, C: 10, M: 10 };
     }
+
+    get mainProp() {
+        return this._mainProp;
+    }
+    set mainProp(mp: "A" | "M") {
+        this._mainProp = mp;
+    }
 }
 export class EventForShow {
     category: EventCategory = EventCategory.CGQY;
@@ -138,10 +148,14 @@ export class EventLog {
     result: ResoluteEventRes = {
         deltaProps: zeroFiveProps(),
         endingText: "",
+        resType: "F",
     };
 }
 
 export class StandardEvent {
+    getID() {
+        return this._readableEvt.id;
+    }
     getEndingB(): string {
         return this._readableEvt.endingB;
     }
@@ -156,6 +170,16 @@ export class StandardEvent {
     }
     isEqualRight() {
         return this._readableEvt.equalRights;
+    }
+    isRequired() {
+        return this._readableEvt.required;
+    }
+    isRepetable() {
+        return this._readableEvt.repetable;
+    }
+    // 是否是二级事件
+    is2ji() {
+        return this._readableEvt.repalceDialog.length !== 0;
     }
     getEndingA(resType: "BigS" | "S" | "F"): string {
         const ending = this._readableEvt.endingA;
@@ -204,7 +228,21 @@ export class StandardEvent {
     getLGear_ChoiceB() {
         return this._readableEvt.resultB.L;
     }
-
+    getHappenYear() {
+        return this._readableEvt.happenYear;
+    }
+    getPrerequisites() {
+        return this._readableEvt.prerequisites;
+    }
+    getRequirement() {
+        return this._readableEvt.requireProps;
+    }
+    setRandIdice() {
+        this._readableEvt.randIdice = getTwoRandomItems(
+            this._readableEvt.repalceDialog,
+            this._readableEvt.randIdice,
+        );
+    }
     private shouldUpgrade() {
         return this._readableEvt.upgrade;
     }
@@ -220,10 +258,10 @@ export class StandardEvent {
         } else {
             // 设置二级事件的随机序号
             if (this._readableEvt.randIdice.length == 0) {
-                this._readableEvt.randIdice = getTwoRandomItems(
-                    this._readableEvt.repalceDialog,
-                );
+                // 没有被选中过，因此randIdice为空，为其随机生成两个选项
+                this.setRandIdice();
             }
+            // 根据选项选择两个文本替换$$
             const [idx1, idx2] = this._readableEvt.randIdice;
             const c1 = this._readableEvt.repalceDialog[idx1];
             const c2 = this._readableEvt.repalceDialog[idx2];
@@ -241,6 +279,8 @@ export class StandardEvent {
         // e.endingBText = this._readableEvt.endingB;
         return e;
     }
+    public experienceCount = 0;
+
     constructor(private _readableEvt: ReadableEvent) {}
 }
 
@@ -250,18 +290,15 @@ export class GameSystem {
     private eventLog: EventLog[] = [];
     private rsltMod: RsltModule;
     private timelineMod: TimelineModule;
+    private year = 1;
     constructor(
         private player: Player,
         private allEvents: StandardEvent[],
-        private year = 1,
     ) {
-        this.logger = new Logger("GameSyS", true);
+        this.logger = new Logger("GameSyS", false);
         this.rsltMod = new RsltModule(this);
-        this.timelineMod = new TimelineModule(
-            this.allEvents,
-            this.player,
-            this,
-        );
+        this.timelineMod = new TimelineModule(this.player, this);
+        console.log(allEvents);
     }
     getYear() {
         return this.year;
@@ -274,6 +311,9 @@ export class GameSystem {
     }
     getEventLog() {
         return this.eventLog;
+    }
+    getAllEvents() {
+        return this.allEvents;
     }
     // 计算人物在当前某事件的成功概率，默认已经可以触发事件
     private calcStandardSuccProb(evtID: number) {
@@ -357,6 +397,7 @@ export class GameSystem {
         return {
             deltaProps,
             endingText: evt.getEndingA(resType),
+            resType: res.resType,
         };
     }
 
@@ -409,6 +450,7 @@ export class GameSystem {
         return {
             deltaProps,
             endingText: evt.getEndingB(),
+            resType: "B",
         };
     }
     // 前端展示事件调用该函数，根据信息去绘制展示该活动的页面
@@ -431,12 +473,13 @@ export class GameSystem {
             result: res,
         });
         // 人物属性
-
         this.player.changeProps(res.deltaProps);
+        // 事件经历次数
+        this.allEvents[evtID].experienceCount++;
         return res;
     }
-
     nextEvt() {
-        return this.timelineMod.getNextEventID();
+        const nextRes = this.timelineMod.getNextEvent();
+        return nextRes;
     }
 }

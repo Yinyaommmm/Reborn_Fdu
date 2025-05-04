@@ -1,3 +1,4 @@
+import { RandomPickModule } from "./randompick";
 import { Player, GameSystem, StandardEvent } from "./type";
 
 import { Logger } from "@/logger/logger";
@@ -30,7 +31,7 @@ const CONSTFixedEvents: FixedEventMap = {
                     "M",
                     player.props.M,
                 );
-                if (player.props.A > player.props.M) return 16;
+                if (player.mainProp === "A") return 16;
                 return 17;
             },
         ],
@@ -53,13 +54,8 @@ const CONSTFixedEvents: FixedEventMap = {
         start: [
             20,
             (player: Player) => {
-                console.log(
-                    "9-2此时的player",
-                    "A" + player.props.A,
-                    "M",
-                    player.props.M,
-                );
-                if (player.props.A > player.props.M) return 89;
+                console.log("9-2此时的player主属性", player.mainProp);
+                if (player.mainProp) return 89;
                 return 90;
             },
             91,
@@ -67,65 +63,65 @@ const CONSTFixedEvents: FixedEventMap = {
         end: [88, 92, 23],
     },
 };
-const RANDOM_EVTNUM_PERYEAR = 7;
+export const RANDOM_EVTNUM_PERYEAR = 7;
 
 export class TimelineModule {
-    private eventIndexInYear: number = 0; // 进行到当前学年的哪一个活动了？
+    private eventNextIndexInYear: number = 0; // 表示下一个要进行的活动的index，并不是
     private completedEventIDs: Set<number> = new Set();
     private fixedEvents: FixedEventMap = CONSTFixedEvents;
     private logger: Logger;
+    private randpickMod: RandomPickModule;
 
     constructor(
-        private allEvents: StandardEvent[],
         private player: Player,
         private gameSys: GameSystem,
     ) {
         this.logger = new Logger("TIMELINE", gameSys.logger.getEnable());
+        this.randpickMod = new RandomPickModule(player, gameSys, this);
     }
 
+    // 只能获取学年不能控制学年
     private get year() {
         return this.gameSys.getYear();
     }
-    private set year(newYear: number) {
-        this.gameSys.setYear(newYear);
-    }
-    public getNextEventID(): number {
-        const current = this.fixedEvents[this.year] || {};
-        const index = this.eventIndexInYear;
-        let evtID: number;
 
+    public getNextEvent(): {
+        evtID: number;
+        indexInYear: number;
+        shouldMoveToNextYear: boolean;
+    } {
+        const current = this.fixedEvents[this.year] || {}; // 从 [0 , maxLength]
+        const curIdx = this.eventNextIndexInYear;
+        let evtID: number;
+        let shouldMoveToNextYear = false;
         const start = current.start ?? [];
         const end = current.end ?? [];
+        const maxLength = start.length + RANDOM_EVTNUM_PERYEAR + end.length;
 
-        if (this.eventIndexInYear < start.length) {
-            evtID = this.resolveFixedSelector(start[index]); // start事件
+        // 因为eventIndexInYear始终是合法的
+        if (this.eventNextIndexInYear < start.length) {
+            evtID = this.resolveFixedSelector(start[curIdx]); // start事件
             this.logger.info("执行开始事件", evtID);
         } else if (
-            this.eventIndexInYear <
+            this.eventNextIndexInYear <
             start.length + RANDOM_EVTNUM_PERYEAR
         ) {
             evtID = this.getRandomEventID(); // 随机事件
             this.logger.info("执行随机事件", evtID);
         } else {
             // end事件
-            const endIndex =
-                this.eventIndexInYear - start.length - RANDOM_EVTNUM_PERYEAR;
+            const endIndex = curIdx - start.length - RANDOM_EVTNUM_PERYEAR;
             evtID = this.resolveFixedSelector(end[endIndex]);
             this.logger.info("执行结束事件", evtID);
         }
         this.completedEventIDs.add(evtID);
-        this.eventIndexInYear++;
-
-        // 重置新一年的事件游标
-        if (
-            this.eventIndexInYear >=
-            start.length + RANDOM_EVTNUM_PERYEAR + end.length
-        ) {
-            this.year++;
-            this.eventIndexInYear = 0;
+        this.eventNextIndexInYear++;
+        if (this.eventNextIndexInYear >= maxLength) {
+            shouldMoveToNextYear = true;
+            this.eventNextIndexInYear = 0;
         }
 
-        return evtID;
+        return { evtID, indexInYear: curIdx + 1, shouldMoveToNextYear };
     }
 
     public getCompletedEventIDs(): Set<number> {
@@ -138,9 +134,14 @@ export class TimelineModule {
         }
         return selector;
     }
-
     private getRandomEventID(): number {
-        // 示例：根据属性做加权抽取，TODO: 替换为真实逻辑
-        return Math.floor(Math.random() * this.allEvents.length);
+        this.randpickMod.updateAllPools(this.gameSys.getAllEvents());
+        const evt = this.randpickMod.pickRandomEvent();
+        if (evt === null) {
+            this.logger.warn("抽取出了NULL事件,返回CRUSH事件");
+            return 77;
+        }
+
+        return evt.getID();
     }
 }
