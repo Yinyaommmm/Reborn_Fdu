@@ -1,6 +1,7 @@
 // RandomPickModule.ts
+import { GameSystem, StandardEvent } from "./gamesys";
+import { Player } from "./player";
 import { TimelineModule } from "./timeline";
-import { Player, GameSystem, StandardEvent } from "./type";
 import { EventCategory } from "../type/type";
 
 import { Logger } from "@/logger/logger";

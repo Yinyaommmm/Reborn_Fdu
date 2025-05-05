@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import { StandardEvent } from "./type";
+import { StandardEvent } from "./gamesys";
 
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
 

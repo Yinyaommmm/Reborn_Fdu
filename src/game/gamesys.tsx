@@ -1,5 +1,7 @@
 import { ReactNode } from "react";
 
+import { Item, ItemID, ItemManager } from "./item";
+import { Player } from "./player";
 import { RsltModule } from "./resolute";
 import { TimelineModule } from "./timeline";
 import {
@@ -16,8 +18,6 @@ import { Logger } from "@/logger/logger";
 import { BaseProbability, UpgradeProbability } from "@/type/config";
 import {
     EventCategory,
-    MainProp,
-    Prop,
     ReadableEvent,
     保研百分百,
     跳过招聘会,
@@ -33,7 +33,7 @@ export interface FiveProps {
     C: number;
     M: number;
 }
-const zeroFiveProps: () => FiveProps = () => {
+export const zeroFiveProps: () => FiveProps = () => {
     return {
         H: 0,
         L: 0,
@@ -53,107 +53,6 @@ export interface ResoluteEventRes {
     resType: "BigS" | "S" | "F" | "B"; // 引入B选项;
 }
 
-type GRADDESTINATION =
-    | "出国"
-    | "辅导员"
-    | "青椒"
-    | "企业"
-    | "退学"
-    | "选调"
-    | "普通毕业";
-
-type EDUDESTINATION = "本科" | "研究生";
-export class Player {
-    private _mainProp: "A" | "M" = "A";
-    public gradDestination: GRADDESTINATION = "普通毕业";
-    public eduDestination: EDUDESTINATION = "本科";
-    public isCCP = false;
-    public specialTag = new Set<string>();
-    getElectionBuff() {
-        return this.electionBuff;
-    }
-    setElectionBuff() {
-        this.electionBuff = 0.15;
-    }
-    clearElectionBuff() {
-        this.electionBuff = 0;
-    }
-    getProbBuff(mainProp: MainProp) {
-        const base = 0.05 * (this.props.H + this.props.L);
-        let res: number;
-        if (mainProp === "NONE") {
-            res = base;
-        } else {
-            res = base + this.props[mainProp] * 0.2;
-        }
-        return res / 100;
-    }
-    constructor(
-        private _props: FiveProps = zeroFiveProps(),
-        private electionBuff = 0, // 竞选失败带来的下次额外加成
-    ) {}
-
-    get props() {
-        return this._props;
-    }
-    changeProp(p: Prop, deltaVal: number) {
-        this._props[p] += deltaVal;
-    }
-    changeProps(deltaVals: FiveProps) {
-        this._props.H += deltaVals.H;
-        this._props.L += deltaVals.L;
-        this._props.A += deltaVals.A;
-        this._props.C += deltaVals.C;
-        this._props.M += deltaVals.M;
-        this._props.H = Math.min(100, this._props.H);
-        this._props.L = Math.min(100, this._props.L);
-        this._props.A = Math.min(100, this._props.A);
-        this._props.C = Math.min(100, this._props.C);
-        this._props.M = Math.min(100, this._props.M);
-    }
-    randomInit() {
-        const keys: Prop[] = ["H", "L", "A", "C", "M"];
-        const maxVal = 40;
-        const total = 100;
-        let remaining = total;
-        const values: FiveProps = { H: 0, L: 0, A: 0, C: 0, M: 0 };
-
-        // 初步给每个属性分配一个最大值不超过 maxVal 的随机值
-        for (let i = 0; i < keys.length; i++) {
-            const remainingAttrs = keys.length - i;
-            const maxForThisAttr = Math.min(
-                maxVal,
-                remaining - (remainingAttrs - 1),
-            );
-            const val = Math.floor(Math.random() * (maxForThisAttr + 1));
-            values[keys[i]] = val;
-            remaining -= val;
-        }
-
-        // 如果还有剩余值，尝试分配给未达到 maxVal 的属性
-        while (remaining > 0) {
-            for (const key of keys) {
-                if (remaining === 0) break;
-                if (values[key] < maxVal) {
-                    values[key]++;
-                    remaining--;
-                }
-            }
-        }
-
-        this._props = values;
-    }
-    fixedInit() {
-        this._props = { H: 10, L: 20, A: 10, C: 10, M: 10 };
-    }
-
-    get mainProp() {
-        return this._mainProp;
-    }
-    set mainProp(mp: "A" | "M") {
-        this._mainProp = mp;
-    }
-}
 export class EventForShow {
     category: EventCategory = EventCategory.CGQY;
     title: string = "这里是title";
@@ -278,6 +177,7 @@ export class StandardEvent {
 
     forShow(): EventForShow {
         const e = new EventForShow();
+        e.category = this._readableEvt.category;
         e.title = this._readableEvt.title;
         e.imgSrc = "todo:暂未确定src";
         e.choiceAText = this._readableEvt.choiceA;
@@ -304,8 +204,6 @@ export class StandardEvent {
                 e.choiceBText = `选择${c2}`;
             }
         }
-        // e.endingAText = this._readableEvt.endingA;
-        // e.endingBText = this._readableEvt.endingB;
         return e;
     }
     public experienceCount = 0;
@@ -404,6 +302,7 @@ export class GameSystem {
     private rsltMod: RsltModule;
     private timelineMod: TimelineModule;
     private year = 1;
+    private itemManager = new ItemManager();
     constructor(
         private player: Player,
         private allEvents: StandardEvent[],
@@ -475,6 +374,12 @@ export class GameSystem {
         let prob = this.calcStandardSuccProb(evtID);
         const spProb = this.calcSpecialSuccProb(evtID);
         prob = Math.min(prob + spProb, 1);
+        this.itemManager.applyPassiveEffects({
+            player: this.player,
+            gameSystem: this,
+            currentEvent: this.allEvents[evtID],
+            probContext: prob,
+        });
         const rand = Math.random();
         const evtResType: EvtResultType = {
             succProb: prob,
@@ -536,8 +441,8 @@ export class GameSystem {
     }
 
     private chooseA(evtID: number) {
-        const res = this.calcEventResultType(evtID);
-        return this.resoluteEvent_ChoiceA(evtID, res);
+        const res = this.calcEventResultType(evtID); // 结算成功与否
+        return this.resoluteEvent_ChoiceA(evtID, res); // 结算属性
     }
     private chooseB(evtID: number) {
         const evt = this.allEvents[evtID];
@@ -624,12 +529,6 @@ export class GameSystem {
         if (evt.isRequired() === false) {
             return false;
         }
-        console.log(
-            "required evt",
-            evtID,
-            this.player.specialTag,
-            this.player.eduDestination,
-        );
         // 基础条件的跳过判断
         if (
             evt
@@ -686,5 +585,14 @@ export class GameSystem {
             console.log("evt === 招聘会，但是允许跳过");
         }
         return false;
+    }
+    addItem(item: Item) {
+        this.itemManager.addItem(item);
+    }
+    showAllItem() {
+        return this.itemManager.getAllItems();
+    }
+    useItem(itemID: ItemID) {
+        this.itemManager.useItem(itemID);
     }
 }

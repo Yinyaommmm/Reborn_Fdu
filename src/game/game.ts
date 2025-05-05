@@ -1,4 +1,6 @@
-import { GameSystem, Player, StandardEvent } from "./type";
+import { GameSystem, StandardEvent } from "./gamesys";
+import { Item, ItemFactory } from "./item";
+import { Player } from "./player";
 
 import { events as readablEvents } from "@/data/events_loaded";
 // import { timeLogger } from "@/game/util";
@@ -11,16 +13,17 @@ export class GameModule {
         player.fixedInit();
         player.mainProp = "M"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
+        system.addItem(ItemFactory("Secretary's Letter") as Item);
         // 游戏系统
         while (system.GameContinue) {
             // 先获取下一个活动
             const nextRes = system.nextEvt();
             const shouldJump = system.requiredEvtJump(nextRes.evtID);
             if (!shouldJump) {
-                // console.log(
-                //     `${system.getYear()}-${nextRes.indexInYear}`,
-                //     system.showEvt(nextRes.evtID),
-                // );
+                console.log(
+                    `${system.getYear()}-${nextRes.indexInYear}`,
+                    system.showEvt(nextRes.evtID),
+                );
                 // 结算，70%概率选A
                 const choice = Math.random() < 0.7 ? "A" : "B";
                 // const choice = nextRes.evtID === 17 || nextRes.evtID === 18 ? "B" : "A";

@@ -1,4 +1,4 @@
-import { FiveProps, GameSystem, StandardEvent } from "./type";
+import { FiveProps, GameSystem, StandardEvent } from "./gamesys";
 import { luckEnchanceACM, luckRollArr, randRangeArr } from "./util";
 
 import { Logger } from "@/logger/logger";

@@ -1,5 +1,6 @@
+import { GameSystem } from "./gamesys";
+import { Player } from "./player";
 import { RandomPickModule } from "./randompick";
-import { Player, GameSystem } from "./type";
 
 import { Logger } from "@/logger/logger";
 export type FixedEventSelector = number | ((player: Player) => number);
