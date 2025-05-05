@@ -197,3 +197,10 @@ export class ReadableEvent {
 
     randIdice: number[] = [];
 }
+
+export const 保研百分百 = "保研100%";
+export const 跳过招聘会 = "跳过招聘会";
+export const 跳过考研 = "跳过考研";
+export const 跳过本科选调 = "跳过本科选调";
+export const 跳过校招 = "跳过校招";
+export const 跳过辅导员青椒 = "跳过辅导员青椒";

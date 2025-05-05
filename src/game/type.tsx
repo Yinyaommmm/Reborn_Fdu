@@ -1,4 +1,3 @@
-import { log } from "console";
 import { ReactNode } from "react";
 
 import { RsltModule } from "./resolute";
@@ -8,13 +7,25 @@ import {
     formatDialog,
     getTwoRandomItems,
     HLRangeConvert_ChoiceB,
+    isSuccess,
     randRangeArr,
 } from "./util";
 
 import { GameErrorFactory } from "@/error/game-error";
 import { Logger } from "@/logger/logger";
 import { BaseProbability, UpgradeProbability } from "@/type/config";
-import { EventCategory, MainProp, Prop, ReadableEvent } from "@/type/type";
+import {
+    EventCategory,
+    MainProp,
+    Prop,
+    ReadableEvent,
+    保研百分百,
+    跳过招聘会,
+    跳过本科选调,
+    跳过校招,
+    跳过考研,
+    跳过辅导员青椒,
+} from "@/type/type";
 export interface FiveProps {
     H: number;
     L: number;
@@ -42,8 +53,22 @@ export interface ResoluteEventRes {
     resType: "BigS" | "S" | "F" | "B"; // 引入B选项;
 }
 
+type GRADDESTINATION =
+    | "出国"
+    | "辅导员"
+    | "青椒"
+    | "企业"
+    | "退学"
+    | "选调"
+    | "普通毕业";
+
+type EDUDESTINATION = "本科" | "研究生";
 export class Player {
     private _mainProp: "A" | "M" = "A";
+    public gradDestination: GRADDESTINATION = "普通毕业";
+    public eduDestination: EDUDESTINATION = "本科";
+    public isCCP = false;
+    public specialTag = new Set<string>();
     getElectionBuff() {
         return this.electionBuff;
     }
@@ -145,6 +170,7 @@ export class EventLog {
     index: number = -1;
     evtID: number = -1;
     choose: "A" | "B" = "A";
+    isHighlight: boolean = false;
     result: ResoluteEventRes = {
         deltaProps: zeroFiveProps(),
         endingText: "",
@@ -176,6 +202,9 @@ export class StandardEvent {
     }
     isRepetable() {
         return this._readableEvt.repetable;
+    }
+    isHightlight() {
+        return this._readableEvt.isHighlight;
     }
     // 是否是二级事件
     is2ji() {
@@ -280,13 +309,97 @@ export class StandardEvent {
         return e;
     }
     public experienceCount = 0;
-
+    specialEffect(resoluteRes: ResoluteEventRes, player: Player, year: number) {
+        if (this.getID() === 14 && isSuccess(resoluteRes.resType)) {
+            // 入党志愿书修改党员信息
+            player.isCCP = true;
+            this.logger.info(14 + "修改成党员");
+        }
+        if (this.getID() === 15 && isSuccess(resoluteRes.resType)) {
+            // 卓博计划
+            player.specialTag.add(保研百分百);
+            this.logger.info(15 + "触发保研100%");
+        }
+        if (this.getID() === 16 && isSuccess(resoluteRes.resType)) {
+            // 人才工程
+            player.specialTag.add(保研百分百);
+            this.logger.info(16 + "触发保研100%");
+        }
+        if (this.getID() === 17) {
+            // 免试攻读研究生
+            if (isSuccess(resoluteRes.resType)) {
+                player.eduDestination = "研究生";
+                player.specialTag.add(跳过考研);
+                player.specialTag.add(跳过本科选调);
+                player.specialTag.add(跳过校招);
+                this.logger.info(17 + "触发免试研究生");
+            } else if (resoluteRes.resType === "B") {
+                player.specialTag.add(跳过考研);
+                this.logger.info(17 + "放弃免试研究生");
+            }
+        }
+        if (this.getID() === 18 && isSuccess(resoluteRes.resType)) {
+            // 研究生入学考试
+            player.eduDestination = "研究生";
+            player.specialTag.add(跳过校招);
+            player.specialTag.add(跳过本科选调);
+            this.logger.info(18 + "触发研究生");
+        }
+        if (this.getID() === 19 && isSuccess(resoluteRes.resType)) {
+            // 选调生考试
+            player.gradDestination = "选调";
+            if (year === 4) player.specialTag.add(跳过校招);
+            if (year === 9) {
+                player.specialTag.add(跳过辅导员青椒);
+                player.specialTag.add(跳过招聘会);
+            }
+            this.logger.info(19 + "触发选调");
+        }
+        if (this.getID() === 20 && isSuccess(resoluteRes.resType)) {
+            // 大厂校招
+            player.gradDestination = "企业";
+            this.logger.info(20 + "触发企业");
+        }
+        if (this.getID() === 27 && resoluteRes.resType === "B") {
+            // 期末
+            player.gradDestination = "退学";
+            this.logger.info(27 + "触发退学");
+        }
+        if (this.getID() === 43 && isSuccess(resoluteRes.resType)) {
+            // 研支团
+            player.specialTag.add(保研百分百);
+            this.logger.info(43 + "触发研究生");
+        }
+        if (this.getID() === 65 && isSuccess(resoluteRes.resType)) {
+            // 出国读研
+            player.gradDestination = "出国";
+            this.logger.info(65 + "触发出国");
+        }
+        if (this.getID() === 88 && isSuccess(resoluteRes.resType)) {
+            // 辅导员招聘
+            player.gradDestination = "辅导员";
+            player.specialTag.add(跳过招聘会);
+            this.logger.info(88 + "触发辅导员");
+        }
+        if (this.getID() === 89 && isSuccess(resoluteRes.resType)) {
+            // 青椒留校
+            player.gradDestination = "青椒";
+            player.specialTag.add(跳过招聘会);
+            this.logger.info(89 + "触发青椒");
+        }
+        if (this.getID() === 90 && isSuccess(resoluteRes.resType)) {
+            // 招聘会
+            player.gradDestination = "企业";
+            this.logger.info(90 + "触发企业");
+        }
+    }
+    private logger = new Logger("STANDARDEVENT", true);
     constructor(private _readableEvt: ReadableEvent) {}
 }
 
 // 对外暴露接口
 export class GameSystem {
-    public logger: Logger;
+    public logger: Logger = new Logger("GameSyS", false);
     private eventLog: EventLog[] = [];
     private rsltMod: RsltModule;
     private timelineMod: TimelineModule;
@@ -295,10 +408,8 @@ export class GameSystem {
         private player: Player,
         private allEvents: StandardEvent[],
     ) {
-        this.logger = new Logger("GameSyS", false);
         this.rsltMod = new RsltModule(this);
         this.timelineMod = new TimelineModule(this.player, this);
-        console.log(allEvents);
     }
     getYear() {
         return this.year;
@@ -309,8 +420,22 @@ export class GameSystem {
         }
         this.year = y;
     }
+    get FinishYear() {
+        return this.player.eduDestination === "本科" ? 5 : 10;
+    }
+    get GameContinue() {
+        return (
+            this.getYear() !== this.FinishYear &&
+            this.player.gradDestination !== "退学"
+        );
+    }
     getEventLog() {
         return this.eventLog;
+    }
+    getHighLightLog() {
+        return this.eventLog.filter(
+            (log) => log.isHighlight && isSuccess(log.result.resType),
+        );
     }
     getAllEvents() {
         return this.allEvents;
@@ -330,16 +455,26 @@ export class GameSystem {
                 ? this.player.getElectionBuff()
                 : 0;
         this.logger.info(
-            "calcStandardSuccProb",
+            "calcStandardSuccProb:",
             "evt" + evtProb,
             "humanBuff" + humanBuffProb,
             "election" + electionBuffProb,
         );
         return clampProb(evtProb + humanBuffProb + electionBuffProb);
     }
+    private calcSpecialSuccProb(evtID: number) {
+        // 卓博计划和人才工程强制保研成功
+        if (evtID === 17 && this.player.specialTag.has(保研百分百)) {
+            this.logger.info("强制保研成功");
+            return 1;
+        }
+        return 0;
+    }
     // 计算人物执行某事件的结果
     private calcEventResultType(evtID: number): EvtResultType {
-        const prob = this.calcStandardSuccProb(evtID);
+        let prob = this.calcStandardSuccProb(evtID);
+        const spProb = this.calcSpecialSuccProb(evtID);
+        prob = Math.min(prob + spProb, 1);
         const rand = Math.random();
         const evtResType: EvtResultType = {
             succProb: prob,
@@ -393,7 +528,6 @@ export class GameSystem {
             resType,
         );
         this.logger.info("ChoiceA 中间随机结果", res);
-        this.logger.warn("还缺结算成功记录特殊影响");
         return {
             deltaProps,
             endingText: evt.getEndingA(resType),
@@ -433,14 +567,14 @@ export class GameSystem {
             evt.getHGear_ChoiceB(),
             evt.getHRange_ChoiceA(),
         );
-        this.logger.info("resoluteEvent_ChoiceB new'H'Range", newHRange);
+        // this.logger.info("resoluteEvent_ChoiceB new'H'Range", newHRange);
         deltaProps.H = randRangeArr(newHRange);
         // L属性结算
         const newLRange = HLRangeConvert_ChoiceB(
             evt.getLGear_ChoiceB(),
             evt.getLRange_ChoiceA(),
         );
-        this.logger.info("resoluteEvent_ChoiceB new'L'Range", newLRange);
+        // this.logger.info("resoluteEvent_ChoiceB new'L'Range", newLRange);
         deltaProps.L = randRangeArr(newLRange);
         // A C M属性结算
         deltaProps.A = this.rsltMod.rsltACM_ChoiceB(luck, crty, evt, "A");
@@ -469,6 +603,7 @@ export class GameSystem {
             year: this.year,
             index,
             evtID,
+            isHighlight: this.allEvents[evtID].isHightlight(),
             choose: choice,
             result: res,
         });
@@ -476,10 +611,51 @@ export class GameSystem {
         this.player.changeProps(res.deltaProps);
         // 事件经历次数
         this.allEvents[evtID].experienceCount++;
+        // 特殊影响： 党员身份√、毕业去向、升学去向、删除后续活动
+        this.allEvents[evtID].specialEffect(res, this.player, this.getYear());
         return res;
     }
     nextEvt() {
         const nextRes = this.timelineMod.getNextEvent();
         return nextRes;
+    }
+    requiredEvtJump(evtID: number) {
+        console.log(evtID, this.player.specialTag, this.player.eduDestination);
+        const evt = this.allEvents[evtID];
+        if (evt.isRequired() === false) {
+            return false;
+        }
+        // 必然事件才需要进行跳过判断
+        if (evtID === 90 && this.player.specialTag.has(跳过招聘会)) {
+            console.log("evt===招聘会，但是允许跳过");
+            return true;
+        }
+        if (evtID === 18 && this.player.specialTag.has(跳过考研)) {
+            console.log("evt===研究生入学考试，但是允许跳过");
+            return true;
+        }
+        if (evtID === 19) {
+            if (this.player.mainProp === "A") {
+                console.log("evt===选调考试，由于不走学工路线，直接跳过");
+            }
+            if (this.year === 4 && this.player.specialTag.has(跳过本科选调)) {
+                console.log("evt===（本科）选调考试，但是允许跳过");
+                return true;
+            }
+        }
+        if (evtID === 20 && this.player.specialTag.has(跳过校招)) {
+            console.log("evt===选调考试，但是允许跳过");
+            return true;
+        }
+        if (evtID === 88 && this.player.specialTag.has(跳过辅导员青椒)) {
+            console.log("evt === 辅导员招聘，但是允许跳过");
+        }
+        if (evtID === 89 && this.player.specialTag.has(跳过辅导员青椒)) {
+            console.log("evt === 青椒留校，但是允许跳过");
+        }
+        if (evtID === 90 && this.player.specialTag.has(跳过招聘会)) {
+            console.log("evt === 招聘会，但是允许跳过");
+        }
+        return false;
     }
 }

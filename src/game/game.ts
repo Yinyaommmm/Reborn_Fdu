@@ -6,15 +6,27 @@ export class GameModule {
     // @timeLogger 这个竟然是罪魁祸首
     static async gamestart() {
         const standardEvents = readablEvents.map((e) => new StandardEvent(e));
+        // 初始化player和system
         const player = new Player();
         player.fixedInit();
-        player.mainProp = "M";
+        player.mainProp = "M"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
-        while (system.getYear() !== 10) {
-            // 先获取下一个活动，结算，
+        // 游戏系统
+        while (system.GameContinue) {
+            // 先获取下一个活动
             const nextRes = system.nextEvt();
-            console.log(`${system.getYear()}-${nextRes.indexInYear}`);
-            system.resoluteEvt(nextRes.evtID, "A", nextRes.indexInYear);
+            const shouldJump = system.requiredEvtJump(nextRes.evtID);
+            if (!shouldJump) {
+                // console.log(
+                //     `${system.getYear()}-${nextRes.indexInYear}`,
+                //     system.showEvt(nextRes.evtID),
+                // );
+                // 结算，70%概率选A
+                // const choice = Math.random() < 0.7 ? "A" : "B";
+                const choice =
+                    nextRes.evtID === 17 || nextRes.evtID === 18 ? "B" : "A";
+                system.resoluteEvt(nextRes.evtID, choice, nextRes.indexInYear);
+            }
             //然后再执行时间移动
             if (nextRes.shouldMoveToNextYear) {
                 system.setYear(system.getYear() + 1);
@@ -36,6 +48,7 @@ export class GameModule {
                 })
                 .filter((c) => c.num >= 2),
         );
-        console.log(system.getEventLog());
+        console.log("日志", system.getEventLog());
+        console.log("成功高光事件", system.getHighLightLog());
     }
 }

@@ -191,3 +191,7 @@ export function formatDialog(
 
     return <>{parts}</>;
 }
+
+export function isSuccess(res: string) {
+    return res === "BigS" || res === "S";
+}

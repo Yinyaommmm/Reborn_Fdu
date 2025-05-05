@@ -1,5 +1,5 @@
 import { RandomPickModule } from "./randompick";
-import { Player, GameSystem, StandardEvent } from "./type";
+import { Player, GameSystem } from "./type";
 
 import { Logger } from "@/logger/logger";
 export type FixedEventSelector = number | ((player: Player) => number);
@@ -13,56 +13,53 @@ export type FixedEventMap = Record<
 >;
 const CONSTFixedEvents: FixedEventMap = {
     1: {
-        start: [1, 2, 3, 4, 5, 6],
+        start: [0, 1, 2, 3, 4, 5],
         end: [],
     },
     2: {
-        start: [7, 8, 9, 10, 11],
-        end: [12],
+        start: [6, 7, 8, 9, 10],
+        end: [11],
     },
     3: {
-        start: [13, 14, 15],
+        start: [12, 13, 14],
         end: [
             // 动态选择事件
             (player: Player) => {
-                console.log(
-                    "3-8此时的player",
-                    "A" + player.props.A,
-                    "M",
-                    player.props.M,
-                );
-                if (player.mainProp === "A") return 16;
-                return 17;
+                console.log("3-11此时的player主属性", player.mainProp);
+
+                if (player.mainProp === "A") return 15;
+                return 16;
             },
         ],
     },
     4: {
-        start: [18, 19, 20, 21],
-        end: [22, 23, 24],
+        start: [17, 18, 19, 20],
+        end: [21, 22, 23],
     },
     5: {
-        start: [80, 81, 82, 83],
+        start: [79, 80, 81, 82],
     },
     6: {
-        start: [84, 85, 86],
+        start: [83, 84, 85],
     },
     7: {
-        start: [87],
+        start: [86],
     },
     8: {},
     9: {
         start: [
-            20,
+            19,
             (player: Player) => {
                 console.log("9-2此时的player主属性", player.mainProp);
-                if (player.mainProp) return 89;
-                return 90;
+                if (player.mainProp === "M") return 88;
+                return 89;
             },
-            91,
+            90,
         ],
-        end: [88, 92, 23],
+        end: [87, 91, 22],
     },
 };
+
 export const RANDOM_EVTNUM_PERYEAR = 7;
 
 export class TimelineModule {
