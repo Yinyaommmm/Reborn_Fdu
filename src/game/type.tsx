@@ -620,13 +620,42 @@ export class GameSystem {
         return nextRes;
     }
     requiredEvtJump(evtID: number) {
-        console.log(evtID, this.player.specialTag, this.player.eduDestination);
         const evt = this.allEvents[evtID];
         if (evt.isRequired() === false) {
             return false;
         }
-        // 必然事件才需要进行跳过判断
+        console.log(
+            "required evt",
+            evtID,
+            this.player.specialTag,
+            this.player.eduDestination,
+        );
+        // 基础条件的跳过判断
+        if (
+            evt
+                .getPrerequisites()
+                .some(
+                    (prereq) =>
+                        !this.timelineMod.getCompletedEventIDs().has(prereq),
+                )
+        ) {
+            console.log(`必然事件${evtID}前置事件未满足！，直接跳过`);
+            return true;
+        }
+
+        const req = evt.getRequirement();
+        const playerProps = this.player.props;
+        for (const prop of ["H", "L", "A", "C", "M"] as const) {
+            if ((playerProps[prop] ?? 0) < (req[prop] ?? 0)) {
+                console.log(
+                    `必然事件${evtID}需求属性${prop}[${playerProps[prop]}/${req[prop]}]！，直接跳过`,
+                );
+                return true;
+            }
+        }
+        // 特殊条件的跳过判断
         if (evtID === 90 && this.player.specialTag.has(跳过招聘会)) {
+            // 必然事件才需要进行跳过判断
             console.log("evt===招聘会，但是允许跳过");
             return true;
         }

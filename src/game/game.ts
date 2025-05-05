@@ -22,9 +22,8 @@ export class GameModule {
                 //     system.showEvt(nextRes.evtID),
                 // );
                 // 结算，70%概率选A
-                // const choice = Math.random() < 0.7 ? "A" : "B";
-                const choice =
-                    nextRes.evtID === 17 || nextRes.evtID === 18 ? "B" : "A";
+                const choice = Math.random() < 0.7 ? "A" : "B";
+                // const choice = nextRes.evtID === 17 || nextRes.evtID === 18 ? "B" : "A";
                 system.resoluteEvt(nextRes.evtID, choice, nextRes.indexInYear);
             }
             //然后再执行时间移动
