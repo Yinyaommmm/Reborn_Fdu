@@ -11,25 +11,43 @@ export class GameModule {
         // 初始化player和system
         const player = new Player();
         player.fixedInit();
-        player.mainProp = "M"; // 玩家选择的方向
+        player.mainProp = "A"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
-        system.addItem(ItemFactory("Secretary's Letter") as Item);
+        system.addItem(ItemFactory("Misfortune Certificate") as Item);
+        // system.addItem(ItemFactory("Secretary's Letter") as Item);
+        // system.addItem(ItemFactory("Academician's Guidebook") as Item);
+        // system.addItem(ItemFactory("Thanos Glove") as Item);
+        // system.addItem(ItemFactory("Lucky Student ID") as Item);
+        // system.addItem(ItemFactory("Buddha Foot") as Item);
+        // system.addItem(ItemFactory("Middle Part Pants") as Item);
+        console.log("用户装备的所有装备：", system.showAllItem());
         // 游戏系统
         while (system.GameContinue) {
-            // 先获取下一个活动
-            const nextRes = system.nextEvt();
+            // 创建一个新的结算上下文
+            const ctx = system.createEmptyContext();
+            // 获取下一个活动
+            const nextRes = system.nextEvt(ctx);
+            // 判断该事件是否需要跳过(例如属性要求不满足)
             const shouldJump = system.requiredEvtJump(nextRes.evtID);
             if (!shouldJump) {
                 console.log(
                     `${system.getYear()}-${nextRes.indexInYear}`,
                     system.showEvt(nextRes.evtID),
                 );
-                // 结算，70%概率选A
-                const choice = Math.random() < 0.7 ? "A" : "B";
-                // const choice = nextRes.evtID === 17 || nextRes.evtID === 18 ? "B" : "A";
-                system.resoluteEvt(nextRes.evtID, choice, nextRes.indexInYear);
+                // 根据用户选择和‘上下文’进行结算，这里模拟使用70%概率选A
+                let choice: "A" | "B" = Math.random() < 0.7 ? "A" : "B";
+                if (nextRes.evtID % 10 === 7) {
+                    choice = "A";
+                    const useRes = system.useItem("Buddha Foot", nextRes.ctx);
+                }
+                system.resoluteEvt(
+                    nextRes.evtID,
+                    choice,
+                    nextRes.indexInYear,
+                    nextRes.ctx,
+                );
             }
-            //然后再执行时间移动
+            //再执行学年移动
             if (nextRes.shouldMoveToNextYear) {
                 system.setYear(system.getYear() + 1);
             }

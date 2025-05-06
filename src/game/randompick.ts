@@ -113,6 +113,7 @@ export class RandomPickModule {
 
         if (availablePools.length === 0) {
             this.logger.warn("没有一个池子可以抽取，但是仍要强制抽取");
+            console.warn("此时还剩余需求", configThisYear);
             return null;
         }
 

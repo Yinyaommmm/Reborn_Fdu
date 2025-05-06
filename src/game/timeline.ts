@@ -1,3 +1,4 @@
+import { SingleRoundContext } from "./context";
 import { GameSystem } from "./gamesys";
 import { Player } from "./player";
 import { RandomPickModule } from "./randompick";
@@ -83,10 +84,11 @@ export class TimelineModule {
         return this.gameSys.getYear();
     }
 
-    public getNextEvent(): {
+    public getNextEvent(ctx: SingleRoundContext): {
         evtID: number;
         indexInYear: number;
         shouldMoveToNextYear: boolean;
+        ctx: SingleRoundContext;
     } {
         const current = this.fixedEvents[this.year] || {}; // 从 [0 , maxLength]
         const curIdx = this.eventNextIndexInYear;
@@ -119,7 +121,9 @@ export class TimelineModule {
             this.eventNextIndexInYear = 0;
         }
 
-        return { evtID, indexInYear: curIdx + 1, shouldMoveToNextYear };
+        // 设置上下文
+        ctx.currentEvent = this.gameSys.getAllEvents()[evtID];
+        return { evtID, indexInYear: curIdx + 1, shouldMoveToNextYear, ctx };
     }
 
     public getCompletedEventIDs(): Set<number> {

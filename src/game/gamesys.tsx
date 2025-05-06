@@ -1,10 +1,13 @@
 import { ReactNode } from "react";
 
+import { createEmptyContext, SingleRoundContext } from "./context";
 import { Item, ItemID, ItemManager } from "./item";
 import { Player } from "./player";
 import { RsltModule } from "./resolute";
 import { TimelineModule } from "./timeline";
 import {
+    clampFiveProps_choiceA,
+    clampFiveProps_choiceB,
     clampProb,
     formatDialog,
     getTwoRandomItems,
@@ -359,7 +362,7 @@ export class GameSystem {
             "humanBuff" + humanBuffProb,
             "election" + electionBuffProb,
         );
-        return clampProb(evtProb + humanBuffProb + electionBuffProb);
+        return evtProb + humanBuffProb + electionBuffProb;
     }
     private calcSpecialSuccProb(evtID: number) {
         // 卓博计划和人才工程强制保研成功
@@ -370,17 +373,20 @@ export class GameSystem {
         return 0;
     }
     // 计算人物执行某事件的结果
-    private calcEventResultType(evtID: number): EvtResultType {
-        let prob = this.calcStandardSuccProb(evtID);
+    private calcEventResultType(
+        evtID: number,
+        ctx: SingleRoundContext,
+    ): EvtResultType {
+        const prob = this.calcStandardSuccProb(evtID);
         const spProb = this.calcSpecialSuccProb(evtID);
-        prob = Math.min(prob + spProb, 1);
-        this.itemManager.applyPassiveEffects({
-            player: this.player,
-            gameSystem: this,
-            currentEvent: this.allEvents[evtID],
-            probContext: prob,
-        });
         const rand = Math.random();
+        ctx.probContext = {
+            succProb: prob + spProb + (ctx.probContext?.succProb ?? 0),
+            rand,
+        };
+        // 引入装备的被动效果
+        this.itemManager.applyProbPassiveEffects(ctx);
+        ctx.probContext.succProb = clampProb(ctx.probContext.succProb);
         const evtResType: EvtResultType = {
             succProb: prob,
             rand,
@@ -403,62 +409,55 @@ export class GameSystem {
     private resoluteEvent_ChoiceA(
         evtID: number,
         res: EvtResultType,
+        ctx: SingleRoundContext,
     ): ResoluteEventRes {
         const evt = this.allEvents[evtID];
         const luck = this.player.props.L;
         const crty = this.player.props.C;
         const resType = res.resType;
-        const deltaProps: FiveProps = zeroFiveProps();
-        deltaProps.H = randRangeArr(evt.getHRange_ChoiceA());
-        deltaProps.L = this.rsltMod.rsltL_ChoiceA(luck, evt, resType);
-        deltaProps.A = this.rsltMod.rsltACM_ChoiceA(
-            luck,
-            crty,
-            evt,
-            "A",
-            resType,
-        );
-        deltaProps.M = this.rsltMod.rsltACM_ChoiceA(
-            luck,
-            crty,
-            evt,
-            "M",
-            resType,
-        );
-        deltaProps.C = this.rsltMod.rsltC_ChoiceA(
-            deltaProps,
+        this.itemManager.applyAttrPassiveEffects(ctx);
+        const dc = ctx.deltaPropContext!;
+        dc.H += randRangeArr(evt.getHRange_ChoiceA());
+        dc.L += this.rsltMod.rsltL_ChoiceA(luck, evt, resType);
+        dc.A += this.rsltMod.rsltACM_ChoiceA(luck, crty, evt, "A", resType);
+        dc.M += this.rsltMod.rsltACM_ChoiceA(luck, crty, evt, "M", resType);
+        dc.C += this.rsltMod.rsltC_ChoiceA(
+            ctx.deltaPropContext!,
             luck,
             crty,
             evt,
             resType,
         );
-        this.logger.info("ChoiceA 中间随机结果", res);
+        clampFiveProps_choiceA(dc, evt);
+        this.logger.info("ChoiceA after clamp", dc.H, dc.L, dc.A, dc.C, dc.M);
         return {
-            deltaProps,
+            deltaProps: ctx.deltaPropContext!,
             endingText: evt.getEndingA(resType),
             resType: res.resType,
         };
     }
 
-    private chooseA(evtID: number) {
-        const res = this.calcEventResultType(evtID); // 结算成功与否
-        return this.resoluteEvent_ChoiceA(evtID, res); // 结算属性
+    private chooseA(evtID: number, ctx: SingleRoundContext) {
+        const res = this.calcEventResultType(evtID, ctx); // 结算成功与否
+        return this.resoluteEvent_ChoiceA(evtID, res, ctx); // 结算属性
     }
-    private chooseB(evtID: number) {
+    private chooseB(evtID: number, ctx: SingleRoundContext) {
         const evt = this.allEvents[evtID];
         if (evt.isEqualRight()) {
             this.logger.info("等权重, 转换成A的结算");
-            return this.chooseA(evtID);
+            return this.chooseA(evtID, ctx);
         }
-        return this.resoluteEvent_ChoiceB(evtID);
+        return this.resoluteEvent_ChoiceB(evtID, ctx);
     }
     // 真的选了一个B选项，非等权重
-    private resoluteEvent_ChoiceB(evtID: number): ResoluteEventRes {
+    private resoluteEvent_ChoiceB(
+        evtID: number,
+        ctx: SingleRoundContext,
+    ): ResoluteEventRes {
         const evt = this.allEvents[evtID];
         if (evt.isEqualRight()) {
             this.logger.bug("Warning!,等权重选项不应该调用这个函数");
         }
-        const deltaProps = zeroFiveProps();
         const luck = this.player.props.L;
         const crty = this.player.props.C;
         // 竞选事件下次一定补偿
@@ -466,28 +465,49 @@ export class GameSystem {
             this.player.setElectionBuff();
             this.logger.info("进行了竞选失败补偿");
         }
-
+        // 使用
+        this.itemManager.applyAttrPassiveEffects(ctx);
         // H 属性结算
         const newHRange = HLRangeConvert_ChoiceB(
             evt.getHGear_ChoiceB(),
             evt.getHRange_ChoiceA(),
         );
-        // this.logger.info("resoluteEvent_ChoiceB new'H'Range", newHRange);
-        deltaProps.H = randRangeArr(newHRange);
+        ctx.deltaPropContext!.H += randRangeArr(newHRange);
         // L属性结算
         const newLRange = HLRangeConvert_ChoiceB(
             evt.getLGear_ChoiceB(),
             evt.getLRange_ChoiceA(),
         );
-        // this.logger.info("resoluteEvent_ChoiceB new'L'Range", newLRange);
-        deltaProps.L = randRangeArr(newLRange);
+        ctx.deltaPropContext!.L += randRangeArr(newLRange);
         // A C M属性结算
-        deltaProps.A = this.rsltMod.rsltACM_ChoiceB(luck, crty, evt, "A");
-        deltaProps.M = this.rsltMod.rsltACM_ChoiceB(luck, crty, evt, "M");
-        deltaProps.C = this.rsltMod.rsltC_ChoiceB(deltaProps, luck, crty, evt);
+        ctx.deltaPropContext!.A += this.rsltMod.rsltACM_ChoiceB(
+            luck,
+            crty,
+            evt,
+            "A",
+        );
+        ctx.deltaPropContext!.M += this.rsltMod.rsltACM_ChoiceB(
+            luck,
+            crty,
+            evt,
+            "M",
+        );
+        ctx.deltaPropContext!.C += this.rsltMod.rsltC_ChoiceB(
+            ctx.deltaPropContext!,
+            luck,
+            crty,
+            evt,
+        );
+        clampFiveProps_choiceB(
+            ctx.deltaPropContext!,
+            evt,
+            newHRange,
+            newLRange,
+        );
+        this.logger.info("ChoiceB 真·中间随机结果", ctx.deltaPropContext);
 
         return {
-            deltaProps,
+            deltaProps: ctx.deltaPropContext!,
             endingText: evt.getEndingB(),
             resType: "B",
         };
@@ -496,12 +516,17 @@ export class GameSystem {
     showEvt(evtID: number) {
         return this.allEvents[evtID].forShow();
     }
-    resoluteEvt(evtID: number, choice: "A" | "B", index: number) {
+    resoluteEvt(
+        evtID: number,
+        choice: "A" | "B",
+        index: number,
+        ctx: SingleRoundContext,
+    ) {
         let res: ResoluteEventRes;
         if (choice === "A") {
-            res = this.chooseA(evtID);
+            res = this.chooseA(evtID, ctx);
         } else {
-            res = this.chooseB(evtID);
+            res = this.chooseB(evtID, ctx);
         }
         // 记录日志
         this.eventLog.push({
@@ -520,8 +545,10 @@ export class GameSystem {
         this.allEvents[evtID].specialEffect(res, this.player, this.getYear());
         return res;
     }
-    nextEvt() {
-        const nextRes = this.timelineMod.getNextEvent();
+    nextEvt(ctx: SingleRoundContext) {
+        // TODO: 这里需要引入装备被动
+        // ....
+        const nextRes = this.timelineMod.getNextEvent(ctx);
         return nextRes;
     }
     requiredEvtJump(evtID: number) {
@@ -592,7 +619,10 @@ export class GameSystem {
     showAllItem() {
         return this.itemManager.getAllItems();
     }
-    useItem(itemID: ItemID) {
-        this.itemManager.useItem(itemID);
+    useItem(itemID: ItemID, ctx: SingleRoundContext) {
+        return this.itemManager.useItem(itemID, ctx);
+    }
+    createEmptyContext(): SingleRoundContext {
+        return createEmptyContext(this.player, this);
     }
 }

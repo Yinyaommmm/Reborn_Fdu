@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react";
 
-import { StandardEvent } from "./gamesys";
+import { FiveProps, StandardEvent } from "./gamesys";
 
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
 
@@ -194,4 +194,59 @@ export function formatDialog(
 
 export function isSuccess(res: string) {
     return res === "BigS" || res === "S";
+}
+
+export function clampFiveProps_choiceA(
+    deltaProps: FiveProps,
+    evt: StandardEvent,
+) {
+    deltaProps.H = clamp(
+        deltaProps.H,
+        evt.getHRange_ChoiceA()[0],
+        evt.getHRange_ChoiceA()[1],
+    );
+    deltaProps.L = clamp(
+        deltaProps.L,
+        evt.getLRange_ChoiceA()[0],
+        evt.getLRange_ChoiceA()[1],
+    );
+    deltaProps.A = clamp(
+        deltaProps.A,
+        evt.getARange_ChoiceA()[0],
+        evt.getARange_ChoiceA()[1],
+    );
+    deltaProps.C = clamp(
+        deltaProps.C,
+        evt.getCRange_ChoiceA()[0],
+        evt.getCRange_ChoiceA()[1],
+    );
+    deltaProps.M = clamp(
+        deltaProps.M,
+        evt.getMRange_ChoiceA()[0],
+        evt.getMRange_ChoiceA()[1],
+    );
+}
+export function clampFiveProps_choiceB(
+    deltaProps: FiveProps,
+    evt: StandardEvent,
+    newHRange: number[],
+    newLRange: number[],
+) {
+    deltaProps.H = clamp(deltaProps.H, newHRange[0], newHRange[1]);
+    deltaProps.L = clamp(deltaProps.L, newLRange[0], newLRange[1]);
+    deltaProps.A = clamp(
+        deltaProps.A,
+        evt.getARange_ChoiceA()[0],
+        evt.getARange_ChoiceA()[1],
+    );
+    deltaProps.C = clamp(
+        deltaProps.C,
+        evt.getCRange_ChoiceA()[0],
+        evt.getCRange_ChoiceA()[1],
+    );
+    deltaProps.M = clamp(
+        deltaProps.M,
+        evt.getMRange_ChoiceA()[0],
+        evt.getMRange_ChoiceA()[1],
+    );
 }
