@@ -13,6 +13,7 @@ export type CircularTransitionTrigger = (
 ) => void;
 
 export function useCircularTransition(
+    onEnter?: () => void,
     duration: number = 0.6,
     waiting: number = 1,
 ) {
@@ -47,6 +48,7 @@ export function useCircularTransition(
                 setActive(false);
             }}
             onEnter={() => {
+                onEnter?.();
                 if (UI) {
                     $UI.update("go to game", (draft) => {
                         draft.route = UI;

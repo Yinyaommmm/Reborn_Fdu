@@ -2,6 +2,7 @@ import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { useViewport } from "@/hooks/useViewPort";
+import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 
 export const GameChoices: FC = () => {
@@ -9,6 +10,7 @@ export const GameChoices: FC = () => {
     const height = Math.ceil(0.08 * viewportHeight);
     const slideDistanceScale = 1;
     const triggerDistance = viewportWidth / 3;
+    const cards = $Data.use((state) => state.cards);
 
     const trigger = $Game.use((state) => state.trigger);
 
@@ -40,13 +42,13 @@ export const GameChoices: FC = () => {
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
-            if (showEnding) return;
+            if (showEnding || cards.length === 0) return;
             isDragging.set(true);
             touchStartX.set(e.touches[0].clientX);
         };
 
         const handleTouchMove = (e: TouchEvent) => {
-            if (!isDragging.get() || showEnding) return;
+            if (!isDragging.get() || showEnding || cards.length === 0) return;
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
             if (deltaX > 0 && exitDirection !== "right") {
@@ -68,7 +70,7 @@ export const GameChoices: FC = () => {
         };
 
         const handleTouchEnd = () => {
-            if (!isDragging.get() || showEnding) return;
+            if (!isDragging.get() || showEnding || cards.length === 0) return;
             isDragging.set(false);
             animate(x, 0, {
                 type: "tween",
@@ -90,7 +92,7 @@ export const GameChoices: FC = () => {
             window.removeEventListener("touchmove", handleTouchMove);
             window.removeEventListener("touchend", handleTouchEnd);
         };
-    }, [exitDirection, showEnding]);
+    }, [exitDirection, showEnding, cards]);
 
     useEffect(() => {
         const handleTouchStart = () => {
@@ -117,7 +119,7 @@ export const GameChoices: FC = () => {
     return (
         <div className="relative mt-[2vh]">
             <AnimatePresence mode="sync">
-                {!showEnding && (
+                {!showEnding && cards.length !== 0 && (
                     <motion.div
                         className="absolute top-0 ml-[3vw] flex items-center"
                         style={{
@@ -196,7 +198,7 @@ export const GameChoices: FC = () => {
                         </div>
                     </motion.div>
                 )}
-                {!showEnding && (
+                {!showEnding && cards.length !== 0 && (
                     <motion.div
                         className="absolute top-[12vh] mr-[3vw] flex items-center justify-end"
                         style={{

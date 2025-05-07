@@ -83,7 +83,7 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
         }
 
         return clean;
-    }, [phase, duration, onEnter, onComplete, setPhase, waiting]);
+    }, [phase, duration, setPhase, waiting]);
 
     if (!phase) return null;
 

@@ -4,7 +4,7 @@ import {
     useTransform,
     AnimatePresence,
 } from "motion/react";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, SetStateAction, useEffect, useRef, useState } from "react";
 
 import GameCard from "./card";
 
@@ -16,11 +16,22 @@ import { $Game } from "@/store/game";
 import { calYFromDeltaX } from "@/utils/circle";
 
 const GameCards: FC = () => {
-    const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
+    // const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
+    const cards = $Data.use((state) => state.cards);
+    const setCards = (updater: SetStateAction<number[]>) => {
+        $Data.update("update cards", (draft) => {
+            draft.cards =
+                typeof updater === "function"
+                    ? (updater as (prev: number[]) => number[])(draft.cards)
+                    : updater;
+        });
+    };
     const [activeIndex] = useState(0);
     const [showEnding, setShowEnding] = useState(false);
     const touchClickRef = useRef<boolean>(false);
-    const { trigger, TransitionComponent } = useCircularTransition();
+    const { trigger, TransitionComponent } = useCircularTransition(() => {
+        setCards([0, 1, 2, 3]);
+    });
 
     const isAnimating = $Game.use((state) => state.isCardAnimating);
     const setIsAnimating = (v: boolean) => {
@@ -146,7 +157,6 @@ const GameCards: FC = () => {
             if (!showEnding || !touchClickRef.current) return;
             if (cards.length === 0) {
                 trigger(e);
-                return;
             }
             touchClickRef.current = false;
             setShowEnding(false);

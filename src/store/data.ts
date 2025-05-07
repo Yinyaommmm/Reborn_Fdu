@@ -6,6 +6,8 @@ export interface DataModel {
     academic: number;
     creativity: number;
     management: number;
+    toolId: number | undefined;
+    cards: number[];
 }
 
 export const $Data = model<DataModel>("DATA", {
@@ -14,4 +16,6 @@ export const $Data = model<DataModel>("DATA", {
     academic: 2,
     creativity: 19,
     management: 10,
+    toolId: undefined,
+    cards: [0, 1, 2, 3],
 });

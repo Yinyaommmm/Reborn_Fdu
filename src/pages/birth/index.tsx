@@ -7,6 +7,7 @@ import { GoCard } from "./components/go-card";
 
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
+import { $Data } from "@/store/data";
 
 interface BirthProps {
     trigger: CircularTransitionTrigger;
@@ -20,6 +21,7 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
     const { onClick: onClickStep2, onTouchEnd: onTouchEnd2 } = useFastClick(
         () => setStep(2),
     );
+    const toolId = $Data.use((state) => state.toolId);
 
     return (
         <div className="relative w-screen h-screen game-background box-border">
@@ -60,11 +62,13 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
                     </AnimatePresence>
                 </div>
             </div>
-            <GoCard
-                onClick={(e) => {
-                    trigger(e, "game");
-                }}
-            />
+            {toolId !== undefined && (
+                <GoCard
+                    onClick={(e) => {
+                        trigger(e, "game");
+                    }}
+                />
+            )}
         </div>
     );
 };

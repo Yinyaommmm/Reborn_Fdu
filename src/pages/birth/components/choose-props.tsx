@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { tools } from "../types/props";
 
 import Image from "@/components/image";
+import { $Data } from "@/store/data";
 
 export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
@@ -42,6 +43,9 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
                             setDescription(tool.description);
                             setPassive(tool.passive);
                             setActive(tool.active);
+                            $Data.update("update tool", (draft) => {
+                                draft.toolId = index;
+                            });
                         }}
                     >
                         <div className="absolute w-full h-full -top-[5%] left-[5%] border-decorate border-decorate-border" />
