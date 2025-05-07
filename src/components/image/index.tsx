@@ -18,6 +18,7 @@ interface ImageProps extends HTMLProps<HTMLDivElement> {
     adjustHeight?: boolean;
     onLoad?: (event: SyntheticEvent<HTMLImageElement>) => void;
     onSizeChange?: (width: number, height: number) => void;
+    square?: boolean;
 }
 
 const Image: FC<ImageProps> = (props) => {
@@ -29,6 +30,7 @@ const Image: FC<ImageProps> = (props) => {
         adjustHeight = false,
         onLoad,
         onSizeChange,
+        square = true,
         ...rest
     } = props;
     const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
@@ -86,14 +88,15 @@ const Image: FC<ImageProps> = (props) => {
     const wrapperStyle: CSSProperties = {
         width: adjustWidth ? "100%" : "auto",
         height: adjustHeight ? "100%" : "auto",
-        position: "relative",
+        // position: "relative",
     };
 
     return (
         <div ref={imageWrapperRef} {...rest} style={wrapperStyle}>
             <div
                 className={twMerge(
-                    "w-full aspect-square bg-gray-100",
+                    "w-full bg-gray-100",
+                    square && "aspect-square",
                     isImageLoaded ? "hidden" : "block",
                 )}
                 style={wrapperStyle}
@@ -105,7 +108,8 @@ const Image: FC<ImageProps> = (props) => {
                 alt={alt}
                 onLoad={handleImageLoad}
                 className={twMerge(
-                    "w-full aspect-square object-cover",
+                    "w-full object-cover",
+                    square && "aspect-square",
                     isImageLoaded ? "block" : "hidden",
                 )}
                 style={{

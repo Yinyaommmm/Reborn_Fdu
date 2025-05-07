@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 
 import { AddTalent } from "./components/add-talent";
 import { ChooseProps } from "./components/choose-props";
+import { GoCard } from "./components/go-card";
 
 import { useFastClick } from "@/hooks/useFastClick";
 
@@ -54,6 +55,7 @@ export const Birth: FC = () => {
                     </AnimatePresence>
                 </div>
             </div>
+            <GoCard />
         </div>
     );
 };
