@@ -5,9 +5,14 @@ import { AddTalent } from "./components/add-talent";
 import { ChooseProps } from "./components/choose-props";
 import { GoCard } from "./components/go-card";
 
+import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
 
-export const Birth: FC = () => {
+interface BirthProps {
+    trigger: CircularTransitionTrigger;
+}
+
+export const Birth: FC<BirthProps> = ({ trigger }) => {
     const [step, setStep] = useState<number>(1);
     const { onClick: onClickStep1, onTouchEnd: onTouchEnd1 } = useFastClick(
         () => setStep(1),
@@ -55,7 +60,11 @@ export const Birth: FC = () => {
                     </AnimatePresence>
                 </div>
             </div>
-            <GoCard />
+            <GoCard
+                onClick={(e) => {
+                    trigger(e, "game");
+                }}
+            />
         </div>
     );
 };

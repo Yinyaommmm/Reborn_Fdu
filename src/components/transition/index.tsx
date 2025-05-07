@@ -1,5 +1,5 @@
 import { motion, MotionStyle, Variants } from "motion/react";
-import { useState, useEffect, FC, useMemo } from "react";
+import { useState, useEffect, FC, useMemo, useRef } from "react";
 import "./index.css";
 interface CircleTransitionProps {
     isActive: boolean;
@@ -11,6 +11,7 @@ interface CircleTransitionProps {
     duration?: number;
     waiting?: number;
     onComplete?: () => void;
+    onEnter?: () => void;
 }
 
 export const CircleTransition: FC<CircleTransitionProps> = ({
@@ -21,10 +22,13 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
     exitCy,
     color = "#fff",
     duration = 0.6,
-    waiting = 0,
+    waiting = 1,
     onComplete,
+    onEnter,
 }) => {
     const [phase, setPhase] = useState<"enter" | "exit" | null>(null);
+    const enterTimer = useRef<number>(null);
+    const exitTimer = useRef<number>(null);
 
     const maxRadius = useMemo(() => {
         const w = window.innerWidth,
@@ -49,21 +53,37 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
     }, [isActive]);
 
     useEffect(() => {
+        const clean = () => {
+            if (enterTimer.current) window.clearTimeout(enterTimer.current);
+            if (exitTimer.current) window.clearTimeout(exitTimer.current);
+        };
+
         if (phase === "enter") {
-            const t = setTimeout(
-                () => setPhase("exit"),
-                duration * 1000 + waiting * 1000,
-            );
-            return () => clearTimeout(t);
-        }
-        if (phase === "exit") {
-            const t = setTimeout(() => {
+            enterTimer.current = window.setTimeout(async () => {
+                const start = Date.now();
+
+                if (onEnter) {
+                    await onEnter();
+                }
+
+                const elapsed = Date.now() - start;
+                const delay = elapsed >= waiting ? 0 : waiting - elapsed;
+
+                console.log("enter");
+
+                exitTimer.current = window.setTimeout(() => {
+                    setPhase("exit");
+                }, delay);
+            }, duration * 1000);
+        } else if (phase === "exit") {
+            exitTimer.current = window.setTimeout(() => {
                 setPhase(null);
                 onComplete?.();
             }, duration * 1000);
-            return () => clearTimeout(t);
         }
-    }, [phase, duration, onComplete]);
+
+        return clean;
+    }, [phase, duration, onEnter, onComplete, setPhase, waiting]);
 
     if (!phase) return null;
 
@@ -76,7 +96,7 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
 
     return (
         <motion.div
-            className="overlay pointer-events-none fixed top-0 left-0 w-screen h-screen z-50"
+            className="overlay pointer-events-none fixed top-0 left-0 w-screen h-screen z-[9999]"
             style={
                 {
                     "--cx": `${cx}px`,

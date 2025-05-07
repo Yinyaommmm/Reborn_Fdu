@@ -167,7 +167,7 @@ const GameCards: FC = () => {
 
     return (
         <div className="relative h-[60vh] mt-[10vw] w-full">
-            <TransitionComponent></TransitionComponent>
+            {TransitionComponent}
             <AnimatePresence mode="sync">
                 {cards.slice(0, 3).map((card, index) => (
                     <GameCard

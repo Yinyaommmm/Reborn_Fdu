@@ -1,15 +1,18 @@
-import { motion } from "motion/react";
+import { HTMLMotionProps, motion } from "motion/react";
 import { FC } from "react";
 
 import Image from "@/components/image";
 
-export const GoCard: FC = () => {
+export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
+    const { ...rest } = props;
+
     return (
         <motion.div
             className="fixed bottom-0 right-0 bg-[#9DCE9C] aspect-[16/10] h-[22vh]"
             initial={{ bottom: -200, right: 200, rotate: 0 }}
             animate={{ bottom: 0, right: -50, rotate: 8 }}
             transition={{ type: "spring", duration: 0.8 }}
+            {...rest}
         >
             <Image
                 className="absolute bottom-0 left-0 w-full"
