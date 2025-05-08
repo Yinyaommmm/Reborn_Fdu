@@ -5,11 +5,11 @@ import {
 } from "react";
 
 import { CircleTransition } from "@/components/transition";
-import { $UI } from "@/store/ui";
+import { $UI, UIRoute } from "@/store/ui";
 
 export type CircularTransitionTrigger = (
     e: MouseEvent | TouchEvent | ReactMouseEvent | ReactTouchEvent,
-    goto?: "game" | "birth",
+    goto?: UIRoute,
 ) => void;
 
 export function useCircularTransition(
@@ -19,7 +19,7 @@ export function useCircularTransition(
 ) {
     const [isActive, setActive] = useState(false);
     const [pos, setPos] = useState({ x: 0, y: 0 });
-    const [UI, setUI] = useState<"game" | "birth" | undefined>(undefined);
+    const [UI, setUI] = useState<UIRoute | undefined>(undefined);
 
     const trigger: CircularTransitionTrigger = (e, goto) => {
         console.log("trigger", e);

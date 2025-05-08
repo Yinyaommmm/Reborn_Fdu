@@ -5,6 +5,7 @@ import { AddTalent } from "./components/add-talent";
 import { ChooseProps } from "./components/choose-props";
 import { GoCard } from "./components/go-card";
 
+import Image from "@/components/image";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
 import { $Data } from "@/store/data";
@@ -25,9 +26,10 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
 
     return (
         <div className="relative w-screen h-screen game-background box-border">
-            <div
-                className="absolute w-full h-full bg-cover bg-center mt-[3vh]"
-                style={{ backgroundImage: "url(png/calender.png)" }}
+            <Image
+                className="absolute w-full h-full mt-[1vh]"
+                src="png/calender.png"
+                square={false}
             />
             <div className="h-[30vh]" />
             <div className="relative w-full">

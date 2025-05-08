@@ -15,11 +15,3 @@ body, html {
   
   --font-cursive: 'CursiveFont';
 }
-
-/* index.css（或 App.css） */
-@font-face {
-  font-family: 'CursiveFont';
-  src: url('./assets/font/cursive-font.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}

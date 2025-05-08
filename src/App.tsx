@@ -5,6 +5,7 @@ import { GameModule } from "./game/game";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { Birth } from "./pages/birth";
 import Game from "./pages/game";
+import { Launch } from "./pages/launch";
 import { $UI } from "./store/ui";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             {TransitionComponent}
             {route === "game" && <Game />}
             {route === "birth" && <Birth trigger={trigger} />}
+            {route === "launch" && <Launch trigger={trigger} />}
         </>
     );
 }

@@ -51,38 +51,11 @@ const Image: FC<ImageProps> = (props) => {
     };
 
     useEffect(() => {
-        const imageObserver = new IntersectionObserver(
-            (entries) => {
-                const entry = entries[0];
-                if (imageRef.current) {
-                    if (entry.isIntersecting) {
-                        const origin =
-                            window.location.origin +
-                            (src.startsWith("/") ? "" : "/");
-                        imageRef.current.src = src.startsWith("data")
-                            ? src
-                            : origin + src;
-                    } else if (!imageRef.current.complete) {
-                        imageRef.current.src = "";
-                    }
-                }
-            },
-            { threshold: 0.1 },
-        );
-
-        const wrapper = imageWrapperRef.current;
-        if (wrapper) {
-            imageObserver.observe(wrapper);
+        if (imageRef.current !== null) {
+            const origin =
+                window.location.origin + (src.startsWith("/") ? "" : "/");
+            imageRef.current.src = src.startsWith("data") ? src : origin + src;
         }
-
-        return () => {
-            if (wrapper) {
-                imageObserver.unobserve(wrapper);
-            }
-            if (imageRef.current && !imageRef.current.complete) {
-                imageRef.current.src = "";
-            }
-        };
     }, [src]);
 
     const wrapperStyle: CSSProperties = {

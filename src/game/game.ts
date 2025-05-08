@@ -38,6 +38,7 @@ export class GameModule {
                 let choice: "A" | "B" = Math.random() < 0.7 ? "A" : "B";
                 if (nextRes.evtID % 10 === 7) {
                     choice = "A";
+                    // @ts-ignore
                     const useRes = system.useItem("Buddha Foot", nextRes.ctx);
                 }
                 system.resoluteEvt(
