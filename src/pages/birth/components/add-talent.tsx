@@ -1,22 +1,63 @@
 import { HTMLMotionProps, motion } from "motion/react";
-import { FC, useState } from "react";
+import { FC, SetStateAction, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import { Talent } from "./talent";
 
 import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
+import { $Data } from "@/store/data";
 
 export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
     const [points, setPoints] = useState<number>(20);
     const [sex, setSex] = useState<number>(1);
     const [prefer, setPrefer] = useState<number>(1);
-    const [honesty, setHonesty] = useState<number>(0);
-    const [lucky, setLucky] = useState<number>(0);
-    const [academic, setAcademic] = useState<number>(0);
-    const [creativity, setCreativity] = useState<number>(0);
-    const [management, setManagement] = useState<number>(0);
+    const honesty = $Data.use((state) => state.honesty);
+    const setHonesty = (updater: SetStateAction<number>) => {
+        $Data.update("update honesty", (draft) => {
+            draft.honesty =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.honesty)
+                    : updater;
+        });
+    };
+    const lucky = $Data.use((state) => state.lucky);
+    const setLucky = (updater: SetStateAction<number>) => {
+        $Data.update("update lucky", (draft) => {
+            draft.lucky =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.lucky)
+                    : updater;
+        });
+    };
+    const academic = $Data.use((state) => state.academic);
+    const setAcademic = (updater: SetStateAction<number>) => {
+        $Data.update("update academic", (draft) => {
+            draft.academic =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.academic)
+                    : updater;
+        });
+    };
+    const creativity = $Data.use((state) => state.creativity);
+    const setCreativity = (updater: SetStateAction<number>) => {
+        $Data.update("update creativity", (draft) => {
+            draft.creativity =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.creativity)
+                    : updater;
+        });
+    };
+    const management = $Data.use((state) => state.management);
+    const setManagement = (updater: SetStateAction<number>) => {
+        $Data.update("update management", (draft) => {
+            draft.management =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.management)
+                    : updater;
+        });
+    };
 
     return (
         <motion.div

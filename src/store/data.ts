@@ -7,15 +7,15 @@ export interface DataModel {
     creativity: number;
     management: number;
     toolId: number | undefined;
-    cards: number[];
+    cards: string[];
 }
 
 export const $Data = model<DataModel>("DATA", {
-    honesty: 7,
-    lucky: 12,
-    academic: 2,
-    creativity: 19,
-    management: 10,
+    honesty: 0,
+    lucky: 0,
+    academic: 0,
+    creativity: 0,
+    management: 0,
     toolId: undefined,
-    cards: [0, 1, 2, 3],
+    cards: [],
 });

@@ -9,7 +9,7 @@ export const GameChoices: FC = () => {
     const { vw: viewportWidth, vh: viewportHeight } = useViewport();
     const height = Math.ceil(0.08 * viewportHeight);
     const slideDistanceScale = 1;
-    const triggerDistance = viewportWidth / 3;
+    const triggerDistance = viewportWidth / 2;
     const cards = $Data.use((state) => state.cards);
 
     const trigger = $Game.use((state) => state.trigger);
@@ -61,10 +61,7 @@ export const GameChoices: FC = () => {
             } else {
                 x.set(Math.abs(deltaX * slideDistanceScale));
             }
-            if (
-                deltaX * slideDistanceScale >= triggerDistance ||
-                deltaX * slideDistanceScale <= -triggerDistance
-            ) {
+            if (deltaX >= triggerDistance || deltaX <= -triggerDistance) {
                 handleSwipeComplete();
                 isDragging.set(false);
             }
@@ -114,8 +111,6 @@ export const GameChoices: FC = () => {
             window.removeEventListener("touchend", handleTouchEnd);
         };
     }, [showEnding]);
-
-    useEffect(() => {}, []);
 
     return (
         <div className="relative mt-[2vh]">

@@ -416,6 +416,9 @@ export class GameSystem {
         const crty = this.player.props.C;
         const resType = res.resType;
         this.itemManager.applyAttrPassiveEffects(ctx);
+        if (ctx.deltaPropContext === undefined) {
+            ctx.deltaPropContext = zeroFiveProps();
+        }
         const dc = ctx.deltaPropContext!;
         dc.H += randRangeArr(evt.getHRange_ChoiceA());
         dc.L += this.rsltMod.rsltL_ChoiceA(luck, evt, resType);
@@ -467,6 +470,9 @@ export class GameSystem {
         }
         // 使用
         this.itemManager.applyAttrPassiveEffects(ctx);
+        if (ctx.deltaPropContext === undefined) {
+            ctx.deltaPropContext = zeroFiveProps();
+        }
         // H 属性结算
         const newHRange = HLRangeConvert_ChoiceB(
             evt.getHGear_ChoiceB(),

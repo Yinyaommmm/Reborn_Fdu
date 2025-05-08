@@ -4,13 +4,21 @@ import {
     useTransform,
     AnimatePresence,
 } from "motion/react";
-import { FC, SetStateAction, useEffect, useRef, useState } from "react";
+import {
+    FC,
+    ReactNode,
+    SetStateAction,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 
 import GameCard from "./card";
 
 import Image from "@/components/image";
 import { useCircularTransition } from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
+import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 import { calYFromDeltaX } from "@/utils/circle";
@@ -18,11 +26,11 @@ import { calYFromDeltaX } from "@/utils/circle";
 const GameCards: FC = () => {
     // const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
     const cards = $Data.use((state) => state.cards);
-    const setCards = (updater: SetStateAction<number[]>) => {
+    const setCards = (updater: SetStateAction<string[]>) => {
         $Data.update("update cards", (draft) => {
             draft.cards =
                 typeof updater === "function"
-                    ? (updater as (prev: number[]) => number[])(draft.cards)
+                    ? (updater as (prev: string[]) => string[])(draft.cards)
                     : updater;
         });
     };
@@ -30,7 +38,9 @@ const GameCards: FC = () => {
     const [showEnding, setShowEnding] = useState(false);
     const touchClickRef = useRef<boolean>(false);
     const { trigger, TransitionComponent } = useCircularTransition(() => {
-        setCards([0, 1, 2, 3]);
+        console.log("trigger 新学期");
+        newSemesterRef.current = false;
+        newSemester();
     });
 
     const isAnimating = $Game.use((state) => state.isCardAnimating);
@@ -53,7 +63,7 @@ const GameCards: FC = () => {
     const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
     const activeRotate = 8;
     const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
-    const triggerDistance = viewportWidth / 3;
+    const triggerDistance = viewportWidth / 2;
 
     const x = useMotionValue(0);
     const delta = useTransform(x, (value) => {
@@ -65,6 +75,10 @@ const GameCards: FC = () => {
     const touchStartX = useMotionValue(0);
     const isDragging = useMotionValue(false);
 
+    const [description, setDescription] = useState<ReactNode>(undefined);
+    const initialRef = useRef<boolean>(false);
+    const newSemesterRef = useRef<boolean>(false);
+
     const handleChoose = () => {
         $Data.update("choose", (draft) => {
             draft.honesty += Math.floor(Math.random() * 5) + 1;
@@ -75,18 +89,66 @@ const GameCards: FC = () => {
         });
     };
 
+    const newSemester = () => {
+        const event1 = gameModule.pick();
+        const event2 = gameModule.pick();
+        const event3 = gameModule.pick();
+
+        $Data.update("update events", (draft) => {
+            draft.cards = [
+                `${event1?.id}-${event1?.indexInYear}`,
+                `${event2?.id}-${event2?.indexInYear}`,
+                `${event3?.id}-${event3?.indexInYear}`,
+            ];
+        });
+
+        setDescription(gameModule.info()?.mainText);
+        console.log("new", event1);
+        console.log("new", event2);
+        console.log("new", event3);
+    };
+
+    useEffect(() => {
+        if (!initialRef.current) {
+            newSemester();
+            initialRef.current = true;
+        }
+    }, []);
+
     const handleSwipeComplete = () => {
         setIsAnimating(true);
         // 更新卡片队列
-
-        setCards((prev) =>
-            prev[prev.length - 1] + 1 <= 4
-                ? [...prev.slice(1), prev[prev.length - 1] + 1]
-                : [...prev.slice(1)],
-        );
+        const next: string[] = [];
+        // 选择选项
+        if (exitDirection === "left") {
+            gameModule.resolve("B");
+        } else {
+            gameModule.resolve("A");
+        }
+        // 抽卡
+        if (!newSemesterRef.current) {
+            let isJump = true;
+            let jumpCount = 0;
+            while (isJump && !newSemesterRef.current) {
+                const pick = gameModule.pick();
+                if (pick === undefined) break;
+                next.push(`${pick.id}-${pick.indexInYear}`);
+                newSemesterRef.current = pick.shouldMoveToNextYear;
+                isJump = gameModule.jump() ?? true;
+                jumpCount += 1;
+            }
+            // 更新 UI
+            setCards((prev) => [...prev.slice(jumpCount), ...next]);
+            console.log("new", ...next, "jump", jumpCount);
+        } else {
+            setCards((prev) => [...prev.slice(1)]);
+        }
+        setDescription(gameModule.info()?.mainText);
+        // 卡片颜色相关
         $Game.update("set cardIndex", (draft) => {
             draft.currentCard = draft.currentCard + 1;
         });
+        // 数值更新
         handleChoose();
         // 重置动画状态
         setShowEnding(true);
@@ -163,7 +225,7 @@ const GameCards: FC = () => {
             setIsAnimating(true);
             setTimeout(() => {
                 setIsAnimating(false);
-            }, 300);
+            }, 200);
         };
 
         window.addEventListener("touchstart", handleTouchStart);
@@ -208,7 +270,7 @@ const GameCards: FC = () => {
                                 ? { x, y, rotate }
                                 : undefined),
                         }}
-                        backgroundColor={colors[card % 3]}
+                        backgroundColor={colors[Number(card.split("-")[0]) % 3]}
                         exit={{
                             transition: { duration: 0.4 },
                             ...(exitDirection === "right"
@@ -241,7 +303,7 @@ const GameCards: FC = () => {
                                 <Image src="/png/event-bg.png" />
                             </div>
                             <div className="px-4 text-sm ml-2">
-                                「开学典礼」即将开始。嘿，新同学，别发呆啦，今天是个重要的日子，可不能迟到，穿上书院服，跟上班级队伍去体育场参加开学典礼吧！
+                                {description}
                             </div>
                         </div>
                     </GameCard>

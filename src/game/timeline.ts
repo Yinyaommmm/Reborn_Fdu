@@ -116,6 +116,17 @@ export class TimelineModule {
         }
         this.completedEventIDs.add(evtID);
         this.eventNextIndexInYear++;
+        console.log(
+            "当前事件",
+            evtID,
+            "当前事件索引",
+            curIdx,
+            "eventNextIndexInYear",
+            this.eventNextIndexInYear,
+            "maxLength",
+            maxLength,
+        );
+
         if (this.eventNextIndexInYear >= maxLength) {
             shouldMoveToNextYear = true;
             this.eventNextIndexInYear = 0;

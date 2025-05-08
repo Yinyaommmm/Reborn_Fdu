@@ -96,6 +96,10 @@ export class Player {
         this._props = { H: 10, L: 20, A: 10, C: 10, M: 10 };
     }
 
+    Init(props: FiveProps) {
+        this._props = props;
+    }
+
     get mainProp() {
         return this._mainProp;
     }

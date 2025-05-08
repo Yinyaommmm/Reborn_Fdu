@@ -8,6 +8,7 @@ import { GoCard } from "./components/go-card";
 import Image from "@/components/image";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
+import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 
 interface BirthProps {
@@ -67,6 +68,8 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
             {toolId !== undefined && (
                 <GoCard
                     onClick={(e) => {
+                        gameModule.init();
+                        gameModule.equip();
                         trigger(e, "game");
                     }}
                 />
