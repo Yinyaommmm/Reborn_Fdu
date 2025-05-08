@@ -29,6 +29,7 @@ export const GameChoices: FC = () => {
 
     const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
     const currentCard = $Game.use((state) => state.currentCard);
+    const isAnimating = $Game.use((state) => state.isCardAnimating);
 
     const handleSwipeComplete = () => {
         setShowEnding(true);
@@ -142,10 +143,12 @@ export const GameChoices: FC = () => {
                         }
                         key="choice-1"
                         onClick={() => {
-                            $Game.update("trigger", (draft) => {
-                                draft.trigger = true;
-                                draft.exitDirection = "right";
-                            });
+                            if (!isAnimating) {
+                                $Game.update("trigger", (draft) => {
+                                    draft.trigger = true;
+                                    draft.exitDirection = "right";
+                                });
+                            }
                         }}
                     >
                         <div
@@ -221,10 +224,12 @@ export const GameChoices: FC = () => {
                         }
                         key="choice-2"
                         onClick={() => {
-                            $Game.update("trigger", (draft) => {
-                                draft.trigger = true;
-                                draft.exitDirection = "left";
-                            });
+                            if (!isAnimating) {
+                                $Game.update("trigger", (draft) => {
+                                    draft.trigger = true;
+                                    draft.exitDirection = "left";
+                                });
+                            }
                         }}
                     >
                         <div
