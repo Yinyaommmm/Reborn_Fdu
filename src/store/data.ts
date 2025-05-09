@@ -1,3 +1,4 @@
+import { EDUDESTINATION, GRADDESTINATION } from "@/game/player";
 import { model } from "@/packages/model";
 
 export interface DataModel {
@@ -9,6 +10,8 @@ export interface DataModel {
     toolId: number | undefined;
     cards: string[];
     ending: string;
+    eduDestination: EDUDESTINATION;
+    gradDestination: GRADDESTINATION;
 }
 
 export const $Data = model<DataModel>("DATA", {
@@ -20,4 +23,6 @@ export const $Data = model<DataModel>("DATA", {
     toolId: undefined,
     cards: [],
     ending: "",
+    eduDestination: "本科",
+    gradDestination: "普通毕业",
 });

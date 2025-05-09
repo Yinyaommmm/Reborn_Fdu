@@ -163,6 +163,15 @@ const alive = () => {
     } else throw Error("system not initialized");
 };
 
+const end = () => {
+    if (system) {
+        return {
+            eduDestination: player.eduDestination,
+            gradDestination: player.gradDestination,
+        };
+    } else throw Error("system not initialized");
+};
+
 export const gameModule = {
     init,
     equip,
@@ -173,4 +182,5 @@ export const gameModule = {
     info,
     data2props,
     alive,
+    end,
 };

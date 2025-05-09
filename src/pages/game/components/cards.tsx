@@ -238,6 +238,10 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         const handleTouchEnd = (e: TouchEvent) => {
             if (!showEnding || !touchClickRef.current) return;
             if (!gameModule.alive()) {
+                $Data.update("update ending", (draft) => {
+                    draft.eduDestination = gameModule.end().eduDestination;
+                    draft.gradDestination = gameModule.end().gradDestination;
+                });
                 triggerUI?.(e, "graduation");
             }
             if (cards.length === 0) {
