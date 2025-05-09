@@ -13,9 +13,11 @@ export const Graduation: FC<GraduationProps> = () => {
 
     return (
         <div className="w-screen h-screen flex items-center justify-center">
-            <h1>一阶段游戏结束力</h1>
-            <h1>学历: {eduDestination}</h1>
-            <h1>结局: {gradDestination}</h1>
+            <div>
+                <h1>一阶段游戏结束力</h1>
+                <h1>学历: {eduDestination}</h1>
+                <h1>结局: {gradDestination}</h1>
+            </div>
         </div>
     );
 };
