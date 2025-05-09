@@ -157,6 +157,12 @@ const info = () => {
     }
 };
 
+const alive = () => {
+    if (system) {
+        return system.GameContinue;
+    } else throw Error("system not initialized");
+};
+
 export const gameModule = {
     init,
     equip,
@@ -166,4 +172,5 @@ export const gameModule = {
     use,
     info,
     data2props,
+    alive,
 };

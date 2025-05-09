@@ -17,14 +17,21 @@ import GameCard from "./card";
 
 import Image from "@/components/image";
 import { FiveProps } from "@/game/gamesys";
-import { useCircularTransition } from "@/hooks/useCircularTransition";
+import {
+    CircularTransitionTrigger,
+    useCircularTransition,
+} from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 import { calYFromDeltaX } from "@/utils/circle";
 
-const GameCards: FC = () => {
+interface GameCardsProps {
+    trigger?: CircularTransitionTrigger;
+}
+
+const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     // const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
     const cards = $Data.use((state) => state.cards);
     const setCards = (updater: SetStateAction<string[]>) => {
@@ -132,6 +139,7 @@ const GameCards: FC = () => {
         $Data.update("update ending", (draft) => {
             draft.ending = res?.endingText ?? "";
         });
+
         // 抽卡
         if (!newSemesterRef.current) {
             let isJump = true;
@@ -229,6 +237,9 @@ const GameCards: FC = () => {
         };
         const handleTouchEnd = (e: TouchEvent) => {
             if (!showEnding || !touchClickRef.current) return;
+            if (!gameModule.alive()) {
+                triggerUI?.(e, "graduation");
+            }
             if (cards.length === 0) {
                 trigger(e);
             }

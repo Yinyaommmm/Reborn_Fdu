@@ -5,12 +5,17 @@ import { GameChoices } from "./components/choises";
 import GameHeader from "./components/header";
 
 import "./index.css";
+import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 
-const Game: FC = () => {
+interface GameProps {
+    trigger?: CircularTransitionTrigger;
+}
+
+const Game: FC<GameProps> = ({ trigger }) => {
     return (
         <div className="w-screen h-screen overflow-hidden game-background">
             <GameHeader />
-            <GameCards />
+            <GameCards trigger={trigger} />
             <GameChoices />
         </div>
     );
