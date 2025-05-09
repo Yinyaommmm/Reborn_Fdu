@@ -66,8 +66,8 @@ const toolId2itemId = (toolId: number): ItemID => {
 // };
 
 const init = () => {
-    // player.Init(data2props($Data.get()));
-    player.fixedInit();
+    player.Init(data2props($Data.get()));
+    // player.fixedInit();
     system = new GameSystem(player, standardEvents);
 };
 

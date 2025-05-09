@@ -16,6 +16,7 @@ import {
 import GameCard from "./card";
 
 import Image from "@/components/image";
+import { FiveProps } from "@/game/gamesys";
 import { useCircularTransition } from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
@@ -76,16 +77,17 @@ const GameCards: FC = () => {
     const isDragging = useMotionValue(false);
 
     const [description, setDescription] = useState<ReactNode>(undefined);
+    const [title, setTitle] = useState<string>("");
     const initialRef = useRef<boolean>(false);
     const newSemesterRef = useRef<boolean>(false);
 
-    const handleChoose = () => {
+    const handleChoose = (delta: FiveProps) => {
         $Data.update("choose", (draft) => {
-            draft.honesty += Math.floor(Math.random() * 5) + 1;
-            draft.academic += Math.floor(Math.random() * 5) + 1;
-            draft.creativity += Math.floor(Math.random() * 5) + 1;
-            draft.lucky += Math.floor(Math.random() * 5) + 1;
-            draft.management += Math.floor(Math.random() * 5) + 1;
+            draft.honesty += delta.H;
+            draft.academic += delta.A;
+            draft.creativity += delta.C;
+            draft.lucky += delta.L;
+            draft.management += delta.M;
         });
     };
 
@@ -103,6 +105,7 @@ const GameCards: FC = () => {
         });
 
         setDescription(gameModule.info()?.mainText);
+        setTitle(gameModule.info()?.title ?? "");
         console.log("new", event1);
         console.log("new", event2);
         console.log("new", event3);
@@ -148,12 +151,15 @@ const GameCards: FC = () => {
             setCards((prev) => [...prev.slice(1)]);
         }
         setDescription(gameModule.info()?.mainText);
+        setTitle(gameModule.info()?.title ?? "");
         // 卡片颜色相关
         $Game.update("set cardIndex", (draft) => {
             draft.currentCard = draft.currentCard + 1;
         });
         // 数值更新
-        handleChoose();
+        if (res !== undefined) {
+            handleChoose(res?.deltaProps);
+        }
         // 重置动画状态
         setShowEnding(true);
         setTimeout(() => {
@@ -303,7 +309,7 @@ const GameCards: FC = () => {
                         }}
                         customZIndex={3 - index}
                         border={activeIndex === index}
-                        title="大一上"
+                        title={title}
                     >
                         <div className="w-full h-full flex items-center justify-center flex-col gap-4">
                             <div className="w-[90%] p-2 bg-white ml-2 mt-2">
