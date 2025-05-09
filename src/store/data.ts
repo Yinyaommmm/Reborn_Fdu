@@ -8,6 +8,7 @@ export interface DataModel {
     management: number;
     toolId: number | undefined;
     cards: string[];
+    ending: string;
 }
 
 export const $Data = model<DataModel>("DATA", {
@@ -18,4 +19,5 @@ export const $Data = model<DataModel>("DATA", {
     management: 0,
     toolId: undefined,
     cards: [],
+    ending: "",
 });

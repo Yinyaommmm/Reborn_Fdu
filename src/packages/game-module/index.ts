@@ -165,4 +165,5 @@ export const gameModule = {
     resolve,
     use,
     info,
+    data2props,
 };

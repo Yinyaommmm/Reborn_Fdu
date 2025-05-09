@@ -2,6 +2,7 @@ import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { useViewport } from "@/hooks/useViewPort";
+import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 
@@ -11,6 +12,9 @@ export const GameChoices: FC = () => {
     const slideDistanceScale = 1;
     const triggerDistance = viewportWidth / 2;
     const cards = $Data.use((state) => state.cards);
+    const ending = $Data.use((state) => state.ending);
+    const choiceA = gameModule.info()?.choiceAText;
+    const choiceB = gameModule.info()?.choiceBText;
 
     const trigger = $Game.use((state) => state.trigger);
 
@@ -43,6 +47,7 @@ export const GameChoices: FC = () => {
 
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
+            e.preventDefault();
             if (showEnding || cards.length === 0) return;
             isDragging.set(true);
             touchStartX.set(e.touches[0].clientX);
@@ -50,6 +55,7 @@ export const GameChoices: FC = () => {
 
         const handleTouchMove = (e: TouchEvent) => {
             if (!isDragging.get() || showEnding || cards.length === 0) return;
+            e.preventDefault();
 
             const deltaX = e.touches[0].clientX - touchStartX.get();
             if (deltaX > 0 && exitDirection !== "right") {
@@ -93,8 +99,9 @@ export const GameChoices: FC = () => {
     }, [exitDirection, showEnding, cards]);
 
     useEffect(() => {
-        const handleTouchStart = () => {
+        const handleTouchStart = (e: TouchEvent) => {
             if (!showEnding) return;
+            e.preventDefault();
             touchClickRef.current = true;
         };
         const handleTouchEnd = () => {
@@ -191,8 +198,8 @@ export const GameChoices: FC = () => {
                                 }}
                             />
                         </div>
-                        <div className="bg-[#79B] text-white h-full w-[60vw] p-2 flex items-center">
-                            认真聆听校领导和学生代表发言。
+                        <div className="bg-[#79B] text-white h-full w-[60vw] p-2 flex items-center text-sm">
+                            {choiceA}
                         </div>
                     </motion.div>
                 )}
@@ -256,8 +263,8 @@ export const GameChoices: FC = () => {
                             />
                         </div>
 
-                        <div className="bg-[#BD7E94] text-white h-full w-[60vw] p-2 flex items-center justify-end">
-                            拍照打卡，发一篇大红书。
+                        <div className="bg-[#BD7E94] text-white h-full w-[60vw] p-2 flex items-center justify-end text-sm text-right">
+                            {choiceB}
                         </div>
                         <div className="h-full flex flex-col justify-between">
                             <div
@@ -293,9 +300,7 @@ export const GameChoices: FC = () => {
                                 backgroundColor: colors[(currentCard - 1) % 3],
                             }}
                         >
-                            <div>
-                                加油！期待你在大学里勇敢追逐、实现心中理想。
-                            </div>
+                            <div>{ending}</div>
                             <div className="absolute top-[5%] left-[2%] w-full bg-decorate-border h-decorate" />
                             <div className="absolute top-[105%] left-[2%] w-full bg-decorate-border h-decorate" />
                             <div className="absolute top-[5%] -right-[2%] h-[40%] w-decorate bg-decorate-border" />

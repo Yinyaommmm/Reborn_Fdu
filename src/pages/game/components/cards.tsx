@@ -120,11 +120,15 @@ const GameCards: FC = () => {
         // 更新卡片队列
         const next: string[] = [];
         // 选择选项
+        let res = null;
         if (exitDirection === "left") {
-            gameModule.resolve("B");
+            res = gameModule.resolve("B");
         } else {
-            gameModule.resolve("A");
+            res = gameModule.resolve("A");
         }
+        $Data.update("update ending", (draft) => {
+            draft.ending = res?.endingText ?? "";
+        });
         // 抽卡
         if (!newSemesterRef.current) {
             let isJump = true;
@@ -170,13 +174,14 @@ const GameCards: FC = () => {
     useEffect(() => {
         const handleTouchStart = (e: TouchEvent) => {
             if (isAnimating || showEnding) return;
+            e.preventDefault();
             isDragging.set(true);
             touchStartX.set(e.touches[0].clientX);
         };
 
         const handleTouchMove = (e: TouchEvent) => {
             if (!isDragging.get() || isAnimating || showEnding) return;
-
+            e.preventDefault();
             const deltaX = e.touches[0].clientX - touchStartX.get();
             // if (deltaX > 0) setExitDirection("right");
             // else setExitDirection("left");
@@ -211,8 +216,9 @@ const GameCards: FC = () => {
     }, [isAnimating, showEnding]);
 
     useEffect(() => {
-        const handleTouchStart = () => {
+        const handleTouchStart = (e: TouchEvent) => {
             if (!showEnding) return;
+            e.preventDefault();
             touchClickRef.current = true;
         };
         const handleTouchEnd = (e: TouchEvent) => {
@@ -220,6 +226,7 @@ const GameCards: FC = () => {
             if (cards.length === 0) {
                 trigger(e);
             }
+            e.preventDefault();
             touchClickRef.current = false;
             setShowEnding(false);
             setIsAnimating(true);

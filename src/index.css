@@ -4,7 +4,9 @@ body, html {
     overscroll-behavior: none;
     -webkit-overflow-scrolling: auto; /* 旧版属性 */
     overflow: hidden;
-  }
+    touch-action: none;            /* 阻止手势导致的滚动/缩放 */
+    overscroll-behavior: contain;  /* 避免 iOS “回弹” */
+}
 
 @theme {
   --color-decorate-border: #060706;
