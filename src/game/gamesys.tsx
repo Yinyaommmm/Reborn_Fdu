@@ -9,6 +9,7 @@ import {
     clampFiveProps_choiceA,
     clampFiveProps_choiceB,
     clampProb,
+    didMeetRequireProps,
     formatDialog,
     getTwoRandomItems,
     HLRangeConvert_ChoiceB,
@@ -201,7 +202,7 @@ export class StandardEvent {
                 "$$",
                 `${c1}` + "和" + c2,
             );
-            e.mainText = formatDialog(tmpMainText, c1, c2);
+            e.mainText = formatDialog(tmpMainText, c1, c2, this.getCategory());
             if (this.getCategory() === EventCategory.SZTZ) {
                 e.choiceAText = `选择${c1}`;
                 e.choiceBText = `选择${c2}`;
@@ -294,7 +295,7 @@ export class StandardEvent {
             this.logger.info(90 + "触发企业");
         }
     }
-    private logger = new Logger("STANDARDEVENT", true);
+    private logger = new Logger("STANDARDEVENT", false);
     constructor(private _readableEvt: ReadableEvent) {}
 }
 
@@ -392,7 +393,7 @@ export class GameSystem {
             rand,
             resType: "F",
         };
-        if (rand <= prob) {
+        if (ctx.probContext.rand <= ctx.probContext.succProb) {
             if (
                 this.allEvents[evtID].getCategory() === EventCategory.SZTZ &&
                 rand <= prob / 2
@@ -431,7 +432,7 @@ export class GameSystem {
             evt,
             resType,
         );
-        clampFiveProps_choiceA(dc, evt);
+        clampFiveProps_choiceA(dc, evt, this.player.props);
         this.logger.info("ChoiceA after clamp", dc.H, dc.L, dc.A, dc.C, dc.M);
         return {
             deltaProps: ctx.deltaPropContext!,
@@ -509,6 +510,7 @@ export class GameSystem {
             evt,
             newHRange,
             newLRange,
+            this.player.props,
         );
         this.logger.info("ChoiceB 真·中间随机结果", ctx.deltaPropContext);
 
@@ -545,15 +547,16 @@ export class GameSystem {
         });
         // 人物属性
         this.player.changeProps(res.deltaProps);
-        // 事件经历次数
-        this.allEvents[evtID].experienceCount++;
+        // 事件经历的记录
+        this.allEvents[evtID].experienceCount++; // 经历次数
+        if (res.resType !== "F") this.timelineMod.succEventIDs.add(evtID);
         // 特殊影响： 党员身份√、毕业去向、升学去向、删除后续活动
         this.allEvents[evtID].specialEffect(res, this.player, this.getYear());
         return res;
     }
     nextEvt(ctx: SingleRoundContext) {
         // TODO: 这里需要引入装备被动
-        // ....
+        this.itemManager.applyHappenPassiveEffects(this.timelineMod);
         const nextRes = this.timelineMod.getNextEvent(ctx);
         return nextRes;
     }
@@ -568,25 +571,19 @@ export class GameSystem {
                 .getPrerequisites()
                 .some(
                     (prereq) =>
-                        !this.timelineMod.getCompletedEventIDs().has(prereq),
+                        !this.timelineMod.getChosedEventIDs().has(prereq),
                 )
         ) {
-            console.log(`必然事件${evtID}前置事件未满足！，直接跳过`);
+            this.logger.info(`必然事件${evtID}前置事件未满足！，直接跳过`);
             return true;
         }
 
-        const req = evt.getRequirement();
-        const playerProps = this.player.props;
-        for (const prop of ["H", "L", "A", "C", "M"] as const) {
-            if ((playerProps[prop] ?? 0) < (req[prop] ?? 0)) {
-                console.log(
-                    `必然事件${evtID}需求属性${prop}[${playerProps[prop]}/${req[prop]}]！，直接跳过`,
-                );
-                return true;
-            }
+        if (!didMeetRequireProps(evt, this.player.props, this.logger)) {
+            return true;
         }
-        // 特殊条件的跳过判断
+
         if (evtID === 90 && this.player.specialTag.has(跳过招聘会)) {
+            // 特殊条件的跳过判断
             // 必然事件才需要进行跳过判断
             console.log("evt===招聘会，但是允许跳过");
             return true;

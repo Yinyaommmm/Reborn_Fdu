@@ -10,6 +10,7 @@ export interface SingleRoundContext {
     currentEvent?: StandardEvent;
     probContext?: ProbContext; // 结算之前的成功概率
     deltaPropContext?: FiveProps; // 结算之前的影响数值
+    happenProbContext?: number; // 事件触发概率
 }
 
 export function createEmptyContext(

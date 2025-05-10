@@ -2,6 +2,7 @@ import { SingleRoundContext } from "./context";
 import { GameSystem } from "./gamesys";
 import { Player } from "./player";
 import { RandomPickModule } from "./randompick";
+import { didMeetRequireProps } from "./util";
 
 import { Logger } from "@/logger/logger";
 export type FixedEventSelector = number | ((player: Player) => number);
@@ -66,16 +67,20 @@ export const RANDOM_EVTNUM_PERYEAR = 7;
 
 export class TimelineModule {
     private eventNextIndexInYear: number = 0; // 表示下一个要进行的活动的index，并不是
-    private completedEventIDs: Set<number> = new Set();
+    private chosedEventIDs: Set<number> = new Set(); // 被选择过的事件
+    public succEventIDs: Set<number> = new Set(); // 成功的事件
     private fixedEvents: FixedEventMap = CONSTFixedEvents;
     private logger: Logger;
     private randpickMod: RandomPickModule;
+    private luckyYear = new Map<number, number>();
+    public luckHappenProb = 0.08;
 
     constructor(
         private player: Player,
         private gameSys: GameSystem,
     ) {
-        this.logger = new Logger("TIMELINE", gameSys.logger.getEnable());
+        // this.logger = new Logger("TIMELINE", gameSys.logger.getEnable());
+        this.logger = new Logger("TIMELINE", true);
         this.randpickMod = new RandomPickModule(player, gameSys, this);
     }
 
@@ -90,14 +95,22 @@ export class TimelineModule {
         shouldMoveToNextYear: boolean;
         ctx: SingleRoundContext;
     } {
+        // 学年初是否发生幸运事件77的判定
+        this.luckeyEventSet();
+
         const current = this.fixedEvents[this.year] || {}; // 从 [0 , maxLength]
         const curIdx = this.eventNextIndexInYear;
         let evtID: number;
         let shouldMoveToNextYear = false;
         const start = current.start ?? [];
         const end = current.end ?? [];
-        const maxLength = start.length + RANDOM_EVTNUM_PERYEAR + end.length;
-
+        const luckHappen =
+            this.luckyYear.get(this.year) === 77 ||
+            this.luckyYear.get(this.year) === 78
+                ? 1
+                : 0;
+        const maxLength =
+            start.length + RANDOM_EVTNUM_PERYEAR + end.length + luckHappen;
         // 因为eventIndexInYear始终是合法的
         if (this.eventNextIndexInYear < start.length) {
             evtID = this.resolveFixedSelector(start[curIdx]); // start事件
@@ -108,37 +121,43 @@ export class TimelineModule {
         ) {
             evtID = this.getRandomEventID(); // 随机事件
             this.logger.info("执行随机事件", evtID);
-        } else {
+        } else if (
+            this.eventNextIndexInYear <
+            start.length + RANDOM_EVTNUM_PERYEAR + end.length
+        ) {
             // end事件
             const endIndex = curIdx - start.length - RANDOM_EVTNUM_PERYEAR;
             evtID = this.resolveFixedSelector(end[endIndex]);
             this.logger.info("执行结束事件", evtID);
+        } else {
+            evtID = this.luckyYear.get(this.year) as 77 | 78;
+            this.logger.info("执行幸运事件", evtID);
         }
-        this.completedEventIDs.add(evtID);
+        this.chosedEventIDs.add(evtID);
         this.eventNextIndexInYear++;
-        console.log(
-            "当前事件",
-            evtID,
-            "当前事件索引",
-            curIdx,
-            "eventNextIndexInYear",
-            this.eventNextIndexInYear,
-            "maxLength",
-            maxLength,
-        );
+        // console.log(
+        //     "当前事件",
+        //     evtID,
+        //     "当前事件索引",
+        //     curIdx,
+        //     "eventNextIndexInYear",
+        //     this.eventNextIndexInYear,
+        //     "maxLength",
+        //     maxLength,
+        // );
 
         if (this.eventNextIndexInYear >= maxLength) {
             shouldMoveToNextYear = true;
             this.eventNextIndexInYear = 0;
         }
 
-        // 设置上下文
+        // 设置上下文里的当前事件
         ctx.currentEvent = this.gameSys.getAllEvents()[evtID];
         return { evtID, indexInYear: curIdx + 1, shouldMoveToNextYear, ctx };
     }
 
-    public getCompletedEventIDs(): Set<number> {
-        return this.completedEventIDs;
+    public getChosedEventIDs(): Set<number> {
+        return this.chosedEventIDs;
     }
 
     private resolveFixedSelector(selector: FixedEventSelector): number {
@@ -151,10 +170,59 @@ export class TimelineModule {
         this.randpickMod.updateAllPools(this.gameSys.getAllEvents());
         const evt = this.randpickMod.pickRandomEvent();
         if (evt === null) {
-            this.logger.warn("抽取出了NULL事件,返回CRUSH事件");
-            return 77;
+            this.logger.warn("抽取出了NULL事件,返回开学典礼事件");
+            return 0;
         }
-
         return evt.getID();
+    }
+
+    private luckeyEventSet() {
+        if (this.succEventIDs.has(77) && this.succEventIDs.has(78)) return;
+        const happenProb = this.luckHappenProb;
+        if (!this.succEventIDs.has(77)) {
+            // 只在学年开头判断是否有事件
+            if (this.luckyYear.get(this.year) !== undefined) {
+                return;
+            }
+            // 尚未完成77
+            const luck77 = this.gameSys.getAllEvents()[77];
+            const meetProp = didMeetRequireProps(
+                luck77,
+                this.player.props,
+                this.logger,
+            );
+            const luckProb = Math.random() <= happenProb;
+            if (meetProp && luckProb) {
+                this.luckyYear.set(this.year, 77);
+                this.logger.info(`!!! 第${this.year}年可以触发幸运事件77`);
+            } else {
+                this.luckyYear.set(this.year, -1);
+                this.logger.info(
+                    `!!! 第${this.year}年幸运事件77无法触发，meetprop:${meetProp},luckProb:${luckProb}`,
+                );
+            }
+        } else {
+            // 只在学年开头判断是否有事件
+            if (this.luckyYear.get(this.year) !== undefined) {
+                return;
+            }
+            // 尚未完成78
+            const luck78 = this.gameSys.getAllEvents()[78];
+            const meetProp = didMeetRequireProps(
+                luck78,
+                this.player.props,
+                this.logger,
+            );
+            const luckProb = Math.random() <= happenProb;
+            if (meetProp && luckProb) {
+                this.luckyYear.set(this.year, 78);
+                this.logger.info(`!!! 第${this.year}年可以触发幸运事件78`);
+            } else {
+                this.luckyYear.set(this.year, -1);
+                this.logger.info(
+                    `!!! 第${this.year}年幸运事件78无法触发，meetprop:${meetProp},luckProb:${luckProb}`,
+                );
+            }
+        }
     }
 }

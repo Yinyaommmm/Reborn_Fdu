@@ -13,7 +13,7 @@ export class GameModule {
         player.fixedInit();
         player.mainProp = "A"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
-        system.addItem(ItemFactory("Misfortune Certificate") as Item);
+        system.addItem(ItemFactory("Skincare Set") as Item);
         // system.addItem(ItemFactory("Secretary's Letter") as Item);
         // system.addItem(ItemFactory("Academician's Guidebook") as Item);
         // system.addItem(ItemFactory("Thanos Glove") as Item);
@@ -32,21 +32,23 @@ export class GameModule {
             if (!shouldJump) {
                 console.log(
                     `${system.getYear()}-${nextRes.indexInYear}`,
-                    system.showEvt(nextRes.evtID),
+                    // system.showEvt(nextRes.evtID),
                 );
                 // 根据用户选择和‘上下文’进行结算，这里模拟使用70%概率选A
-                let choice: "A" | "B" = Math.random() < 0.7 ? "A" : "B";
+                let choice: "A" | "B" = Math.random() < 1 ? "A" : "B";
                 if (nextRes.evtID % 10 === 7) {
                     choice = "A";
                     // @ts-ignore
                     const useRes = system.useItem("Buddha Foot", nextRes.ctx);
                 }
-                system.resoluteEvt(
+                const rsltRes = system.resoluteEvt(
                     nextRes.evtID,
                     choice,
                     nextRes.indexInYear,
                     nextRes.ctx,
                 );
+                if (nextRes.evtID === 77 || nextRes.evtID === 78)
+                    console.log(rsltRes);
             }
             //再执行学年移动
             if (nextRes.shouldMoveToNextYear) {
@@ -59,17 +61,20 @@ export class GameModule {
             count[log.evtID]++;
         });
         console.log(
-            "这是重复的事件id列表",
+            "这是重复发生随机事件的id列表",
             count
                 .map((item, idx) => {
                     return {
                         idx,
                         num: item,
+                        required:
+                            system.getAllEvents()[idx]?.isRequired() ?? true,
                     };
                 })
-                .filter((c) => c.num >= 2),
+                .filter((c) => c.num >= 2 && c.required === false),
         );
         console.log("日志", system.getEventLog());
         console.log("成功高光事件", system.getHighLightLog());
+        console.log("全部事件", system.getAllEvents());
     }
 }

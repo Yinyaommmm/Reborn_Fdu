@@ -2,6 +2,7 @@
 import { GameSystem, StandardEvent } from "./gamesys";
 import { Player } from "./player";
 import { TimelineModule } from "./timeline";
+import { didMeetRequireProps } from "./util";
 import { EventCategory } from "../type/type";
 
 import { Logger } from "@/logger/logger";
@@ -49,7 +50,7 @@ export class RandomPickModule {
 
     updateAllPools(allEvents: StandardEvent[]) {
         const currentYear = this.gameSys.getYear();
-        const completedIDs = new Set(this.timeline.getCompletedEventIDs());
+        const completedIDs = new Set(this.timeline.getChosedEventIDs());
         const playerProps = this.player.props;
         const mainProp = this.player.mainProp;
 
@@ -63,6 +64,7 @@ export class RandomPickModule {
         // 2. 满足前置事件需求
         // 3. 满足属性要求
         // 4. 尚未做过
+        // 5. 不是两个幸运事件
         const filteredEvts = allEvents
             .filter((evt) => !evt.isRequired())
             .filter((evt) => evt.getHappenYear().includes(currentYear))
@@ -71,20 +73,20 @@ export class RandomPickModule {
                     .getPrerequisites()
                     .every((prereq) => completedIDs.has(prereq)),
             )
-            .filter((evt) => {
-                const req = evt.getRequirement();
-                for (const prop of ["H", "L", "A", "C", "M"] as const) {
-                    if ((playerProps[prop] ?? 0) < (req[prop] ?? 0)) {
-                        return false;
-                    }
-                }
-                return true;
-            })
+            .filter((evt) =>
+                didMeetRequireProps(
+                    evt,
+                    playerProps,
+                    // this.logger,
+                    null,
+                ),
+            )
             .filter(
                 (evt) =>
                     evt.isRepetable ||
-                    !this.timeline.getCompletedEventIDs().has(evt.getID()), //
-            );
+                    !this.timeline.getChosedEventIDs().has(evt.getID()), //
+            )
+            .filter((evt) => evt.getID() !== 77 && evt.getID() !== 78);
 
         for (const evt of filteredEvts) {
             // 满足所有条件，分发入池
@@ -153,7 +155,7 @@ export class RandomPickModule {
                 (10 - evt.getHappenYear().length) / 3, // 最大为9/3 = 3
                 1,
             ); // 1 ~ 3
-            const expFactor = Math.max(3 - evt.experienceCount, 0.25); // 超过3次概率大幅
+            const expFactor = Math.max(2 - evt.experienceCount, 0.01); // 超过3次概率大幅
             return prereqFactor * happenYearFactor * expFactor;
         });
 
