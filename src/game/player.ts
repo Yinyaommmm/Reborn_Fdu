@@ -9,12 +9,12 @@ export type GRADDESTINATION =
     | "企业"
     | "退学"
     | "选调"
-    | "普通毕业";
+    | "灵活就业";
 
 export type EDUDESTINATION = "本科" | "研究生";
 export class Player {
     private _mainProp: "A" | "M" = "A";
-    public gradDestination: GRADDESTINATION = "普通毕业";
+    public gradDestination: GRADDESTINATION = "灵活就业";
     public eduDestination: EDUDESTINATION = "本科";
     public isCCP = false;
     public specialTag = new Set<string>();

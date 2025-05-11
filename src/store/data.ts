@@ -24,5 +24,5 @@ export const $Data = model<DataModel>("DATA", {
     cards: [],
     ending: "",
     eduDestination: "本科",
-    gradDestination: "普通毕业",
+    gradDestination: "灵活就业",
 });

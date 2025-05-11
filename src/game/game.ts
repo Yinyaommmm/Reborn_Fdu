@@ -3,6 +3,7 @@ import { Item, ItemFactory } from "./item";
 import { Player } from "./player";
 
 import { events as readablEvents } from "@/data/events_loaded";
+import { Stage2Sys } from "@/stage2/stage2";
 // import { timeLogger } from "@/game/util";
 export class GameModule {
     // @timeLogger 这个竟然是罪魁祸首
@@ -76,5 +77,11 @@ export class GameModule {
         console.log("日志", system.getEventLog());
         console.log("成功高光事件", system.getHighLightLog());
         console.log("全部事件", system.getAllEvents());
+
+        // 二阶段
+        console.log("--!!!!进入二阶段!!!!--");
+        const stage2Sys = new Stage2Sys(player);
+        stage2Sys.setAllLine();
+        console.log(stage2Sys.getAll());
     }
 }
