@@ -68,7 +68,14 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     const leftExit = calYFromDeltaX(radius, -8, -xExit);
     const rights = [32, 32, 32];
     const tops = [0, 0, 0];
-    const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
+    const colors = [
+        "#B4AED2",
+        "#F0D28C",
+        "#B9CFE6",
+        "#C9D895",
+        "#F3AFAC",
+        "#DCB6C8",
+    ];
     const activeRotate = 8;
     const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
     const triggerDistance = viewportWidth / 2;
@@ -298,7 +305,9 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                                 ? { x, y, rotate }
                                 : undefined),
                         }}
-                        backgroundColor={colors[Number(card.split("-")[0]) % 3]}
+                        backgroundColor={
+                            colors[Number(card.split("-")[0]) % colors.length]
+                        }
                         exit={{
                             transition: { duration: 0.4 },
                             ...(exitDirection === "right"
