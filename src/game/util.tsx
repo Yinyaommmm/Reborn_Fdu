@@ -1,8 +1,10 @@
-import React, { ReactNode } from "react";
+import React from "react";
 
 import { FiveProps, StandardEvent } from "./gamesys";
 
+import { Logger } from "@/logger/logger";
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
+import { EventCategory } from "@/type/type";
 
 // export function timeLogger<T extends (...args: unknown[]) => unkn>(
 //     _target: object,
@@ -95,7 +97,7 @@ export function HLRangeConvert_ChoiceB(
     } else if (gear === ResultBLevel.Same) {
         return [min, max];
     } else if (gear === ResultBLevel.Punish) {
-        return [-8, -8];
+        return [-4, -4];
     }
     console.log("warning! unexpected gear");
     return [0, 0];
@@ -147,11 +149,16 @@ export function formatDialog(
     dialog: string,
     c1: string,
     c2: string,
+    category: EventCategory,
 ): React.ReactNode {
     const parts: React.ReactNode[] = [];
 
-    const match = dialog.match(/(.*?)「(.*?)」(.*)/);
-    const applyUnderline = (text: string): ReactNode[] => {
+    const shouldUnderline = category === EventCategory.SZTZ;
+    const shouldHighlight = category === EventCategory.SZTZ;
+
+    const applyUnderline = (text: string): React.ReactNode[] => {
+        if (!shouldUnderline) return [text];
+
         const result: React.ReactNode[] = [];
         let remaining = text;
 
@@ -178,15 +185,28 @@ export function formatDialog(
 
         return result;
     };
-    if (match) {
-        const [, before, highlight, after] = match;
+
+    const regex = /「(.*?)」/g;
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(dialog)) !== null) {
+        const before = dialog.slice(lastIndex, match.index);
+        const highlight = match[1];
 
         parts.push(...applyUnderline(before));
-        parts.push(<b key="highlight">「{highlight}」</b>);
-        parts.push(...applyUnderline(after));
-    } else {
-        // 没有「」的情况，也处理下划线
-        parts.push(...applyUnderline(dialog));
+
+        if (shouldHighlight) {
+            parts.push(<b key={`highlight-${match.index}`}>「{highlight}」</b>);
+        } else {
+            parts.push(`「${highlight}」`);
+        }
+
+        lastIndex = regex.lastIndex;
+    }
+
+    if (lastIndex < dialog.length) {
+        parts.push(...applyUnderline(dialog.slice(lastIndex)));
     }
 
     return <>{parts}</>;
@@ -199,7 +219,9 @@ export function isSuccess(res: string) {
 export function clampFiveProps_choiceA(
     deltaProps: FiveProps,
     evt: StandardEvent,
+    playerProps: FiveProps,
 ) {
+    // 第一步：按事件范围约束 deltaProps
     deltaProps.H = clamp(
         deltaProps.H,
         evt.getHRange_ChoiceA()[0],
@@ -225,13 +247,23 @@ export function clampFiveProps_choiceA(
         evt.getMRange_ChoiceA()[0],
         evt.getMRange_ChoiceA()[1],
     );
+
+    // 第二步：确保应用 deltaProps 后不会超出 0~100
+    deltaProps.H = clamp(deltaProps.H, -playerProps.H, 100 - playerProps.H);
+    deltaProps.L = clamp(deltaProps.L, -playerProps.L, 100 - playerProps.L);
+    deltaProps.A = clamp(deltaProps.A, -playerProps.A, 100 - playerProps.A);
+    deltaProps.C = clamp(deltaProps.C, -playerProps.C, 100 - playerProps.C);
+    deltaProps.M = clamp(deltaProps.M, -playerProps.M, 100 - playerProps.M);
 }
+
 export function clampFiveProps_choiceB(
     deltaProps: FiveProps,
     evt: StandardEvent,
     newHRange: number[],
     newLRange: number[],
+    playerProps: FiveProps,
 ) {
+    // 第一步：按传入范围和事件设定范围进行初步 clamp
     deltaProps.H = clamp(deltaProps.H, newHRange[0], newHRange[1]);
     deltaProps.L = clamp(deltaProps.L, newLRange[0], newLRange[1]);
     deltaProps.A = clamp(
@@ -249,4 +281,64 @@ export function clampFiveProps_choiceB(
         evt.getMRange_ChoiceA()[0],
         evt.getMRange_ChoiceA()[1],
     );
+
+    // 第二步：确保加到 playerProps 上后仍在 [0, 100] 范围内
+    deltaProps.H = clamp(deltaProps.H, -playerProps.H, 100 - playerProps.H);
+    deltaProps.L = clamp(deltaProps.L, -playerProps.L, 100 - playerProps.L);
+    deltaProps.A = clamp(deltaProps.A, -playerProps.A, 100 - playerProps.A);
+    deltaProps.C = clamp(deltaProps.C, -playerProps.C, 100 - playerProps.C);
+    deltaProps.M = clamp(deltaProps.M, -playerProps.M, 100 - playerProps.M);
+}
+
+export function didMeetRequireProps(
+    evt: StandardEvent,
+    playerProps: FiveProps,
+    logger: Logger | null = null,
+) {
+    // 1. 强制检查 H 和 L
+    const requireProps = evt.getRequirement();
+    const evtID = evt.getID();
+    const evtRequired = evt.isRequired();
+    for (const prop of ["H", "L"] as const) {
+        if ((playerProps[prop] ?? 0) < (requireProps[prop] ?? 0)) {
+            if (logger) {
+                logger.info(
+                    `[didMeetRequireProps] ${evtRequired ? "必选" : "随机"}事件${evtID}需求属性${prop}[${playerProps[prop]}/${requireProps[prop]}]，直接跳过`,
+                );
+            }
+            return false;
+        }
+    }
+
+    // 2. 检查 A, C, M 的逻辑（根据需要数量不同决定“或”或“与”）
+    const softProps: ("A" | "C" | "M")[] = ["A", "C", "M"];
+    const requiredSoftProps = softProps.filter(
+        (prop) => requireProps[prop] >= 0,
+    );
+
+    const requiredMet = requiredSoftProps.map(
+        (prop) => (playerProps[prop] ?? 0) >= (requireProps[prop] ?? 0),
+    );
+
+    const allMet =
+        requiredSoftProps.length <= 2
+            ? requiredMet.every((met) => met)
+            : requiredMet.some((met) => met); // 3个时为“或”
+
+    if (!allMet) {
+        if (logger) {
+            const detail = requiredSoftProps
+                .map(
+                    (prop) =>
+                        `${prop}[${playerProps[prop]}/${requireProps[prop]}]`,
+                )
+                .join(", ");
+            logger.info(
+                `[didMeetRequireProps] ${evtRequired ? "必选" : "随机"}事件${evtID}的软性属性要求未满足：${detail}，直接跳过`,
+            );
+        }
+        return false;
+    }
+
+    return true;
 }

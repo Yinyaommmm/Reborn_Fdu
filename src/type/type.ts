@@ -94,8 +94,8 @@ export const BaseProbabilityMap = new Map<string, BaseProbability>(
 export const ResultLevelMap = ResultLevel;
 
 export class ResultA {
-    H: [number, number] = [0, 0];
-    L: [number, number] = [0, 0];
+    H: [number, number] = ResultLevel.get("0")!;
+    L: [number, number] = ResultLevel.get("0")!;
     A: [number, number] = ResultLevel.get("0")!;
     C: [number, number] = ResultLevel.get("0")!;
     M: [number, number] = ResultLevel.get("0")!;
@@ -121,32 +121,7 @@ export const ResultBLevelMap = new Map<ResultBLevelType, ResultBLevel>([
     // ["HeavyPunish", ResultBLevel.HeavyPunish],
     ["NONE", ResultBLevel.None],
 ]);
-// export enum BgCategory {
-//     NONE,
-//     CAMPUS,
-//     CLASSROOM,
-//     GYM,
-//     PLAYGROUND,
-//     LAB,
-//     OFFICE,
-//     PRACTICE,
-//     AUDITORIUM,
-//     DORMITORY,
-//     TOUR,
-// }
-// export const BgCategoryMap = new Map<string, BgCategory>([
-//     ["无", BgCategory.NONE],
-//     ["校园", BgCategory.CAMPUS],
-//     ["教室", BgCategory.CLASSROOM],
-//     ["体育馆", BgCategory.GYM],
-//     ["操场", BgCategory.PLAYGROUND],
-//     ["实验室", BgCategory.LAB],
-//     ["办公室", BgCategory.OFFICE],
-//     ["实践场地", BgCategory.PRACTICE],
-//     ["礼堂", BgCategory.AUDITORIUM],
-//     ["寝室", BgCategory.DORMITORY],
-//     ["旅游打卡地", BgCategory.TOUR],
-// ]);
+
 export enum BgCategory {
     REGULAR,
     CLOSEUP,

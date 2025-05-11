@@ -2,6 +2,7 @@
 
 import { SingleRoundContext } from "./context";
 import { StandardEvent } from "./gamesys";
+import { TimelineModule } from "./timeline";
 
 import { Logger } from "@/logger/logger";
 import { EventCategory } from "@/type/type";
@@ -9,17 +10,22 @@ import { EventCategory } from "@/type/type";
 export type ProbPassiveEffect = (context: SingleRoundContext) => void;
 export type AttrPassiveEffect = (context: SingleRoundContext) => void;
 export type ActiveEffect = (context: SingleRoundContext) => void;
+export type happenEffect = (timeLineMod: TimelineModule) => void;
 
 export interface Item {
     id: ItemID;
     name: string;
     description: string;
+    logger: Logger;
 
     // 概率相关的被动效果（如提升/降低成功率）
     probPassiveEffect?: ProbPassiveEffect;
 
     // 属性结算相关的被动效果（如属性加成）
     attrPassiveEffect?: AttrPassiveEffect;
+
+    // 事件出现概率的被动效果
+    happenPassiveEffect?: happenEffect;
 
     // 主动效果,反正现在都是修改属性的，就不动了
     activeEffect?: ActiveEffect;
@@ -36,15 +42,13 @@ export abstract class SimpleItem implements Item {
     protected passiveBoost: number = 0;
     protected activeBoost: number = 1;
     protected targetCategories: EventCategory[] = [];
+    public logger = new Logger("SIMPLE ITEM", false);
 
     probPassiveEffect = (ctx: SingleRoundContext): SingleRoundContext => {
         if (!ctx.currentEvent || !ctx.probContext) return ctx;
         if (this.matchesCategory(ctx.currentEvent)) {
             const before = ctx.probContext.succProb;
-            ctx.probContext.succProb = Math.min(
-                1,
-                ctx.probContext.succProb + this.passiveBoost,
-            );
+            ctx.probContext.succProb += this.passiveBoost;
             console.log(
                 `${this.name} 被动触发, 事件 ${ctx.currentEvent.getID()} 的成功阈值: ${before} -> ${ctx.probContext.succProb}`,
             );
@@ -87,7 +91,8 @@ export type ItemID =
     | "Lucky Student ID"
     | "Buddha Foot"
     | "Middle Part Pants"
-    | "Misfortune Certificate";
+    | "Misfortune Certificate"
+    | "Skincare Set";
 
 export class SecretaryLetter extends SimpleItem {
     id: ItemID = "Secretary's Letter";
@@ -155,6 +160,7 @@ export class MisfortuneCertificate implements Item {
     name = "非酋证书";
     description = "人非命不非，西边不亮东边亮～";
     usageLeft = 0; // 无主动使用效果
+    logger: Logger = new Logger("非酋证书", false);
 
     // 概率阶段：所有事件成功率 -2%
     probPassiveEffect = (ctx: SingleRoundContext): void => {
@@ -163,16 +169,16 @@ export class MisfortuneCertificate implements Item {
                 succProb: -0.02,
                 rand: 0,
             };
-            console.log(
-                `${this.name} 被动触发【设置初始probcontext】：成功率 ${ctx.probContext.succProb}`,
+            this.logger.info(
+                `被动触发【设置初始probcontext】：成功率 ${ctx.probContext.succProb}`,
             );
             return;
         }
         if (ctx.probContext) {
             const before = ctx.probContext.succProb;
             ctx.probContext.succProb = before - 0.02;
-            console.log(
-                `${this.name} 被动触发：成功率 ${before} → ${ctx.probContext.succProb}`,
+            this.logger.info(
+                `被动触发：成功率 ${before} → ${ctx.probContext.succProb}`,
             );
         }
     };
@@ -188,8 +194,8 @@ export class MisfortuneCertificate implements Item {
                 M: 0.2,
             };
             const cd = ctx.deltaPropContext;
-            console.log(
-                `${this.name} 被动触发【设置初始attrcontext】: `,
+            this.logger.info(
+                `被动触发【设置初始attrcontext】: `,
                 cd.H,
                 cd.L,
                 cd.A,
@@ -204,10 +210,46 @@ export class MisfortuneCertificate implements Item {
         ctx.deltaPropContext.A += 0.2;
         ctx.deltaPropContext.C += 0.2;
         ctx.deltaPropContext.M += 0.2;
-        console.log(
-            `${this.name} 被动触发：属性H ${H}->${ctx.deltaPropContext.H} 属性L ${L}->${ctx.deltaPropContext.L} 
+        this.logger.info(
+            `被动触发：属性H ${H}->${ctx.deltaPropContext.H} 属性L ${L}->${ctx.deltaPropContext.L} 
                 属性A ${A}->${ctx.deltaPropContext.A} 属性C ${C}->${ctx.deltaPropContext.C} 属性M ${M}->${ctx.deltaPropContext.M}`,
         );
+    };
+}
+export class SkincareSet implements Item {
+    id: ItemID = "Skincare Set";
+    name = "护肤套装";
+    description = "老西红柿力荐的F大泉眼神仙水";
+    usageLeft = 0; // 无主动使用效果
+    logger: Logger = new Logger("护肤套装", true);
+
+    // 概率阶段：所有事件成功率 -2%
+    probPassiveEffect = (ctx: SingleRoundContext): void => {
+        if (ctx.currentEvent === undefined) return;
+        if (ctx.probContext === undefined) {
+            ctx.probContext = {
+                succProb: 0,
+                rand: 0,
+            };
+            this.logger.info(
+                `被动触发【设置初始probcontext】：成功率 ${ctx.probContext.succProb}`,
+            );
+            return;
+        }
+        if (
+            ctx.probContext &&
+            ctx.currentEvent.getCategory() === EventCategory.XYSJ
+        ) {
+            const before = ctx.probContext.succProb;
+            ctx.probContext.succProb = before + 1;
+            this.logger.info(
+                `被动触发：成功率 ${before} → ${ctx.probContext.succProb}`,
+            );
+        }
+    };
+
+    happenPassiveEffect = (timeLineMod: TimelineModule): void => {
+        timeLineMod.luckHappenProb = 1;
     };
 }
 
@@ -227,13 +269,15 @@ export function ItemFactory(id: ItemID): Item | null {
             return new MiddlePartPants();
         case "Misfortune Certificate":
             return new MisfortuneCertificate();
+        case "Skincare Set":
+            return new SkincareSet();
         default:
             return null;
     }
 }
 export class ItemManager {
     private items: Item[];
-    private logger: Logger = new Logger("ITEM MANAGER", true);
+    private logger: Logger = new Logger("ITEM MANAGER", false);
     constructor(items: Item[] = []) {
         this.items = items;
     }
@@ -246,6 +290,13 @@ export class ItemManager {
         for (const item of this.items) {
             if (item.probPassiveEffect) {
                 item.probPassiveEffect(context);
+            }
+        }
+    }
+    applyHappenPassiveEffects(timeLineMod: TimelineModule) {
+        for (const item of this.items) {
+            if (item.happenPassiveEffect) {
+                item.happenPassiveEffect(timeLineMod);
             }
         }
     }
