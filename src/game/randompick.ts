@@ -86,7 +86,8 @@ export class RandomPickModule {
                     evt.isRepetable ||
                     !this.timeline.getChosedEventIDs().has(evt.getID()), //
             )
-            .filter((evt) => evt.getID() !== 77 && evt.getID() !== 78);
+            .filter((evt) => evt.getID() !== 77 && evt.getID() !== 78)
+            .filter((evt) => evt.getID() !== 65); // 先把出国读研屏蔽了
 
         for (const evt of filteredEvts) {
             // 满足所有条件，分发入池
