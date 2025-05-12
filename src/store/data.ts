@@ -1,4 +1,5 @@
 import { EDUDESTINATION, GRADDESTINATION } from "@/game/player";
+import { PickRes } from "@/packages/game-module";
 import { model } from "@/packages/model";
 
 export interface DataModel {
@@ -8,7 +9,8 @@ export interface DataModel {
     creativity: number;
     management: number;
     toolId: number | undefined;
-    cards: string[];
+    cards: (PickRes | undefined)[];
+    endingCard: PickRes | undefined;
     ending: string;
     eduDestination: EDUDESTINATION;
     gradDestination: GRADDESTINATION;
@@ -22,6 +24,7 @@ export const $Data = model<DataModel>("DATA", {
     management: 0,
     toolId: undefined,
     cards: [],
+    endingCard: undefined,
     ending: "",
     eduDestination: "本科",
     gradDestination: "灵活就业",
