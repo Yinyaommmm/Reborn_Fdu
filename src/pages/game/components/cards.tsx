@@ -14,7 +14,7 @@ import {
 } from "react";
 
 import GameCard from "./card";
-import { CardColorMap } from "../utils/colors";
+import { CardBackMap, CardColorMap } from "../utils/colors";
 
 import Image from "@/components/image";
 import { FiveProps } from "@/game/gamesys";
@@ -333,6 +333,20 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                         customZIndex={3 - index}
                         border={activeIndex === index}
                         title={title}
+                        backChildren={
+                            <Image
+                                className="w-full h-full"
+                                square={false}
+                                src={
+                                    CardBackMap.get(
+                                        card?.id !== undefined
+                                            ? gameModule.getCard(card.id)
+                                                  .category
+                                            : EventCategory.NONE,
+                                    ) ?? ""
+                                }
+                            />
+                        }
                     >
                         <div className="w-full h-full flex items-center justify-center flex-col gap-4">
                             <div className="w-[90%] p-2 bg-white ml-2 mt-2">

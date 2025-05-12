@@ -8,6 +8,7 @@ export interface GameCardProps extends HTMLMotionProps<"div"> {
     customZIndex?: number;
     border?: boolean;
     title?: string;
+    backChildren?: ReactNode;
 }
 
 const GameCard: FC<GameCardProps> = (props) => {
@@ -19,6 +20,7 @@ const GameCard: FC<GameCardProps> = (props) => {
         style,
         border = false,
         title,
+        backChildren,
         ...rest
     } = props;
 
@@ -59,7 +61,9 @@ const GameCard: FC<GameCardProps> = (props) => {
                 className="absolute w-full h-full backface-hidden flex items-center justify-center rotate-y-180"
                 style={{ backgroundColor }}
             >
-                <span className="text-white text-5xl">Back</span>
+                {backChildren ?? (
+                    <span className="text-white text-5xl">Back</span>
+                )}
             </div>
         </motion.div>
         // </div>
