@@ -17,11 +17,11 @@ export interface DataModel {
 }
 
 export const $Data = model<DataModel>("DATA", {
-    honesty: 0,
-    lucky: 0,
-    academic: 0,
-    creativity: 0,
-    management: 0,
+    honesty: 10,
+    lucky: 10,
+    academic: 10,
+    creativity: 10,
+    management: 10,
     toolId: undefined,
     cards: [],
     endingCard: undefined,

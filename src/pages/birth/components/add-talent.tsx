@@ -127,7 +127,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (lucky > 0) {
+                        if (lucky > 10) {
                             setLucky((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -144,7 +144,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (honesty > 0) {
+                        if (honesty > 10) {
                             setHonesty((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -163,7 +163,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (academic > 0) {
+                        if (academic > 10) {
                             setAcademic((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -180,7 +180,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (creativity > 0) {
+                        if (creativity > 10) {
                             setCreativity((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -199,7 +199,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (management > 0) {
+                        if (management > 10) {
                             setManagement((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
