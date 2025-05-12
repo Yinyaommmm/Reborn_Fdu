@@ -4,11 +4,14 @@ import { events as readableEvents } from "@/data/events_loaded";
 import { FiveProps, GameSystem, StandardEvent } from "@/game/gamesys";
 import { ItemFactory, ItemID } from "@/game/item";
 import { Player } from "@/game/player";
+import { Stage2Sys } from "@/stage2/stage2";
 import { $Data, DataModel } from "@/store/data";
 
 const standardEvents = readableEvents.map((e) => new StandardEvent(e));
 const player = new Player();
 let system: GameSystem | null = null;
+let stage2Sys: Stage2Sys | null = null;
+
 const events: (GameEvent | undefined)[] = [];
 
 const data2props = (model: DataModel): FiveProps => {
@@ -172,6 +175,17 @@ const end = () => {
     } else throw Error("system not initialized");
 };
 
+const initStage2 = () => {
+    stage2Sys = new Stage2Sys(player);
+    stage2Sys.setAllLine();
+};
+
+const useStage2 = () => {
+    if (stage2Sys) {
+        return stage2Sys.getAll();
+    } else throw Error("stage2Sys not initialized");
+};
+
 export const gameModule = {
     init,
     equip,
@@ -183,4 +197,6 @@ export const gameModule = {
     data2props,
     alive,
     end,
+    initStage2,
+    useStage2,
 };

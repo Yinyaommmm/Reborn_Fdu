@@ -17,7 +17,12 @@ interface ImageProps extends HTMLProps<HTMLDivElement> {
     adjustWidth?: boolean;
     adjustHeight?: boolean;
     onLoad?: (event: SyntheticEvent<HTMLImageElement>) => void;
-    onSizeChange?: (width: number, height: number) => void;
+    onSizeChange?: (
+        width: number,
+        height: number,
+        documentWidth: number,
+        documentHeight: number,
+    ) => void;
     square?: boolean;
 }
 
@@ -43,8 +48,13 @@ const Image: FC<ImageProps> = (props) => {
         const width = img.naturalWidth;
         const height = img.naturalHeight;
         // 触发外部回调
-        if (onSizeChange) {
-            onSizeChange(width, height);
+        if (onSizeChange && imageRef.current) {
+            onSizeChange(
+                width,
+                height,
+                imageRef.current.clientWidth,
+                imageRef.current.clientHeight,
+            );
         }
 
         if (onLoad) onLoad(event);

@@ -7,12 +7,17 @@ interface GraduationProps {
     trigger?: CircularTransitionTrigger;
 }
 
-export const Graduation: FC<GraduationProps> = () => {
+export const Graduation: FC<GraduationProps> = ({ trigger }) => {
     const eduDestination = $Data.use((state) => state.eduDestination);
     const gradDestination = $Data.use((state) => state.gradDestination);
 
     return (
-        <div className="w-screen h-screen flex items-center justify-center">
+        <div
+            className="w-screen h-screen flex items-center justify-center"
+            onClick={(e) => {
+                trigger?.(e, "after");
+            }}
+        >
             <div>
                 <h1>一阶段游戏结束力</h1>
                 <h1>学历: {eduDestination}</h1>

@@ -43,7 +43,7 @@ interface NewsItem {
     id: number;
     doc: string;
 }
-interface YearItem {
+export interface YearItem {
     abstract: string;
     detail: string;
     year: number;

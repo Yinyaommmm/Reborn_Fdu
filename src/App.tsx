@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import "./App.css";
 import { GameModule } from "./game/game";
 import { useCircularTransition } from "./hooks/useCircularTransition";
+import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
 import Game from "./pages/game";
 import { Graduation } from "./pages/graduation";
@@ -24,6 +25,7 @@ function App() {
             {route === "birth" && <Birth trigger={trigger} />}
             {route === "launch" && <Launch trigger={trigger} />}
             {route === "graduation" && <Graduation trigger={trigger} />}
+            {route === "after" && <After />}
         </>
     );
 }
