@@ -11,7 +11,10 @@ export type ProbPassiveEffect = (context: SingleRoundContext) => void;
 export type AttrPassiveEffect = (context: SingleRoundContext) => void;
 export type ActiveEffect = (context: SingleRoundContext) => void;
 export type happenEffect = (timeLineMod: TimelineModule) => void;
-
+export interface UseItemRes {
+    result: boolean;
+    msg: string;
+}
 export interface Item {
     id: ItemID;
     name: string;
@@ -29,6 +32,8 @@ export interface Item {
 
     // 主动效果,反正现在都是修改属性的，就不动了
     activeEffect?: ActiveEffect;
+    // 撤销主动效果
+    cancelEffect?: ActiveEffect;
 
     usageLeft: number;
 }
@@ -66,14 +71,29 @@ export abstract class SimpleItem implements Item {
 
         if (this.matchesCategory(ctx.currentEvent)) {
             const before = ctx.probContext.succProb;
-            ctx.probContext.succProb = Math.min(
-                1,
-                ctx.probContext.succProb + this.activeBoost,
-            );
+            ctx.probContext.succProb += this.activeBoost;
             console.log(
                 `${this.name} 主动触发, 事件 ${ctx.currentEvent.getID()} 的成功阈值: ${before} -> ${ctx.probContext.succProb}`,
             );
             this.usageLeft -= 1;
+        }
+
+        return ctx;
+    };
+
+    cancelEffect = (ctx: SingleRoundContext): SingleRoundContext => {
+        if (!this.hasActiveEffect || !ctx.currentEvent || this.usageLeft < 0)
+            return ctx;
+
+        if (!ctx.probContext) return ctx;
+
+        if (this.matchesCategory(ctx.currentEvent)) {
+            const before = ctx.probContext.succProb;
+            ctx.probContext.succProb -= this.activeBoost;
+            console.log(
+                `${this.name} 主动效果撤销, 事件 ${ctx.currentEvent.getID()} 的成功阈值: ${before} -> ${ctx.probContext.succProb}`,
+            );
+            this.usageLeft += 1;
         }
 
         return ctx;
@@ -278,6 +298,7 @@ export function ItemFactory(id: ItemID): Item | null {
 export class ItemManager {
     private items: Item[];
     private logger: Logger = new Logger("ITEM MANAGER", false);
+    private lastItemUsedID: ItemID | undefined = undefined;
     constructor(items: Item[] = []) {
         this.items = items;
     }
@@ -308,14 +329,38 @@ export class ItemManager {
         }
     }
 
-    useItem(id: ItemID, context: SingleRoundContext): boolean {
+    useItem(id: ItemID, context: SingleRoundContext): UseItemRes {
+        const fail = (msg: string): UseItemRes => ({ result: false, msg });
+
         const item = this.items.find((i) => i.id === id);
-        if (item && item.activeEffect && item.usageLeft > 0) {
-            item.activeEffect(context);
-            return true;
-        }
-        return false;
+        if (!context.currentEvent) return fail("还未确定事件，不允许使用道具");
+        if (!item) return fail("未拥有该道具");
+        if (!item.activeEffect) return fail("该道具没有主动效果");
+        if (item.usageLeft <= 0) return fail("该道具已经没有使用次数了");
+        item.activeEffect(context);
+        this.lastItemUsedID = item.id;
+        return { result: true, msg: "成功" };
     }
+    unUseItem(id: ItemID, context: SingleRoundContext): UseItemRes {
+        const fail = (msg: string): UseItemRes => ({ result: false, msg });
+
+        const item = this.items.find((i) => i.id === id);
+        if (!item) return fail("未拥有该道具");
+        if (!item.cancelEffect) return fail("该道具无法取消使用");
+        // 查找最近一次该道具在该 context 中的使用记录
+        if (this.lastItemUsedID === undefined)
+            return fail("尚未使用该道具，无法撤销");
+
+        item.cancelEffect(context);
+        this.lastItemUsedID = undefined; // 移除使用记录
+
+        return { result: true, msg: "成功取消使用" };
+    }
+    resetLastItemID() {
+        console.log("本轮使用了主动道具 ", this.lastItemUsedID, "现在清空");
+        this.lastItemUsedID = undefined;
+    }
+
     hasItem(id: ItemID): boolean {
         return this.items.find((i) => i.id === id) ? true : false;
     }

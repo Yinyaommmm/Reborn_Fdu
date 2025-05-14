@@ -14,12 +14,12 @@ export class GameModule {
         player.fixedInit();
         player.mainProp = "A"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
-        system.addItem(ItemFactory("Skincare Set") as Item);
+        // system.addItem(ItemFactory("Skincare Set") as Item);
         // system.addItem(ItemFactory("Secretary's Letter") as Item);
         // system.addItem(ItemFactory("Academician's Guidebook") as Item);
         // system.addItem(ItemFactory("Thanos Glove") as Item);
         // system.addItem(ItemFactory("Lucky Student ID") as Item);
-        // system.addItem(ItemFactory("Buddha Foot") as Item);
+        system.addItem(ItemFactory("Buddha Foot") as Item);
         // system.addItem(ItemFactory("Middle Part Pants") as Item);
         console.log("用户装备的所有装备：", system.showAllItem());
         // 游戏系统
@@ -39,8 +39,21 @@ export class GameModule {
                 let choice: "A" | "B" = Math.random() < 1 ? "A" : "B";
                 if (nextRes.evtID % 10 === 7) {
                     choice = "A";
-                    // @ts-ignore
                     const useRes = system.useItem("Buddha Foot", nextRes.ctx);
+                    console.log(
+                        "佛脚使用结果",
+                        useRes,
+                        nextRes.ctx.probContext?.succProb,
+                    );
+                    const unuseRes = system.unUseItem(
+                        "Buddha Foot",
+                        nextRes.ctx,
+                    );
+                    console.log(
+                        "佛脚撤销结果",
+                        unuseRes,
+                        nextRes.ctx.probContext?.succProb,
+                    );
                 }
                 const rsltRes = system.resoluteEvt(
                     nextRes.evtID,

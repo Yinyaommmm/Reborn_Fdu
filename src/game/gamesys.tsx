@@ -552,6 +552,8 @@ export class GameSystem {
         if (res.resType !== "F") this.timelineMod.succEventIDs.add(evtID);
         // 特殊影响： 党员身份√、毕业去向、升学去向、删除后续活动
         this.allEvents[evtID].specialEffect(res, this.player, this.getYear());
+        // 清空lastItemID
+        this.itemManager.resetLastItemID();
         return res;
     }
     nextEvt(ctx: SingleRoundContext) {
@@ -624,6 +626,9 @@ export class GameSystem {
     }
     useItem(itemID: ItemID, ctx: SingleRoundContext) {
         return this.itemManager.useItem(itemID, ctx);
+    }
+    unUseItem(itemID: ItemID, ctx: SingleRoundContext) {
+        return this.itemManager.unUseItem(itemID, ctx);
     }
     createEmptyContext(): SingleRoundContext {
         return createEmptyContext(this.player, this);
