@@ -117,7 +117,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-l.png"
                     value={lucky}
                     title="幸运"
                     onAdd={() => {
@@ -134,7 +134,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     }}
                 />
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-h.png"
                     value={honesty}
                     title="诚信"
                     onAdd={() => {
@@ -153,7 +153,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-a.png"
                     value={academic}
                     title="学术"
                     onAdd={() => {
@@ -170,7 +170,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     }}
                 />
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-c.png"
                     value={creativity}
                     title="创造"
                     onAdd={() => {
@@ -189,7 +189,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-m.png"
                     value={management}
                     title="管理"
                     onAdd={() => {

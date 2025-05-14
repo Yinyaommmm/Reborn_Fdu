@@ -24,6 +24,7 @@ interface ImageProps extends HTMLProps<HTMLDivElement> {
         documentHeight: number,
     ) => void;
     square?: boolean;
+    scale?: number;
 }
 
 const Image: FC<ImageProps> = (props) => {
@@ -36,6 +37,7 @@ const Image: FC<ImageProps> = (props) => {
         onLoad,
         onSizeChange,
         square = true,
+        scale = 1,
         ...rest
     } = props;
     const [isImageLoaded, setIsImageLoaded] = useState<boolean>(false);
@@ -98,6 +100,7 @@ const Image: FC<ImageProps> = (props) => {
                 style={{
                     transition: "opacity 0.3s ease-in-out",
                     ...wrapperStyle,
+                    scale,
                 }}
             />
             {children}
