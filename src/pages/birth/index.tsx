@@ -37,7 +37,7 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
                 <div className="absolute top-[1%] left-0 bg-[#D8B79D] ml-[8%] w-[85%] h-[60vh] -rotate-1"></div>
                 <div className="absolute flex items-center top-0 lef-0 -rotate-6 gap-4 ml-[10%]">
                     <motion.div
-                        className="bg-[#C6796C] px-4 py-2 text-white"
+                        className="bg-[#C6796C] px-4 py-2 text-white font-cursive"
                         animate={{ translateY: step === 1 ? "-70%" : "-40%" }}
                         onClick={onClickStep1}
                         onTouchEnd={onTouchEnd1}
@@ -46,7 +46,7 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
                         STEP 1
                     </motion.div>
                     <motion.div
-                        className="bg-[#7897B5] px-4 py-2 text-white"
+                        className="bg-[#7897B5] px-4 py-2 text-white font-cursive"
                         animate={{ translateY: step === 2 ? "-70%" : "-40%" }}
                         onClick={onClickStep2}
                         onTouchEnd={onTouchEnd2}

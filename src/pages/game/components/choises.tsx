@@ -1,10 +1,13 @@
 import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 
+import { CardColorMap } from "../utils/colors";
+
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
+import { EventCategory } from "@/type/type";
 
 export const GameChoices: FC = () => {
     const { vw: viewportWidth, vh: viewportHeight } = useViewport();
@@ -12,6 +15,7 @@ export const GameChoices: FC = () => {
     const slideDistanceScale = 1;
     const triggerDistance = viewportWidth / 2;
     const cards = $Data.use((state) => state.cards);
+    const endingCard = $Data.use((state) => state.endingCard);
     const ending = $Data.use((state) => state.ending);
     const choiceA = gameModule.info()?.choiceAText;
     const choiceB = gameModule.info()?.choiceBText;
@@ -31,8 +35,6 @@ export const GameChoices: FC = () => {
     const [showEnding, setShowEnding] = useState<boolean>(false);
     const touchClickRef = useRef<boolean>(false);
 
-    const colors = ["#EFDC89", "#D8B79D", "#B7B6CA"];
-    const currentCard = $Game.use((state) => state.currentCard);
     const isAnimating = $Game.use((state) => state.isCardAnimating);
 
     const handleSwipeComplete = () => {
@@ -297,7 +299,12 @@ export const GameChoices: FC = () => {
                         <div
                             className="relative py-4 px-8 h-full box-border flex items-center justify-center"
                             style={{
-                                backgroundColor: colors[(currentCard - 1) % 3],
+                                backgroundColor: CardColorMap.get(
+                                    endingCard !== undefined
+                                        ? gameModule.getCard(endingCard.id)
+                                              .category
+                                        : EventCategory.NONE,
+                                ),
                             }}
                         >
                             <div>{ending}</div>

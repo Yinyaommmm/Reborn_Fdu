@@ -14,6 +14,7 @@ import {
 } from "react";
 
 import GameCard from "./card";
+import { CardBackMap, CardColorMap } from "../utils/colors";
 
 import Image from "@/components/image";
 import { FiveProps } from "@/game/gamesys";
@@ -22,9 +23,10 @@ import {
     useCircularTransition,
 } from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
-import { gameModule } from "@/packages/game-module";
+import { gameModule, PickRes } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
+import { EventCategory } from "@/type/type";
 import { calYFromDeltaX } from "@/utils/circle";
 
 interface GameCardsProps {
@@ -34,11 +36,15 @@ interface GameCardsProps {
 const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     // const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
     const cards = $Data.use((state) => state.cards);
-    const setCards = (updater: SetStateAction<string[]>) => {
+    const setCards = (updater: SetStateAction<(PickRes | undefined)[]>) => {
         $Data.update("update cards", (draft) => {
             draft.cards =
                 typeof updater === "function"
-                    ? (updater as (prev: string[]) => string[])(draft.cards)
+                    ? (
+                          updater as (
+                              prev: (PickRes | undefined)[],
+                          ) => (PickRes | undefined)[]
+                      )(draft.cards)
                     : updater;
         });
     };
@@ -68,14 +74,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     const leftExit = calYFromDeltaX(radius, -8, -xExit);
     const rights = [32, 32, 32];
     const tops = [0, 0, 0];
-    const colors = [
-        "#B4AED2",
-        "#F0D28C",
-        "#B9CFE6",
-        "#C9D895",
-        "#F3AFAC",
-        "#DCB6C8",
-    ];
+
     const activeRotate = 8;
     const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
     const triggerDistance = viewportWidth / 2;
@@ -91,6 +90,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     const isDragging = useMotionValue(false);
 
     const [description, setDescription] = useState<ReactNode>(undefined);
+
     const [title, setTitle] = useState<string>("");
     const initialRef = useRef<boolean>(false);
     const newSemesterRef = useRef<boolean>(false);
@@ -111,11 +111,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         const event3 = gameModule.pick();
 
         $Data.update("update events", (draft) => {
-            draft.cards = [
-                `${event1?.id}-${event1?.indexInYear}`,
-                `${event2?.id}-${event2?.indexInYear}`,
-                `${event3?.id}-${event3?.indexInYear}`,
-            ];
+            draft.cards = [event1, event2, event3];
         });
 
         setDescription(gameModule.info()?.mainText);
@@ -135,7 +131,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     const handleSwipeComplete = () => {
         setIsAnimating(true);
         // 更新卡片队列
-        const next: string[] = [];
+        const next: (PickRes | undefined)[] = [];
         // 选择选项
         let res = null;
         if (exitDirection === "left") {
@@ -146,6 +142,10 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         $Data.update("update ending", (draft) => {
             draft.ending = res?.endingText ?? "";
         });
+        // 卡片颜色相关
+        $Data.update("set ending card", (draft) => {
+            draft.endingCard = draft.cards[0];
+        });
 
         // 抽卡
         if (!newSemesterRef.current) {
@@ -154,7 +154,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             while (isJump && !newSemesterRef.current) {
                 const pick = gameModule.pick();
                 if (pick === undefined) break;
-                next.push(`${pick.id}-${pick.indexInYear}`);
+                next.push(pick);
                 newSemesterRef.current = pick.shouldMoveToNextYear;
                 isJump = gameModule.jump() ?? true;
                 jumpCount += 1;
@@ -167,10 +167,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         }
         setDescription(gameModule.info()?.mainText);
         setTitle(gameModule.info()?.title ?? "");
-        // 卡片颜色相关
-        $Game.update("set cardIndex", (draft) => {
-            draft.currentCard = draft.currentCard + 1;
-        });
+
         // 数值更新
         if (res !== undefined) {
             handleChoose(res?.deltaProps);
@@ -278,7 +275,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             <AnimatePresence mode="sync">
                 {cards.slice(0, 3).map((card, index) => (
                     <GameCard
-                        key={card}
+                        key={`${card?.id}-${card?.indexInYear}`}
                         className="absolute perspective-[1000px] transform-3d"
                         initial={{
                             rotateY:
@@ -305,9 +302,11 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                                 ? { x, y, rotate }
                                 : undefined),
                         }}
-                        backgroundColor={
-                            colors[Number(card.split("-")[0]) % colors.length]
-                        }
+                        backgroundColor={CardColorMap.get(
+                            card?.id !== undefined
+                                ? gameModule.getCard(card.id).category
+                                : EventCategory.NONE,
+                        )}
                         exit={{
                             transition: { duration: 0.4 },
                             ...(exitDirection === "right"
@@ -334,6 +333,20 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                         customZIndex={3 - index}
                         border={activeIndex === index}
                         title={title}
+                        backChildren={
+                            <Image
+                                className="w-full h-full"
+                                square={false}
+                                src={
+                                    CardBackMap.get(
+                                        card?.id !== undefined
+                                            ? gameModule.getCard(card.id)
+                                                  .category
+                                            : EventCategory.NONE,
+                                    ) ?? ""
+                                }
+                            />
+                        }
                     >
                         <div className="w-full h-full flex items-center justify-center flex-col gap-4">
                             <div className="w-[90%] p-2 bg-white ml-2 mt-2">

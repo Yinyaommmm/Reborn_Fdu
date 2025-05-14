@@ -88,6 +88,12 @@ const equip = () => {
     }
 };
 
+export type PickRes = {
+    id: number;
+    indexInYear: number;
+    shouldMoveToNextYear: boolean;
+};
+
 const pick = () => {
     if (system) {
         const ctx = system.createEmptyContext();
@@ -186,6 +192,14 @@ const useStage2 = () => {
     } else throw Error("stage2Sys not initialized");
 };
 
+const getCard = (evtID: number) => {
+    if (system) {
+        return system.showEvt(evtID);
+    } else {
+        throw Error("system not initialized");
+    }
+};
+
 export const gameModule = {
     init,
     equip,
@@ -199,4 +213,5 @@ export const gameModule = {
     end,
     initStage2,
     useStage2,
+    getCard,
 };

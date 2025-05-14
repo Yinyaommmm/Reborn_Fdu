@@ -15,6 +15,12 @@ export const ImageUrls = [
     "/png/icon-c.png",
     "/png/icon-m.png",
     "/png/after-decoration.png",
+    "/png/back-blue.png",
+    "/png/back-green.png",
+    "/png/back-pink.png",
+    "/png/back-purple.png",
+    "/png/back-red.png",
+    "/png/back-yellow.png",
     ...levels
         .flatMap((level) =>
             icons.map((icon) => `png/${level}/${icon}-${level}`),

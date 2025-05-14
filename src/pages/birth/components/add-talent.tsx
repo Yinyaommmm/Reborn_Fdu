@@ -117,7 +117,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-l.png"
                     value={lucky}
                     title="幸运"
                     onAdd={() => {
@@ -127,14 +127,14 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (lucky > 0) {
+                        if (lucky > 10) {
                             setLucky((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
                     }}
                 />
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-h.png"
                     value={honesty}
                     title="诚信"
                     onAdd={() => {
@@ -144,7 +144,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (honesty > 0) {
+                        if (honesty > 10) {
                             setHonesty((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -153,7 +153,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-a.png"
                     value={academic}
                     title="学术"
                     onAdd={() => {
@@ -163,14 +163,14 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (academic > 0) {
+                        if (academic > 10) {
                             setAcademic((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
                     }}
                 />
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-c.png"
                     value={creativity}
                     title="创造"
                     onAdd={() => {
@@ -180,7 +180,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (creativity > 0) {
+                        if (creativity > 10) {
                             setCreativity((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -189,7 +189,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/data-icon.png"
+                    src="png/icon-m.png"
                     value={management}
                     title="管理"
                     onAdd={() => {
@@ -199,7 +199,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                     onMinus={() => {
-                        if (management > 0) {
+                        if (management > 10) {
                             setManagement((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }

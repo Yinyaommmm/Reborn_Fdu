@@ -21,14 +21,17 @@ export const Talent: FC<TalentProps> = (props) => {
 
     return (
         <div className="relative flex-1 flex gap-3 h-full">
-            <Image
-                className="relative h-full aspect-square"
-                src={src}
-                adjustWidth={false}
-                adjustHeight
-            >
-                <div className="absolute -top-[8%] left-[8%] border-decorate border-decorate-border w-full h-full" />
-            </Image>
+            <div className="relative h-full aspect-square">
+                <div className="absolute left-0 top-0 h-full aspect-square bg-white rotate-[6deg]"></div>
+                <Image
+                    className="relative h-full aspect-square"
+                    src={src}
+                    adjustWidth={false}
+                    adjustHeight
+                    scale={0.8}
+                />
+                <div className="absolute -top-[0%] left-[0%] border-decorate border-decorate-border w-full h-full" />
+            </div>
             <div className="flex-1 flex flex-col justify-between">
                 <div>{title}</div>
                 <div className="flex items-center gap-2">
