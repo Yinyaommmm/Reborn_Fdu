@@ -33,6 +33,31 @@ interface GameCardsProps {
     trigger?: CircularTransitionTrigger;
 }
 
+const semester2Title = (semester: number) => {
+    switch (semester) {
+        case 1:
+            return "大一";
+        case 2:
+            return "大二";
+        case 3:
+            return "大三";
+        case 4:
+            return "大四";
+        case 5:
+            return "博一";
+        case 6:
+            return "博二";
+        case 7:
+            return "博三";
+        case 8:
+            return "博四";
+        case 9:
+            return "博五";
+        default:
+            return "";
+    }
+};
+
 const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     // const [cards, setCards] = useState<number[]>([0, 1, 2, 3]);
     const cards = $Data.use((state) => state.cards);
@@ -50,10 +75,13 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     };
     const [activeIndex] = useState(0);
     const [showEnding, setShowEnding] = useState(false);
+    const [semester, setSemester] = useState<number>(1);
+
     const touchClickRef = useRef<boolean>(false);
     const { trigger, TransitionComponent } = useCircularTransition(() => {
         console.log("trigger 新学期");
         newSemesterRef.current = false;
+        setSemester((prev) => prev + 1);
         newSemester();
     });
 
@@ -276,7 +304,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                 {cards.slice(0, 3).map((card, index) => (
                     <GameCard
                         key={`${card?.id}-${card?.indexInYear}`}
-                        className="absolute perspective-[1000px] transform-3d"
+                        className="absolute perspective-[1000px] transform-3d shadow-md"
                         initial={{
                             rotateY:
                                 !showEnding && index === activeIndex
@@ -332,7 +360,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                         }}
                         customZIndex={3 - index}
                         border={activeIndex === index}
-                        title={title}
+                        title={`「${semester2Title(semester)}」${title}`}
                         backChildren={
                             <Image
                                 className="w-full h-full"
