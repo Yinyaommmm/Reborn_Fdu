@@ -6,6 +6,7 @@ body, html {
     overflow: hidden;
     touch-action: none;            /* 阻止手势导致的滚动/缩放 */
     overscroll-behavior: contain;  /* 避免 iOS “回弹” */
+    user-select: none;
 }
 
 @theme {

@@ -81,6 +81,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     const { trigger, TransitionComponent } = useCircularTransition(() => {
         console.log("trigger 新学期");
         newSemesterRef.current = false;
+        gameModule.nextSemester();
         setSemester((prev) => prev + 1);
         newSemester();
     });
