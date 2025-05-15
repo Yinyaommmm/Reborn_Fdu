@@ -8,9 +8,21 @@ import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
 import { $Data } from "@/store/data";
 
+const getPoints = () => {
+    const data = $Data.get();
+    return (
+        70 -
+        data.academic -
+        data.creativity -
+        data.honesty -
+        data.management -
+        data.lucky
+    );
+};
+
 export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
-    const [points, setPoints] = useState<number>(20);
+    const [points, setPoints] = useState<number>(getPoints());
     const [sex, setSex] = useState<number>(1);
     const [prefer, setPrefer] = useState<number>(1);
     const honesty = $Data.use((state) => state.honesty);
