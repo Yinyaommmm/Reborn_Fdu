@@ -8,9 +8,21 @@ import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
 import { $Data } from "@/store/data";
 
+const getPoints = () => {
+    const data = $Data.get();
+    return (
+        70 -
+        data.academic -
+        data.creativity -
+        data.honesty -
+        data.management -
+        data.lucky
+    );
+};
+
 export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
-    const [points, setPoints] = useState<number>(20);
+    const [points, setPoints] = useState<number>(getPoints());
     const [sex, setSex] = useState<number>(1);
     const [prefer, setPrefer] = useState<number>(1);
     const honesty = $Data.use((state) => state.honesty);
@@ -121,7 +133,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     value={lucky}
                     title="幸运"
                     onAdd={() => {
-                        if (points > 0) {
+                        if (points > 0 && lucky < 20) {
                             setLucky((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
@@ -138,7 +150,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     value={honesty}
                     title="诚信"
                     onAdd={() => {
-                        if (points > 0) {
+                        if (points > 0 && honesty < 20) {
                             setHonesty((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
@@ -157,7 +169,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     value={academic}
                     title="学术"
                     onAdd={() => {
-                        if (points > 0) {
+                        if (points > 0 && academic < 20) {
                             setAcademic((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
@@ -174,7 +186,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     value={creativity}
                     title="创造"
                     onAdd={() => {
-                        if (points > 0) {
+                        if (points > 0 && creativity < 20) {
                             setCreativity((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
@@ -193,7 +205,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     value={management}
                     title="管理"
                     onAdd={() => {
-                        if (points > 0) {
+                        if (points > 0 && management < 20) {
                             setManagement((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }

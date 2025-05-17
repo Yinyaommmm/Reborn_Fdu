@@ -200,6 +200,14 @@ const getCard = (evtID: number) => {
     }
 };
 
+const nextSemester = () => {
+    if (system) {
+        system.setYear(system.getYear() + 1);
+    } else {
+        throw Error("system not initialized");
+    }
+};
+
 export const gameModule = {
     init,
     equip,
@@ -214,4 +222,5 @@ export const gameModule = {
     initStage2,
     useStage2,
     getCard,
+    nextSemester,
 };
