@@ -12,10 +12,11 @@ import { CorporatePath } from "@/data/line/CorporatePath";
 import { CounselorPath } from "@/data/line/CounselorPath";
 import { FreelancePath } from "@/data/line/FreelancePath";
 import { LifeLine } from "@/data/line/LifeLine";
+import { LoveAfterPath } from "@/data/line/LoveAfterPath";
 import { LovePath } from "@/data/line/LovePath";
-import { LovePrePath } from "@/data/line/LovePrePath";
 import { NewsList } from "@/data/line/NewsList";
 import { SomeNiceEventList } from "@/data/line/SomeNiceEventList";
+import { YoungResearcherAfterPath } from "@/data/line/YoungResearcherAfterPath";
 import { YoungResearcherPath } from "@/data/line/YoungResearcherPath";
 import { Player } from "@/game/player";
 import { Logger } from "@/logger/logger";
@@ -51,13 +52,14 @@ export interface YearItem {
 export class Stage2Sys {
     private logger = new Logger("故事二阶段", true);
     private loveMap: Map<number, Stage2Map> = LovePath;
-    private lovePreMap: Map<number, Stage2Map> = LovePrePath;
+    private loveAfterMap: Map<number, Stage2Map> = LoveAfterPath;
     private careerMap: Map<number, Stage2Map> = new Map();
     private hashArr: HashArrItem[];
     private randYear: number | undefined = undefined;
     private lifeArr: LifeLineItem[] = LifeLine;
     private niceArr: NiceItem[] = SomeNiceEventList;
     private newsArr: NewsItem[] = NewsList;
+    private youngAfterMap = YoungResearcherAfterPath;
 
     constructor(private player: Player) {
         this.careerMap = this.initCareerMap(player.gradDestination);
@@ -133,6 +135,18 @@ export class Stage2Sys {
             const addYear = randomIntBetween(item.min, item.max);
             year += addYear;
             this.insert(year, item.path, item.doc);
+            // 青椒插入后置
+            if (
+                this.player.gradDestination === "青椒" &&
+                i <= this.youngAfterMap.size
+            ) {
+                const item = this.youngAfterMap.get(i) as Stage2Map;
+                const afterYear = (year += randomIntBetween(
+                    item.min,
+                    item.max,
+                ));
+                this.insert(afterYear, item.path, item.doc, "后向");
+            }
         }
     }
     private setLoveLine() {
@@ -148,8 +162,8 @@ export class Stage2Sys {
             insertYear.push(year);
             this.insert(year, item.path, item.doc);
             // 插入后置事件
-            if (i <= this.lovePreMap.size) {
-                const item = this.lovePreMap.get(i) as Stage2Map;
+            if (i <= this.loveAfterMap.size) {
+                const item = this.loveAfterMap.get(i) as Stage2Map;
                 const afterYear = (year += randomIntBetween(
                     item.min,
                     item.max,
@@ -263,6 +277,8 @@ export class Stage2Sys {
             this.player.props.H,
             "L",
             this.player.props.L,
+            "结局",
+            this.player.gradDestination,
         );
         console.log("careermap", this.careerMap);
         console.log("hashArr", this.hashArr);

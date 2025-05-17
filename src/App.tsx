@@ -1,7 +1,10 @@
 // import { useEffect } from "react";
 
+import { useEffect } from "react";
+
 import "./App.css";
 // import { GameModule } from "./game/game";
+import { GameModule } from "./game/game";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
@@ -14,9 +17,9 @@ function App() {
     const route = $UI.use((state) => state.route);
     const { trigger, TransitionComponent } = useCircularTransition();
 
-    // useEffect(() => {
-    //     GameModule.gamestart();
-    // }, []);
+    useEffect(() => {
+        GameModule.gamestart();
+    }, []);
 
     return (
         <>

@@ -11,7 +11,7 @@ export class GameModule {
         const standardEvents = readablEvents.map((e) => new StandardEvent(e));
         // 初始化player和system
         const player = new Player();
-        player.fixedInit();
+        player.randomInit(player.props, 50);
         player.mainProp = "A"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
         // system.addItem(ItemFactory("Skincare Set") as Item);
@@ -95,6 +95,7 @@ export class GameModule {
         console.log("--!!!!进入二阶段!!!!--");
         const stage2Sys = new Stage2Sys(player);
         stage2Sys.setAllLine();
+        console.log(stage2Sys.show());
         console.log(stage2Sys.getAll());
     }
 }

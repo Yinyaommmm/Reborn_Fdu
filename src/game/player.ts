@@ -60,38 +60,27 @@ export class Player {
         this._props.C = Math.min(100, this._props.C);
         this._props.M = Math.min(100, this._props.M);
     }
-    randomInit() {
+    randomInit(curProps: FiveProps, leftPoint: number) {
         const keys: Prop[] = ["H", "L", "A", "C", "M"];
-        const maxVal = 40;
-        const total = 100;
-        let remaining = total;
-        const values: FiveProps = { H: 0, L: 0, A: 0, C: 0, M: 0 };
+        const maxVal = 30;
+        const values: FiveProps = { ...curProps }; // 复制当前属性，避免直接修改传入对象
 
-        // 初步给每个属性分配一个最大值不超过 maxVal 的随机值
-        for (let i = 0; i < keys.length; i++) {
-            const remainingAttrs = keys.length - i;
-            const maxForThisAttr = Math.min(
-                maxVal,
-                remaining - (remainingAttrs - 1),
-            );
-            const val = Math.floor(Math.random() * (maxForThisAttr + 1));
-            values[keys[i]] = val;
-            remaining -= val;
+        // 开始分配剩余点数
+        while (leftPoint > 0) {
+            // 获取所有未满 maxVal 的属性名
+            const availableKeys = () => keys.filter((k) => values[k] < maxVal);
+            const candidates = availableKeys();
+            if (candidates.length === 0) break; // 所有属性都达到 maxVal，停止分配
+
+            // 随机选一个可以加点的属性
+            const randomKey =
+                candidates[Math.floor(Math.random() * candidates.length)];
+            values[randomKey]++;
+            leftPoint--;
         }
-
-        // 如果还有剩余值，尝试分配给未达到 maxVal 的属性
-        while (remaining > 0) {
-            for (const key of keys) {
-                if (remaining === 0) break;
-                if (values[key] < maxVal) {
-                    values[key]++;
-                    remaining--;
-                }
-            }
-        }
-
         this._props = values;
     }
+
     fixedInit() {
         this._props = { H: 10, L: 20, A: 10, C: 10, M: 10 };
     }

@@ -153,12 +153,10 @@ export function formatDialog(
 ): React.ReactNode {
     const parts: React.ReactNode[] = [];
 
-    const shouldUnderline = category === EventCategory.SZTZ;
-    const shouldHighlight = category === EventCategory.SZTZ;
+    // const shouldHighlight = category === EventCategory.SZTZ;
+    const shouldHighlight = true;
 
     const applyUnderline = (text: string): React.ReactNode[] => {
-        if (!shouldUnderline) return [text];
-
         const result: React.ReactNode[] = [];
         let remaining = text;
 
@@ -207,6 +205,35 @@ export function formatDialog(
 
     if (lastIndex < dialog.length) {
         parts.push(...applyUnderline(dialog.slice(lastIndex)));
+    }
+
+    return <>{parts}</>;
+}
+
+export function highLight(dialog: string): React.ReactNode {
+    const regex = /「(.*?)」/g;
+    const parts: React.ReactNode[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = regex.exec(dialog)) !== null) {
+        const start = match.index;
+        const end = regex.lastIndex;
+
+        // 添加普通文本部分
+        if (start > lastIndex) {
+            parts.push(dialog.slice(lastIndex, start));
+        }
+
+        // 添加加粗部分
+        parts.push(<strong key={start}>{`「${match[1]}」`}</strong>);
+
+        lastIndex = end;
+    }
+
+    // 添加最后剩下的普通文本
+    if (lastIndex < dialog.length) {
+        parts.push(dialog.slice(lastIndex));
     }
 
     return <>{parts}</>;

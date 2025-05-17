@@ -336,6 +336,8 @@ export class ItemManager {
         if (!context.currentEvent) return fail("还未确定事件，不允许使用道具");
         if (!item) return fail("未拥有该道具");
         if (!item.activeEffect) return fail("该道具没有主动效果");
+        if (this.lastItemUsedID === id)
+            return fail("不能在一个事件多次使用同一个道具");
         if (item.usageLeft <= 0) return fail("该道具已经没有使用次数了");
         item.activeEffect(context);
         this.lastItemUsedID = item.id;

@@ -12,6 +12,7 @@ import {
     didMeetRequireProps,
     formatDialog,
     getTwoRandomItems,
+    highLight,
     HLRangeConvert_ChoiceB,
     isSuccess,
     randRangeArr,
@@ -187,7 +188,7 @@ export class StandardEvent {
         e.choiceAText = this._readableEvt.choiceA;
         e.choiceBText = this._readableEvt.choiceB;
         if (this._readableEvt.repalceDialog.length === 0) {
-            e.mainText = this._readableEvt.mainDialog;
+            e.mainText = highLight(this._readableEvt.mainDialog);
         } else {
             // 设置二级事件的随机序号
             if (this._readableEvt.randIdice.length == 0) {
@@ -198,10 +199,19 @@ export class StandardEvent {
             const [idx1, idx2] = this._readableEvt.randIdice;
             const c1 = this._readableEvt.repalceDialog[idx1];
             const c2 = this._readableEvt.repalceDialog[idx2];
-            const tmpMainText = this._readableEvt.mainDialog.replace(
-                "$$",
-                `${c1}` + "和" + c2,
-            );
+            let tmpMainText: string;
+            if (this.getCategory() === EventCategory.SZTZ) {
+                tmpMainText = this._readableEvt.mainDialog.replace(
+                    "$$",
+                    `${c1}` + "和" + c2,
+                );
+            } else {
+                tmpMainText = this._readableEvt.mainDialog.replace(
+                    "$$",
+                    `${c1}`,
+                );
+            }
+
             e.mainText = formatDialog(tmpMainText, c1, c2, this.getCategory());
             if (this.getCategory() === EventCategory.SZTZ) {
                 e.choiceAText = `选择${c1}`;
