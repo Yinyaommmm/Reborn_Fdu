@@ -113,8 +113,8 @@ export class Stage2Sys {
         this.setCareerLine();
         this.setLoveLine();
         this.setNiceLine();
-        this.setNewsLine();
         this.setOldLine();
+        this.setNewsLine();
     }
 
     private setDeadEnd() {
@@ -192,27 +192,40 @@ export class Stage2Sys {
     private setNewsLine() {
         const shuffled = this.cardShuffle(this.newsArr);
         let shuffledIdx = 0;
-        for (let i = this.startYear; i < this.endYear; i += 3) {
-            const minV = i;
-            let maxV;
-            if (this.hashArr[i] !== undefined) continue;
-            if (i + 1 < this.endYear && this.hashArr[i + 1] !== undefined)
-                continue;
-            maxV = i + 1;
 
-            if (i + 2 < this.endYear && this.hashArr[i + 2] !== undefined)
-                continue;
-            maxV = i + 2;
-            const randYear = randomIntBetween(minV, maxV);
+        for (let i = this.startYear; i < this.endYear; ) {
+            const isBefore65 = i < 65;
+            const groupSize = isBefore65 ? 3 : 5;
 
-            if (shuffledIdx >= shuffled.length) {
-                shuffledIdx = 0;
-                this.logger.bug("填充的新闻太多了！");
+            let skipGroup = false;
+
+            // 如果该组内任意一个年份已被占用，则跳过这组
+            for (let j = 0; j < groupSize; j++) {
+                if (i + j >= this.endYear) break;
+                if (this.hashArr[i + j] !== undefined) {
+                    skipGroup = true;
+                    break;
+                }
             }
-            this.insert(randYear, "NEWS", shuffled[shuffledIdx].doc);
-            shuffledIdx++;
+
+            if (!skipGroup) {
+                const minV = i;
+                const maxV = Math.min(i + groupSize - 1, this.endYear - 1);
+                const randYear = randomIntBetween(minV, maxV);
+
+                if (shuffledIdx >= shuffled.length) {
+                    shuffledIdx = 0;
+                    this.logger.bug("填充的新闻太多了！");
+                }
+
+                this.insert(randYear, "NEWS", shuffled[shuffledIdx].doc);
+                shuffledIdx++;
+            }
+
+            i += groupSize;
         }
     }
+
     private setOldLine() {
         const age = this.endYear - this.startYear;
         const oldNum = age <= 70 ? 1 : 2;
