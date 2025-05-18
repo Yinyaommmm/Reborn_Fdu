@@ -145,7 +145,8 @@ export class Stage2Sys {
             // 青椒插入后置
             if (
                 this.player.gradDestination === "青椒" &&
-                i <= this.youngPreMap.size
+                i <= this.youngPreMap.size &&
+                i >= 4
             ) {
                 const item = this.youngPreMap.get(i) as Stage2Map;
                 const afterYear = (year += randomIntBetween(

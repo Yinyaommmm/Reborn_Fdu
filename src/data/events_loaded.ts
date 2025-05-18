@@ -216,7 +216,7 @@ export const events: ReadableEvent[] = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 2,
+    "bgCategory": 1,
     "specialEffect": "",
     "randIdice": []
   },
