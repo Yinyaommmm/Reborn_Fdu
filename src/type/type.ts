@@ -125,10 +125,12 @@ export const ResultBLevelMap = new Map<ResultBLevelType, ResultBLevel>([
 export enum BgCategory {
     REGULAR,
     CLOSEUP,
+    POSTER,
 }
 export const BgCategoryMap = new Map<string, BgCategory>([
     ["常规", BgCategory.REGULAR],
     ["特写", BgCategory.CLOSEUP],
+    ["海报", BgCategory.POSTER],
 ]);
 
 // ReadableEvent: 从excel中粗加工得到的事件，但并不是最终可用方便使用的事件

@@ -1,5 +1,6 @@
 import { ReadableEvent } from "@/type/type";
-export const events = [
+
+export const events: ReadableEvent[] = [
   {
     "id": 0,
     "title": "开学典礼",
@@ -215,7 +216,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 1,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -369,7 +370,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 1,
+    "bgCategory": 0,
     "specialEffect": "",
     "randIdice": []
   },
@@ -442,7 +443,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -515,7 +516,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -642,7 +643,7 @@ export const events = [
         0.75
       ]
     },
-    "choiceB": "寻找代刷，找个类似的同学（只是有点像而已。",
+    "choiceB": "某鱼找代刷，挑个类似的同学（只是有点像而已。",
     "endingB": "你在侥幸心理的驱使下，找了同学代刷，但最终因长得过于不像被抓！受到了批评，后续亲自补完刷锻。",
     "resultB": {
       "H": 2,
@@ -807,7 +808,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -861,7 +862,7 @@ export const events = [
         0.75
       ]
     },
-    "choiceB": "快结束了，ps请假条给C导，摸鱼一下。",
+    "choiceB": "快结束了，p一个请假条给C导。",
     "endingB": "由于全班有一半人请假，导致学校严查请假条...悲惨被C导发现！你在刚入学就交了检讨书！",
     "resultB": {
       "H": 2,
@@ -953,7 +954,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -1026,7 +1027,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -1173,7 +1174,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "升学去向：研究生",
     "randIdice": []
   },
@@ -1248,7 +1249,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "升学去向：研究生",
     "randIdice": []
   },
@@ -1479,7 +1480,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "毕业去向：选调",
     "randIdice": []
   },
@@ -1926,7 +1927,7 @@ export const events = [
         2
       ]
     },
-    "choiceB": "已经连续点了两次名，不信这次还点。",
+    "choiceB": "能翘就翘，已经连续点了两次，不信还点。",
     "endingB": "家人们，墨菲定律（流汗黄豆，就这节课又点名了，你失去了平时分。",
     "resultB": {
       "H": 2,
@@ -3288,7 +3289,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -3361,7 +3362,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5130,7 +5131,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5211,7 +5212,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5372,7 +5373,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5451,7 +5452,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5530,7 +5531,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5607,7 +5608,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5686,7 +5687,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5768,7 +5769,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5842,7 +5843,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -5916,7 +5917,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -6384,7 +6385,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 1,
+    "bgCategory": 0,
     "specialEffect": "",
     "randIdice": []
   },
@@ -6966,7 +6967,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 1,
     "specialEffect": "",
     "randIdice": []
   },
@@ -6976,7 +6977,7 @@ export const events = [
     "required": true,
     "equalRights": false,
     "category": 4,
-    "mainDialog": "",
+    "mainDialog": "F大已启动「专职辅导员」招聘！辅导员是指从事学生的思政教育、学生管理、就业指导和党团建设等方面工作的公职人员。机会难得，如果想留在F大从事行政工作，专职辅导员是不二选择！",
     "repalceDialog": [],
     "repetable": false,
     "happenYear": [
@@ -6995,10 +6996,10 @@ export const events = [
     ],
     "baseProbability": "VERYHARD",
     "upgrade": false,
-    "choiceA": "$毕业去向：F大专职辅导员$",
+    "choiceA": "汇总学生工作履历，投递简历。$毕业去向：专职辅导员$",
     "endingA": [
-      "excel中此处未填写excel中此处未填写",
-      "excel中此处未填写excel中此处未填写"
+      "你凭借优秀的学生工作履历进入笔面环节。笔试中，你对突发情况处理应答入流；面试中，你自信的问答征服了所有评审领导，因此成功上岸。",
+      "你通过简历筛选和笔试环节，顺利入围面试考核。面试过程中，针对专硕和学硕的培养模式，以及差异化引导等问题，对于你过于超纲，因此止步于面试。"
     ],
     "resultA": {
       "H": [
@@ -7022,8 +7023,8 @@ export const events = [
         2.5
       ]
     },
-    "choiceB": "",
-    "endingB": "",
+    "choiceB": "慎重考虑后，放弃事业编。",
+    "endingB": "辅导员招聘每年仅一次，你并未投递简历。因此，在毕业学年的秋季学期，你需要把更多精力投入在招聘会，并选择心意的大厂。",
     "resultB": {
       "H": 3,
       "L": 3,
@@ -7040,8 +7041,8 @@ export const events = [
         0.75
       ]
     },
-    "isHighlight": false,
-    "bgCategory": 0,
+    "isHighlight": true,
+    "bgCategory": 2,
     "specialEffect": "毕业去向：辅导员",
     "randIdice": []
   },
@@ -7051,7 +7052,7 @@ export const events = [
     "required": true,
     "equalRights": false,
     "category": 3,
-    "mainDialog": "",
+    "mainDialog": "F大博士后申请已开放，如果想在F大「青椒留校」并继续开展学术工作，入站成为博士后是一个重要途径。博后在站时间一般为24个月，期间需发表高水平学术论文才可出站。",
     "repalceDialog": [],
     "repetable": false,
     "happenYear": [
@@ -7068,10 +7069,10 @@ export const events = [
     "prerequisites": [],
     "baseProbability": "VERYHARD",
     "upgrade": false,
-    "choiceA": "$毕业去向：F大青年教师$",
+    "choiceA": "确认研究方向和合作导师，提交申请。$毕业去向：青年教师$",
     "endingA": [
-      "excel中此处未填写excel中此处未填写",
-      "excel中此处未填写excel中此处未填写"
+      "在提交入站手续一个半月后，你收到了来自F大大录用函，正式成为所在学科的博士后研究人员。希望你在博后期间科研顺利，Paper多多，基金满满！",
+      "在提交入站手续后，导师与你沟通了后续研究方向。由于合作导师有了新的研究版图，迫使你必须放弃已有的研究方向，因此与你已不再适配，最终你放弃了博后的Offer。"
     ],
     "resultA": {
       "H": [
@@ -7095,8 +7096,8 @@ export const events = [
         2.5
       ]
     },
-    "choiceB": "",
-    "endingB": "",
+    "choiceB": "慎重思考好，决定以企业就业为第一志愿。",
+    "endingB": "青椒之路未必适合每一个人，你在研究生阶段接受学术毒打之后，毅然决定投奔工业界，相信秋招总有企业适合你。",
     "resultB": {
       "H": 3,
       "L": 3,
@@ -7114,7 +7115,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "毕业去向：青椒",
     "randIdice": []
   },
@@ -7594,7 +7595,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -7850,7 +7851,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -9307,7 +9308,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -9395,7 +9396,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -9634,7 +9635,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -9711,7 +9712,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -9786,7 +9787,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -9950,7 +9951,7 @@ export const events = [
       ]
     },
     "isHighlight": false,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -10037,7 +10038,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -10124,7 +10125,7 @@ export const events = [
       ]
     },
     "isHighlight": true,
-    "bgCategory": 0,
+    "bgCategory": 2,
     "specialEffect": "",
     "randIdice": []
   },
@@ -10471,4 +10472,4 @@ export const events = [
     "specialEffect": "",
     "randIdice": []
   }
-] as ReadableEvent[];
+];

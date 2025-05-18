@@ -15,9 +15,10 @@ import { LifeLine } from "@/data/line/LifeLine";
 import { LoveAfterPath } from "@/data/line/LoveAfterPath";
 import { LovePath } from "@/data/line/LovePath";
 import { NewsList } from "@/data/line/NewsList";
+import { OldList } from "@/data/line/OldList";
 import { SomeNiceEventList } from "@/data/line/SomeNiceEventList";
-import { YoungResearcherAfterPath } from "@/data/line/YoungResearcherAfterPath";
 import { YoungResearcherPath } from "@/data/line/YoungResearcherPath";
+import { YoungResearcherPrePath } from "@/data/line/YoungResearcherPrePath";
 import { Player } from "@/game/player";
 import { Logger } from "@/logger/logger";
 
@@ -44,6 +45,10 @@ interface NewsItem {
     id: number;
     doc: string;
 }
+interface OldItem {
+    idx: number;
+    text: string;
+}
 export interface YearItem {
     abstract: string;
     detail: string;
@@ -59,7 +64,8 @@ export class Stage2Sys {
     private lifeArr: LifeLineItem[] = LifeLine;
     private niceArr: NiceItem[] = SomeNiceEventList;
     private newsArr: NewsItem[] = NewsList;
-    private youngAfterMap = YoungResearcherAfterPath;
+    private oldArr: OldItem[] = OldList;
+    private youngPreMap = YoungResearcherPrePath;
 
     constructor(private player: Player) {
         this.careerMap = this.initCareerMap(player.gradDestination);
@@ -108,6 +114,7 @@ export class Stage2Sys {
         this.setLoveLine();
         this.setNiceLine();
         this.setNewsLine();
+        this.setOldLine();
     }
 
     private setDeadEnd() {
@@ -138,14 +145,14 @@ export class Stage2Sys {
             // 青椒插入后置
             if (
                 this.player.gradDestination === "青椒" &&
-                i <= this.youngAfterMap.size
+                i <= this.youngPreMap.size
             ) {
-                const item = this.youngAfterMap.get(i) as Stage2Map;
+                const item = this.youngPreMap.get(i) as Stage2Map;
                 const afterYear = (year += randomIntBetween(
                     item.min,
                     item.max,
                 ));
-                this.insert(afterYear, item.path, item.doc, "后向");
+                this.insert(afterYear, item.path, item.doc, "前向");
             }
         }
     }
@@ -178,7 +185,7 @@ export class Stage2Sys {
         const shuffled = this.cardShuffle(this.niceArr);
         const chosedArr = shuffled.slice(0, niceNum);
         chosedArr.forEach((item) => {
-            const year = randomIntBetween(this.startYear, this.endYear);
+            const year = randomIntBetween(this.startYear, 65);
             this.insert(year, item.key, item.text);
         });
     }
@@ -206,6 +213,16 @@ export class Stage2Sys {
             shuffledIdx++;
         }
     }
+    private setOldLine() {
+        const age = this.endYear - this.startYear;
+        const oldNum = age <= 70 ? 1 : 2;
+        const shuffled = this.cardShuffle(this.oldArr);
+        const chosedArr = shuffled.slice(0, oldNum);
+        chosedArr.forEach((item) => {
+            const year = randomIntBetween(66, this.endYear - 3);
+            this.insert(year, "老年", item.text);
+        });
+    }
 
     private insert(
         year: number,
@@ -214,7 +231,7 @@ export class Stage2Sys {
         strategy: "前向" | "后向" | "两端" = "两端",
     ) {
         if (year < this.startYear || year > this.endYear) {
-            this.logger.info(`$第{year}事件：${doc}不在范围内，不再插入`);
+            this.logger.info(`第${year}事件：${doc}不在范围内，不再插入`);
             return;
         }
 
