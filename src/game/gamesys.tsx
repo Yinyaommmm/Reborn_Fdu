@@ -641,7 +641,7 @@ export class GameSystem {
         return this.itemManager.unUseItem(itemID, ctx);
     }
     canUseItem(itemID: ItemID, ctx: SingleRoundContext) {
-        return this.itemManager.canUseItem(itemID.ctx);
+        return this.itemManager.canUseItem(itemID, ctx);
     }
     createEmptyContext(): SingleRoundContext {
         return createEmptyContext(this.player, this);
