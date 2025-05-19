@@ -1,6 +1,12 @@
 import { model } from "@/packages/model";
 
-export type UIRoute = "game" | "birth" | "launch" | "graduation" | "after";
+export type UIRoute =
+    | "game"
+    | "birth"
+    | "launch"
+    | "graduation"
+    | "after"
+    | "dev";
 export interface UIModel {
     messageContent: string;
     messageType: "success" | "danger" | "warning";

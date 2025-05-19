@@ -2,9 +2,14 @@ import {
     useState,
     MouseEvent as ReactMouseEvent,
     TouchEvent as ReactTouchEvent,
+    useRef,
 } from "react";
 
 import { CircleTransition } from "@/components/transition";
+import {
+    CardsTransition,
+    CardsTransitionHandler,
+} from "@/pages/game/components/transition";
 import { $UI, UIRoute } from "@/store/ui";
 
 export type CircularTransitionTrigger = (
@@ -16,10 +21,12 @@ export function useCircularTransition(
     onEnter?: () => void,
     duration: number = 0.6,
     waiting: number = 1,
+    type?: "cards" | undefined,
 ) {
     const [isActive, setActive] = useState(false);
     const [pos, setPos] = useState({ x: 0, y: 0 });
     const [UI, setUI] = useState<UIRoute | undefined>(undefined);
+    const cardsRef = useRef<CardsTransitionHandler>(null);
 
     const trigger: CircularTransitionTrigger = (e, goto) => {
         console.log("trigger", e);
@@ -49,13 +56,18 @@ export function useCircularTransition(
             }}
             onEnter={() => {
                 onEnter?.();
+                if (cardsRef.current !== null && type === "cards") {
+                    cardsRef.current.startTear();
+                }
                 if (UI) {
                     $UI.update("go to game", (draft) => {
                         draft.route = UI;
                     });
                 }
             }}
-        />
+        >
+            {type === "cards" && <CardsTransition ref={cardsRef} />}
+        </CircleTransition>
     );
 
     return { trigger, TransitionComponent };

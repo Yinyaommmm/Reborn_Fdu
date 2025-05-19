@@ -33,7 +33,7 @@ interface GameCardsProps {
     trigger?: CircularTransitionTrigger;
 }
 
-const semester2Title = (semester: number) => {
+export const semester2Title = (semester: number) => {
     switch (semester) {
         case 1:
             return "大一";
@@ -75,16 +75,29 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     };
     const [activeIndex] = useState(0);
     const [showEnding, setShowEnding] = useState(false);
-    const [semester, setSemester] = useState<number>(1);
+    const semester = $Data.use((state) => state.semester);
+    const setSemester = (updater: SetStateAction<number>) => {
+        $Data.update("update cards", (draft) => {
+            draft.semester =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.semester)
+                    : updater;
+        });
+    };
 
     const touchClickRef = useRef<boolean>(false);
-    const { trigger, TransitionComponent } = useCircularTransition(() => {
-        console.log("trigger 新学期");
-        newSemesterRef.current = false;
-        gameModule.nextSemester();
-        setSemester((prev) => prev + 1);
-        newSemester();
-    });
+    const { trigger, TransitionComponent } = useCircularTransition(
+        () => {
+            // console.log("trigger 新学期");
+            // newSemesterRef.current = false;
+            // gameModule.nextSemester();
+            // setSemester((prev) => prev + 1);
+            // newSemester();
+        },
+        0.6,
+        1,
+        "cards",
+    );
 
     const isAnimating = $Game.use((state) => state.isCardAnimating);
     const setIsAnimating = (v: boolean) => {
@@ -281,6 +294,11 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                 triggerUI?.(e, "graduation");
             }
             if (cards.length === 0) {
+                console.log("trigger 新学期");
+                newSemesterRef.current = false;
+                gameModule.nextSemester();
+                setSemester((prev) => prev + 1);
+                newSemester();
                 trigger(e);
             }
             e.preventDefault();

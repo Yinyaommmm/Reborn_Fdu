@@ -1,5 +1,5 @@
 import { motion, MotionStyle, Variants } from "motion/react";
-import { useState, useEffect, FC, useMemo, useRef } from "react";
+import { useState, useEffect, FC, useMemo, useRef, ReactNode } from "react";
 import "./index.css";
 interface CircleTransitionProps {
     isActive: boolean;
@@ -12,6 +12,7 @@ interface CircleTransitionProps {
     waiting?: number;
     onComplete?: () => void;
     onEnter?: () => void;
+    children?: ReactNode;
 }
 
 export const CircleTransition: FC<CircleTransitionProps> = ({
@@ -25,6 +26,7 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
     waiting = 1,
     onComplete,
     onEnter,
+    children,
 }) => {
     const [phase, setPhase] = useState<"enter" | "exit" | null>(null);
     const enterTimer = useRef<number>(null);
@@ -67,7 +69,8 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
                 }
 
                 const elapsed = Date.now() - start;
-                const delay = elapsed >= waiting ? 0 : waiting - elapsed;
+                const delay =
+                    elapsed >= waiting * 1000 ? 0 : waiting * 1000 - elapsed;
 
                 console.log("enter");
 
@@ -96,7 +99,7 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
 
     return (
         <motion.div
-            className="overlay pointer-events-none fixed top-0 left-0 w-screen h-screen z-[9999]"
+            className="overlay fixed top-0 left-0 w-screen h-screen z-[9999]"
             style={
                 {
                     "--cx": `${cx}px`,
@@ -109,6 +112,8 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
             animate={phase === "enter" ? "enterEnd" : "exitEnd"}
             variants={variants}
             transition={{ duration, ease: "easeInOut" }}
-        />
+        >
+            {children}
+        </motion.div>
     );
 };

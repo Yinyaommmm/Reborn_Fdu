@@ -100,9 +100,9 @@ const pick = () => {
         const next = system.nextEvt(ctx);
         events.push(next);
         console.log("pick", next.shouldMoveToNextYear);
-        if (next.shouldMoveToNextYear) {
-            system.setYear(system.getYear() + 1);
-        }
+        // if (next.shouldMoveToNextYear) {
+        //     system.setYear(system.getYear() + 1);
+        // }
         return {
             id: next.evtID,
             indexInYear: next.indexInYear,
