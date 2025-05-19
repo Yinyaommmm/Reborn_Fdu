@@ -22,7 +22,7 @@ export const Talent: FC<TalentProps> = (props) => {
     return (
         <div className="relative flex-1 flex gap-3 h-full">
             <div className="relative h-full aspect-square">
-                <div className="absolute left-0 top-0 h-full aspect-square bg-white rotate-[6deg]"></div>
+                <div className="absolute left-0 top-0 h-full aspect-square bg-[#F6F6F2] rotate-[6deg]"></div>
                 <Image
                     className="relative h-full aspect-square"
                     src={src}

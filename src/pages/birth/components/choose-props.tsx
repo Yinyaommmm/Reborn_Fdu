@@ -27,13 +27,13 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative pt-[10%] px-[8%] w-full flex justify-between gap-4">
                 <div className="relative border-decorate border-decorate-border py-1 px-3 box-border w-[30%] text-center text-base font-cursive">
                     道具
-                    <div className="absolute top-0 left-0 bg-white w-full h-full rotate-[6deg] z-[-1]" />
+                    <div className="absolute top-0 left-0 bg-[#F6F6F2] w-full h-full rotate-[6deg] z-[-1]" />
                 </div>
             </div>
             <div className="relative mt-[8%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
                 {tools.slice(0, 4).map((tool, index) => (
                     <Image
-                        className="relative h-full aspect-square bg-white"
+                        className="relative h-full aspect-square bg-[#EBE7D3]"
                         src={tool.src}
                         adjustHeight
                         adjustWidth={false}
@@ -55,7 +55,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative mt-[5%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
                 {tools.slice(4, 8).map((tool, index) => (
                     <Image
-                        className="relative h-full aspect-square bg-white"
+                        className="relative h-full aspect-square bg-[#F6F6F2]"
                         src={tool.src}
                         adjustHeight
                         adjustWidth={false}
@@ -77,7 +77,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative mt-[10%] px-[8%] w-full box-border h-[25%]">
                 <div className="relative w-full h-full">
                     <div className="absolute -top-[10%] left-[3%] w-full h-full border-decorate border-decorate-border -z-10" />
-                    <div className="w-full h-full bg-white py-2 px-3 flex flex-col justify-between">
+                    <div className="w-full h-full bg-[#F6F6F2] py-2 px-3 flex flex-col justify-between">
                         <div>
                             <div className="text-sm font-semibold mb-1">
                                 {name}
