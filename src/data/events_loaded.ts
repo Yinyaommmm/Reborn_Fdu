@@ -1052,7 +1052,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "NONE",
     "prerequisites": [
-      5
+      4
     ],
     "baseProbability": "TRIVIAL",
     "upgrade": false,
@@ -1199,7 +1199,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "M",
     "prerequisites": [
-      15
+      14
     ],
     "baseProbability": "HARD",
     "upgrade": false,
@@ -5944,7 +5944,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "M",
     "prerequisites": [
-      4
+      3
     ],
     "baseProbability": "VERYHARD",
     "upgrade": false,
@@ -6021,7 +6021,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "M",
     "prerequisites": [
-      90
+      79
     ],
     "baseProbability": "VERYHARD",
     "upgrade": false,
@@ -6992,7 +6992,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "M",
     "prerequisites": [
-      15
+      14
     ],
     "baseProbability": "VERYHARD",
     "upgrade": false,
@@ -7468,7 +7468,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "M",
     "prerequisites": [
-      15
+      14
     ],
     "baseProbability": "VERYHARD",
     "upgrade": false,
@@ -7545,7 +7545,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "M",
     "prerequisites": [
-      15
+      14
     ],
     "baseProbability": "VERYHARD",
     "upgrade": false,

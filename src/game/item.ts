@@ -20,6 +20,7 @@ export interface Item {
     name: string;
     description: string;
     logger: Logger;
+    targetCategories: EventCategory[];
 
     // 概率相关的被动效果（如提升/降低成功率）
     probPassiveEffect?: ProbPassiveEffect;
@@ -41,23 +42,24 @@ export abstract class SimpleItem implements Item {
     abstract id: ItemID;
     abstract name: string;
     abstract description: string;
-    usageLeft: number = 0;
+    usageLeft: number = 1;
     protected hasActiveEffect: boolean = true;
+    targetCategories: EventCategory[] = [];
 
     protected passiveBoost: number = 0;
     protected activeBoost: number = 1;
-    protected targetCategories: EventCategory[] = [];
     public logger = new Logger("SIMPLE ITEM", false);
 
     probPassiveEffect = (ctx: SingleRoundContext): SingleRoundContext => {
         if (!ctx.currentEvent || !ctx.probContext) return ctx;
-        if (this.matchesCategory(ctx.currentEvent)) {
-            const before = ctx.probContext.succProb;
-            ctx.probContext.succProb += this.passiveBoost;
-            console.log(
-                `${this.name} 被动触发, 事件 ${ctx.currentEvent.getID()} 的成功阈值: ${before} -> ${ctx.probContext.succProb}`,
-            );
+        if (!this.matchesCategory(ctx.currentEvent)) {
+            return ctx;
         }
+        // const before = ctx.probContext.succProb;
+        ctx.probContext.succProb += this.passiveBoost;
+        // console.log(
+        //     `${this.name} 被动触发, 事件 ${ctx.currentEvent.getID()} 的成功阈值: ${before} -> ${ctx.probContext.succProb}`,
+        // );
         return ctx;
     };
 
@@ -120,7 +122,7 @@ export class SecretaryLetter extends SimpleItem {
     description = "书记对学生工作的高度肯定";
     protected passiveBoost = 0.05;
     protected activeBoost = 1;
-    protected targetCategories = [EventCategory.XSGZ];
+    targetCategories = [EventCategory.XSGZ];
 }
 
 export class AcademicianGuidebook extends SimpleItem {
@@ -129,7 +131,7 @@ export class AcademicianGuidebook extends SimpleItem {
     description = "校长亲传的顶刊论文法宝";
     protected passiveBoost = 0.05;
     protected activeBoost = 1;
-    protected targetCategories = [EventCategory.XSTS];
+    targetCategories = [EventCategory.XSTS];
 }
 export class ThanosGlove extends SimpleItem {
     id: ItemID = "Thanos Glove";
@@ -137,7 +139,7 @@ export class ThanosGlove extends SimpleItem {
     description = "打个响指淘汰一半对手";
     protected passiveBoost = 0.05;
     protected activeBoost = 1;
-    protected targetCategories = [EventCategory.JXPY];
+    targetCategories = [EventCategory.JXPY];
 }
 
 export class LuckyStudentID extends SimpleItem {
@@ -146,7 +148,7 @@ export class LuckyStudentID extends SimpleItem {
     description = "学号20256789堪称F大天选之子";
     protected passiveBoost = 0.05;
     protected activeBoost = 1;
-    protected targetCategories = [EventCategory.PYFA];
+    targetCategories = [EventCategory.PYFA];
 }
 export class BuddhaFoot extends SimpleItem {
     id: ItemID = "Buddha Foot";
@@ -154,7 +156,7 @@ export class BuddhaFoot extends SimpleItem {
     description = "临时抱佛脚，佛有两个脚";
     protected passiveBoost = 0.02;
     protected activeBoost = 1;
-    protected targetCategories = [
+    targetCategories = [
         EventCategory.PYFA,
         EventCategory.CGQY,
         EventCategory.JXPY,
@@ -171,7 +173,7 @@ export class MiddlePartPants extends SimpleItem {
     name = "中分背带裤";
     description = "凭借《哎呦TA干嘛》火爆F大的明星套装";
     protected passiveBoost = 1;
-    protected targetCategories = [EventCategory.SZTZ];
+    targetCategories = [EventCategory.SZTZ];
     protected hasActiveEffect = false;
 }
 
@@ -181,7 +183,15 @@ export class MisfortuneCertificate implements Item {
     description = "人非命不非，西边不亮东边亮～";
     usageLeft = 0; // 无主动使用效果
     logger: Logger = new Logger("非酋证书", false);
-
+    targetCategories = [
+        EventCategory.PYFA,
+        EventCategory.CGQY,
+        EventCategory.JXPY,
+        EventCategory.XSTS,
+        EventCategory.XSGZ,
+        EventCategory.SZTZ,
+        EventCategory.XYSJ,
+    ];
     // 概率阶段：所有事件成功率 -2%
     probPassiveEffect = (ctx: SingleRoundContext): void => {
         if (ctx.probContext === undefined) {
@@ -242,7 +252,7 @@ export class SkincareSet implements Item {
     description = "老西红柿力荐的F大泉眼神仙水";
     usageLeft = 0; // 无主动使用效果
     logger: Logger = new Logger("护肤套装", true);
-
+    targetCategories = [EventCategory.XYSJ];
     // 概率阶段：所有事件成功率 -2%
     probPassiveEffect = (ctx: SingleRoundContext): void => {
         if (ctx.currentEvent === undefined) return;
@@ -339,6 +349,8 @@ export class ItemManager {
         if (this.lastItemUsedID === id)
             return fail("不能在一个事件多次使用同一个道具");
         if (item.usageLeft <= 0) return fail("该道具已经没有使用次数了");
+        if (!item.targetCategories.includes(context.currentEvent.getCategory()))
+            return fail("该道具无法用在该类型活动上");
         item.activeEffect(context);
         this.lastItemUsedID = item.id;
         return { result: true, msg: "成功" };

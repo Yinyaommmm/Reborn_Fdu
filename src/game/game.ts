@@ -15,11 +15,11 @@ export class GameModule {
         player.mainProp = "A"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
         // system.addItem(ItemFactory("Skincare Set") as Item);
-        // system.addItem(ItemFactory("Secretary's Letter") as Item);
+        system.addItem(ItemFactory("Secretary's Letter") as Item);
         // system.addItem(ItemFactory("Academician's Guidebook") as Item);
         // system.addItem(ItemFactory("Thanos Glove") as Item);
         // system.addItem(ItemFactory("Lucky Student ID") as Item);
-        system.addItem(ItemFactory("Buddha Foot") as Item);
+        // system.addItem(ItemFactory("Buddha Foot") as Item);
         // system.addItem(ItemFactory("Middle Part Pants") as Item);
         console.log("用户装备的所有装备：", system.showAllItem());
         // 游戏系统
@@ -30,31 +30,33 @@ export class GameModule {
             const nextRes = system.nextEvt(ctx);
             // 判断该事件是否需要跳过(例如属性要求不满足)
             const shouldJump = system.requiredEvtJump(nextRes.evtID);
+            console.log("使用次数", system.showAllItem()[0].usageLeft);
             if (!shouldJump) {
                 console.log(
                     `${system.getYear()}-${nextRes.indexInYear}`,
                     // system.showEvt(nextRes.evtID),
                 );
                 // 根据用户选择和‘上下文’进行结算，这里模拟使用70%概率选A
-                let choice: "A" | "B" = Math.random() < 1 ? "A" : "B";
-                if (nextRes.evtID % 10 === 7) {
-                    choice = "A";
-                    const useRes = system.useItem("Buddha Foot", nextRes.ctx);
-                    console.log(
-                        "佛脚使用结果",
-                        useRes,
-                        nextRes.ctx.probContext?.succProb,
-                    );
-                    const unuseRes = system.unUseItem(
-                        "Buddha Foot",
-                        nextRes.ctx,
-                    );
-                    console.log(
-                        "佛脚撤销结果",
-                        unuseRes,
-                        nextRes.ctx.probContext?.succProb,
-                    );
-                }
+                const choice: "A" | "B" = Math.random() < 1 ? "A" : "B";
+                const useRes = system.useItem(
+                    "Secretary's Letter",
+                    nextRes.ctx,
+                );
+                console.log(
+                    "道具使用结果",
+                    useRes,
+                    nextRes.ctx.probContext?.succProb,
+                );
+                // const unuseRes = system.unUseItem(
+                //     "Buddha Foot",
+                //     nextRes.ctx,
+                // );
+                // console.log(
+                //     "佛脚撤销结果",
+                //     unuseRes,
+                //     nextRes.ctx.probContext?.succProb,
+                // );
+
                 const rsltRes = system.resoluteEvt(
                     nextRes.evtID,
                     choice,

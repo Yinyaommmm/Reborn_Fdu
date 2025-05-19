@@ -228,7 +228,7 @@ export class Stage2Sys {
     }
 
     private setOldLine() {
-        const age = this.endYear - this.startYear;
+        const age = this.endYear;
         const oldNum = age <= 70 ? 1 : 2;
         const shuffled = this.cardShuffle(this.oldArr);
         const chosedArr = shuffled.slice(0, oldNum);
