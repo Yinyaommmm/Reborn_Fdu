@@ -20,7 +20,7 @@ export const CardsTransition: FC<{ ref: Ref<CardsTransitionHandler> }> = ({
         await controls.start({
             rotate: -15,
             transformOrigin: "100% 0%",
-            transition: { duration: 0.4, ease: "easeOut" },
+            transition: { duration: 0.8, ease: "easeOut" },
         });
 
         await controls.start({
@@ -28,7 +28,7 @@ export const CardsTransition: FC<{ ref: Ref<CardsTransitionHandler> }> = ({
             y: 200,
             rotate: -60,
             opacity: 0,
-            transition: { duration: 0.6, ease: "easeIn" },
+            transition: { duration: 1.2, ease: "easeIn" },
         });
 
         // // 第三步：复原到原始状态

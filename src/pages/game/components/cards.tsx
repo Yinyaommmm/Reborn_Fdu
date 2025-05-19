@@ -95,7 +95,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             newSemester();
         },
         0.6,
-        1,
+        2,
         "cards",
     );
 
