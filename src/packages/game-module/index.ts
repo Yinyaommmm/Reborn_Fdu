@@ -4,6 +4,7 @@ import { events as readableEvents } from "@/data/events_loaded";
 import { FiveProps, GameSystem, StandardEvent } from "@/game/gamesys";
 import { ItemFactory, ItemID } from "@/game/item";
 import { Player } from "@/game/player";
+import { tools } from "@/pages/birth/types/props";
 import { Stage2Sys } from "@/stage2/stage2";
 import { $Data, DataModel } from "@/store/data";
 
@@ -245,6 +246,24 @@ const unUseTool = () => {
     }
 };
 
+const toolAvailable = () => {
+    if (system) {
+        const toolId = $Data.get().toolId;
+        if (toolId !== undefined && events[0] !== undefined) {
+            if (
+                tools[toolId].available.includes(
+                    system.showEvt(events[0].evtID).category,
+                )
+            ) {
+                return true;
+            }
+        }
+        return false;
+    } else {
+        throw Error("system not initialized");
+    }
+};
+
 export const gameModule = {
     init,
     equip,
@@ -263,4 +282,5 @@ export const gameModule = {
     toolLeft,
     useTool,
     unUseTool,
+    toolAvailable,
 };
