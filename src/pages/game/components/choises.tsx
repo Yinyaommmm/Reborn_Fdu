@@ -322,7 +322,17 @@ export const GameChoices: FC = () => {
                             <div className="absolute top-[75%] -right-[2%] h-[30%] w-decorate bg-decorate-border" />
                             <div className="absolute top-[25%] left-[2%] h-[80%] w-decorate bg-decorate-border" />
                             {endingType !== "B" && (
-                                <div className="absolute bottom-[-20%] right-0 w-[25%] aspect-square rotate-[-20deg] opacity-70">
+                                <motion.div
+                                    className="absolute bottom-[-20%] right-[-5%] w-[25%] aspect-square rotate-[-20deg] opacity-70"
+                                    initial={{ scale: 4, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    transition={{
+                                        type: "tween",
+                                        ease: "easeInOut",
+                                        delay: 0.3,
+                                        duration: 0.2,
+                                    }}
+                                >
                                     <Image
                                         src={
                                             endingType === "F"
@@ -330,7 +340,7 @@ export const GameChoices: FC = () => {
                                                 : "/png/success.png"
                                         }
                                     />
-                                </div>
+                                </motion.div>
                             )}
                         </div>
                     </motion.div>

@@ -14,18 +14,29 @@ interface ToolDisplayProps {
 export const ToolDisplay: FC<ToolDisplayProps> = (props) => {
     const { toolId, height, onUse } = props;
     const [left] = useState<number>(gameModule.toolLeft());
+    const [available] = useState<boolean>(gameModule.toolAvailable());
     const [use, setUse] = useState<boolean>(false);
 
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
     const [showIntro, setShowIntro] = useState<boolean>(false);
 
     const handlePointerDown: PointerEventHandler<HTMLDivElement> = () => {
-        timeoutRef.current = setTimeout(() => {
+        if (available) {
+            timeoutRef.current = setTimeout(() => {
+                setShowIntro(true);
+            }, 300);
+        } else {
             setShowIntro(true);
-        }, 300);
+            timeoutRef.current = setTimeout(() => {
+                setShowIntro(true);
+            }, 500);
+        }
     };
 
     const handlePointerUp = () => {
+        if (!available) {
+            return;
+        }
         if (timeoutRef.current) {
             clearTimeout(timeoutRef.current);
             timeoutRef.current = null;
@@ -77,14 +88,25 @@ export const ToolDisplay: FC<ToolDisplayProps> = (props) => {
                 </div>
             )}
             <AnimatePresence>
-                {showIntro && tools[toolId].active && (
+                {showIntro && (
                     <motion.div
                         className="absolute top-0 left-0 translate-y-[-120%] ml-2 w-[40vw] px-2 py-1 text-sm bg-white text-gray-800 shadow-lg rounded border border-gray-300 z-[99999]"
                         exit={{ opacity: 0, y: -20 }}
                         initial={{ opacity: 0, y: -20 }}
                         animate={{ opacity: 1, y: 0 }}
                     >
-                        <div>{tools[toolId].active}</div>
+                        {tools[toolId].active === undefined && (
+                            <div>{"道具无主动"}</div>
+                        )}
+                        {tools[toolId].active !== undefined &&
+                            available &&
+                            left > 0 && <div>{tools[toolId].active}</div>}
+                        {tools[toolId].active !== undefined && !available && (
+                            <div>{"该道具在当前事件无法使用"}</div>
+                        )}
+                        {tools[toolId].active !== undefined &&
+                            available &&
+                            left <= 0 && <div>{"该道具已无使用次数"}</div>}
                     </motion.div>
                 )}
             </AnimatePresence>

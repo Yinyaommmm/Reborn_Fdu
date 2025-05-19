@@ -87,7 +87,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     adjustWidth={false}
                 />
                 <div className="flex-1 flex flex-col items-end">
-                    <div className="relative border-decorate border-decorate-border py-1 px-3 box-border w-[50%] text-center text-base font-cursive">
+                    <div className="relative border-decorate border-decorate-border py-1 px-3 box-border min-w-[50%] text-center text-base font-cursive">
                         个人档案
                         <div className="absolute top-0 left-0 bg-[#F6F6F2] w-full h-full rotate-[6deg] z-[-1]" />
                     </div>
@@ -121,7 +121,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                 </div>
             </div>
             <div className="mt-[6%] px-[8%] flex items-end gap-4">
-                <div className="relative border-decorate border-decorate-border py-1 px-3 box-border w-[33%] text-center text-base font-cursive">
+                <div className="relative border-decorate border-decorate-border py-1 px-3 box-border min-w-[33%] text-center text-base font-cursive">
                     个人信息
                     <div className="absolute top-0 left-0 bg-[#F6F6F2] w-full h-full rotate-[6deg] z-[-1]" />
                 </div>
