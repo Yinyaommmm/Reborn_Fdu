@@ -171,6 +171,9 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         $Data.update("update ending", (draft) => {
             draft.ending = res?.endingText ?? "";
         });
+        $Game.update("update ending type", (draft) => {
+            if (res?.resType) draft.endingType = res?.resType;
+        });
         // 卡片颜色相关
         $Data.update("set ending card", (draft) => {
             draft.endingCard = draft.cards[0];

@@ -5,6 +5,7 @@ export interface GameModel {
     isChoiceAnimating: boolean;
     exitDirection: "left" | "right";
     trigger: boolean;
+    endingType: "BigS" | "S" | "F" | "B";
 }
 
 export const $Game = model<GameModel>("GAME", {
@@ -12,4 +13,5 @@ export const $Game = model<GameModel>("GAME", {
     isChoiceAnimating: false,
     exitDirection: "right",
     trigger: false,
+    endingType: "B",
 });

@@ -3,6 +3,7 @@ import { FC, useEffect, useRef, useState } from "react";
 
 import { CardColorMap } from "../utils/colors";
 
+import Image from "@/components/image";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
@@ -36,6 +37,7 @@ export const GameChoices: FC = () => {
     const touchClickRef = useRef<boolean>(false);
 
     const isAnimating = $Game.use((state) => state.isCardAnimating);
+    const endingType = $Game.use((state) => state.endingType);
 
     const handleSwipeComplete = () => {
         setShowEnding(true);
@@ -314,6 +316,17 @@ export const GameChoices: FC = () => {
                             <div className="absolute top-[59%] -right-[2%] h-[2%] w-decorate bg-decorate-border" />
                             <div className="absolute top-[75%] -right-[2%] h-[30%] w-decorate bg-decorate-border" />
                             <div className="absolute top-[25%] left-[2%] h-[80%] w-decorate bg-decorate-border" />
+                            {endingType !== "B" && (
+                                <div className="absolute bottom-[-20%] right-0 w-[25%] aspect-square rotate-[-20deg] opacity-70">
+                                    <Image
+                                        src={
+                                            endingType === "F"
+                                                ? "/png/failure.png"
+                                                : "/png/success.png"
+                                        }
+                                    />
+                                </div>
+                            )}
                         </div>
                     </motion.div>
                 )}
