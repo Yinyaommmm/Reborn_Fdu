@@ -290,7 +290,7 @@ export const GameChoices: FC = () => {
                         </div>
                     </motion.div>
                 )}
-                {!showEnding && cards.length !== 0 && toolId && (
+                {!showEnding && cards.length !== 0 && toolId !== undefined && (
                     <ToolDisplay toolId={toolId} height={height} />
                 )}
                 {showEnding && (
