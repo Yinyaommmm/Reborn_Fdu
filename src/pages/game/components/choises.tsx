@@ -1,6 +1,7 @@
 import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 
+import { ToolDisplay } from "./tool-display";
 import { CardColorMap } from "../utils/colors";
 
 import Image from "@/components/image";
@@ -38,6 +39,7 @@ export const GameChoices: FC = () => {
 
     const isAnimating = $Game.use((state) => state.isCardAnimating);
     const endingType = $Game.use((state) => state.endingType);
+    const toolId = $Data.use((state) => state.toolId);
 
     const handleSwipeComplete = () => {
         setShowEnding(true);
@@ -209,7 +211,7 @@ export const GameChoices: FC = () => {
                 )}
                 {!showEnding && cards.length !== 0 && (
                     <motion.div
-                        className="absolute top-[12vh] mr-[3vw] flex items-center justify-end"
+                        className="absolute top-[12vh] mr-[3vw] flex items-center justify-end z-20"
                         style={{
                             height,
                             ...(exitDirection === "left" ? { right: x } : {}),
@@ -287,6 +289,9 @@ export const GameChoices: FC = () => {
                             />
                         </div>
                     </motion.div>
+                )}
+                {!showEnding && cards.length !== 0 && toolId && (
+                    <ToolDisplay toolId={toolId} height={height} />
                 )}
                 {showEnding && (
                     <motion.div

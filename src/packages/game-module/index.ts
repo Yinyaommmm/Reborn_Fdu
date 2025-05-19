@@ -36,7 +36,8 @@ const toolId2itemId = (toolId: number): ItemID => {
             return "Lucky Student ID";
         case 4:
             return "Middle Part Pants";
-        // TODO case 5
+        case 5:
+            return "Skincare Set";
         case 6:
             return "Buddha Foot";
         case 7:
@@ -208,6 +209,42 @@ const nextSemester = () => {
     }
 };
 
+const toolLeft = () => {
+    if (system) {
+        return system.showAllItem()[0].usageLeft;
+    } else {
+        throw Error("system not initialized");
+    }
+};
+
+const useTool = () => {
+    const toolId = $Data.get().toolId;
+    if (system && toolId !== undefined && events[0] !== undefined) {
+        const item = ItemFactory(toolId2itemId(toolId));
+        if (item) {
+            system.useItem(item.id, events[0].ctx);
+        } else {
+            throw Error("item not exist");
+        }
+    } else {
+        throw Error("system not initialized | tool id not defined");
+    }
+};
+
+const unUseTool = () => {
+    const toolId = $Data.get().toolId;
+    if (system && toolId !== undefined && events[0] !== undefined) {
+        const item = ItemFactory(toolId2itemId(toolId));
+        if (item) {
+            system.unUseItem(item.id, events[0].ctx);
+        } else {
+            throw Error("item not exist");
+        }
+    } else {
+        throw Error("system not initialized | tool id not defined");
+    }
+};
+
 export const gameModule = {
     init,
     equip,
@@ -223,4 +260,7 @@ export const gameModule = {
     useStage2,
     getCard,
     nextSemester,
+    toolLeft,
+    useTool,
+    unUseTool,
 };
