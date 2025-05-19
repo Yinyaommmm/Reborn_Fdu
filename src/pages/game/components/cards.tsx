@@ -92,7 +92,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             // newSemesterRef.current = false;
             // gameModule.nextSemester();
             // setSemester((prev) => prev + 1);
-            // newSemester();
+            newSemester();
         },
         0.6,
         1,
@@ -298,7 +298,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                 newSemesterRef.current = false;
                 gameModule.nextSemester();
                 setSemester((prev) => prev + 1);
-                newSemester();
+                // newSemester();
                 trigger(e);
             }
             e.preventDefault();
