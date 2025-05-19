@@ -340,20 +340,13 @@ export class ItemManager {
     }
 
     useItem(id: ItemID, context: SingleRoundContext): UseItemRes {
-        const fail = (msg: string): UseItemRes => ({ result: false, msg });
-
-        const item = this.items.find((i) => i.id === id);
-        if (!context.currentEvent) return fail("还未确定事件，不允许使用道具");
-        if (!item) return fail("未拥有该道具");
-        if (!item.activeEffect) return fail("该道具没有主动效果");
-        if (this.lastItemUsedID === id)
-            return fail("不能在一个事件多次使用同一个道具");
-        if (item.usageLeft <= 0) return fail("该道具已经没有使用次数了");
-        if (!item.targetCategories.includes(context.currentEvent.getCategory()))
-            return fail("该道具无法用在该类型活动上");
-        item.activeEffect(context);
-        this.lastItemUsedID = item.id;
-        return { result: true, msg: "成功" };
+        const canUse = this.canUseItem(id, context);
+        if (canUse.result) {
+            const item = this.items.find((i) => i.id === id) as Item;
+            item.activeEffect!(context);
+            this.lastItemUsedID = item.id;
+        }
+        return canUse;
     }
     unUseItem(id: ItemID, context: SingleRoundContext): UseItemRes {
         const fail = (msg: string): UseItemRes => ({ result: false, msg });
@@ -369,6 +362,20 @@ export class ItemManager {
         this.lastItemUsedID = undefined; // 移除使用记录
 
         return { result: true, msg: "成功取消使用" };
+    }
+    canUseItem(id: ItemID, context: SingleRoundContext): UseItemRes {
+        const fail = (msg: string): UseItemRes => ({ result: false, msg });
+        const item = this.items.find((i) => i.id === id);
+        if (!context.currentEvent) return fail("还未确定事件，不允许使用道具");
+        if (!item) return fail("未拥有该道具");
+        if (!item.activeEffect) return fail("该道具没有主动效果");
+        if (this.lastItemUsedID === id)
+            return fail("不能在一个事件多次使用同一个道具");
+        if (item.usageLeft <= 0) return fail("该道具已经没有使用次数了");
+        if (!item.targetCategories.includes(context.currentEvent.getCategory()))
+            return fail("该道具无法用在该类型活动上");
+
+        return { result: true, msg: "成功" };
     }
     resetLastItemID() {
         console.log("本轮使用了主动道具 ", this.lastItemUsedID, "现在清空");
