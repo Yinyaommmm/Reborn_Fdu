@@ -323,7 +323,7 @@ export const GameChoices: FC = () => {
                             <div className="absolute top-[25%] left-[2%] h-[80%] w-decorate bg-decorate-border" />
                             {endingType !== "B" && (
                                 <motion.div
-                                    className="absolute bottom-[-20%] right-0 w-[25%] aspect-square rotate-[-20deg] opacity-70"
+                                    className="absolute bottom-[-20%] right-[-5%] w-[25%] aspect-square rotate-[-20deg] opacity-70"
                                     initial={{ scale: 4, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     transition={{
