@@ -67,6 +67,7 @@ export class EventForShow {
     choiceBText: string = "B选项文本";
     // endingAText: string[] = ["A结局1", "A结局2"];
     // endingBText: string = "B结局";
+    highLightChoice: "A" | "AB" | "B" = "A";
 }
 export class EventLog {
     // 时间、事件、选择、结果
@@ -217,6 +218,11 @@ export class StandardEvent {
                 e.choiceAText = `选择${c1}`;
                 e.choiceBText = `选择${c2}`;
             }
+        }
+        if (this.isEqualRight()) {
+            e.highLightChoice = "AB";
+        } else {
+            e.highLightChoice = "A";
         }
         return e;
     }
