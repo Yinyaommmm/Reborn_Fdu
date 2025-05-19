@@ -149,7 +149,7 @@ export function formatDialog(
     dialog: string,
     c1: string,
     c2: string,
-    category: EventCategory,
+    _category: EventCategory,
 ): React.ReactNode {
     const parts: React.ReactNode[] = [];
 

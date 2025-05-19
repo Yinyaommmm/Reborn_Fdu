@@ -33,7 +33,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative mt-[8%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
                 {tools.slice(0, 4).map((tool, index) => (
                     <Image
-                        className="relative h-full aspect-square"
+                        className="relative h-full aspect-square bg-white"
                         src={tool.src}
                         adjustHeight
                         adjustWidth={false}
@@ -55,7 +55,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative mt-[5%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
                 {tools.slice(4, 8).map((tool, index) => (
                     <Image
-                        className="relative h-full aspect-square"
+                        className="relative h-full aspect-square bg-white"
                         src={tool.src}
                         adjustHeight
                         adjustWidth={false}
