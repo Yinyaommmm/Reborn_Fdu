@@ -47,7 +47,7 @@ export const CardsTransition: FC<{ ref: Ref<CardsTransitionHandler> }> = ({
 
     return (
         <>
-            <div className="h-[10%] flex items-center justify-end">
+            <div className="h-[12%] flex items-center justify-end">
                 <div className="relative h-full mr-[5%]">
                     <Image
                         src={"png/light.png"}
@@ -57,19 +57,19 @@ export const CardsTransition: FC<{ ref: Ref<CardsTransitionHandler> }> = ({
                     />
                 </div>
             </div>
-            <div className="mt-[7%] flex items-center justify-end">
+            <div className="mt-[3%] flex items-center justify-end">
                 <div className="relative w-[95%]">
                     <Image
                         src={"png/board.png"}
                         adjustHeight
-                        adjustWidth={false}
+                        adjustWidth
                         square={false}
                     />
                     <div className="absolute left-[53%] top-[43%] w-[40%] -translate-x-1/2 -translate-y-1/2">
                         <Image
                             src={"png/wall-calender.png"}
                             adjustHeight
-                            adjustWidth={false}
+                            adjustWidth
                             square={false}
                         >
                             <div className="absolute left-[52%] bottom-[3.5%] font-cursive -translate-x-1/2 text-[#C18C6D] flex flex-col items-center justify-center gap-1 w-[93%] h-[58%]">
