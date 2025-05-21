@@ -27,7 +27,7 @@ export function useImagePreloader(urls: string[]) {
         setStart(true);
     };
 
-    // console.log("loaded", loaded, "/", total);
+    console.log("loaded", loaded, "/", total);
 
     return { progress, done: loaded >= total, startLoading };
 }

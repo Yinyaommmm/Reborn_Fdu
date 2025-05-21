@@ -39,5 +39,5 @@ export const ImageUrls = [
         )
         .flatMap((levelPath) => sequence.map((i) => `${levelPath}-${i}.png`)),
     ...eventSpecialPngFiles.map((url) => `/event/special/${url}`),
-    [...CGFileList],
+    // [...CGFileList],
 ];
