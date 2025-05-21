@@ -2,7 +2,7 @@ import { HTMLMotionProps, motion } from "motion/react";
 import { FC, SetStateAction, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
-import { Talent } from "./Talent";
+import { Talent } from "./talent";
 
 import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";

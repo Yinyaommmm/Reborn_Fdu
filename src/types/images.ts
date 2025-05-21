@@ -1,5 +1,3 @@
-import { CGFileList } from "./cgImages";
-
 import { eventSpecialPngFiles } from "@/data/pngname";
 
 const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
