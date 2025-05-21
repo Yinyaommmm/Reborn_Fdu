@@ -22,6 +22,7 @@ import { GameErrorFactory } from "@/error/game-error";
 import { Logger } from "@/logger/logger";
 import { BaseProbability, UpgradeProbability } from "@/type/config";
 import {
+    BgCategory,
     EventCategory,
     ReadableEvent,
     保研百分百,
@@ -181,13 +182,20 @@ export class StandardEvent {
         return this._readableEvt.upgrade;
     }
 
-    forShow(): EventForShow {
+    forShow(gender: "男" | "女"): EventForShow {
         const e = new EventForShow();
         e.category = this._readableEvt.category;
         e.title = this._readableEvt.title;
-        e.imgSrc = "todo:暂未确定src";
+        const startNum = String(this.getID() + 1).padStart(3, "0");
+        e.imgSrc =
+            this._readableEvt.bgCategory === BgCategory.CLOSEUP
+                ? `/event/special/${startNum}-${e.title}-${gender}.png`
+                : this._readableEvt.bgCategory === BgCategory.POSTER
+                  ? `/event/special/${startNum}-${e.title}.png`
+                  : "/png/event-bg.png";
         e.choiceAText = this._readableEvt.choiceA;
         e.choiceBText = this._readableEvt.choiceB;
+
         if (this._readableEvt.repalceDialog.length === 0) {
             e.mainText = highLight(this._readableEvt.mainDialog);
         } else {
@@ -538,7 +546,7 @@ export class GameSystem {
     }
     // 前端展示事件调用该函数，根据信息去绘制展示该活动的页面
     showEvt(evtID: number) {
-        return this.allEvents[evtID].forShow();
+        return this.allEvents[evtID].forShow(this.player.gender);
     }
     resoluteEvt(
         evtID: number,

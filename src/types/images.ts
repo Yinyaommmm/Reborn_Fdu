@@ -1,3 +1,5 @@
+import { eventSpecialPngFiles } from "@/data/pngname";
+
 const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
 const icons = ["A", "C", "H", "L", "M"];
 const sequence = [0, 1, 2, 3, 4];
@@ -34,4 +36,5 @@ export const ImageUrls = [
             icons.map((icon) => `png/${level}/${icon}-${level}`),
         )
         .flatMap((levelPath) => sequence.map((i) => `${levelPath}-${i}.png`)),
+    ...eventSpecialPngFiles.map((url) => `/event/special/${url}`),
 ];

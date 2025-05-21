@@ -18,6 +18,10 @@ export class Player {
     public eduDestination: EDUDESTINATION = "本科";
     public isCCP = false;
     public specialTag = new Set<string>();
+    public gender: "男" | "女" = "男";
+    setGender(gender: "男" | "女") {
+        this.gender = gender;
+    }
     getElectionBuff() {
         return this.electionBuff;
     }

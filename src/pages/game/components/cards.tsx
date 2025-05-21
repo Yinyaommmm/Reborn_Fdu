@@ -400,7 +400,13 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                     >
                         <div className="w-full h-full flex items-center justify-center flex-col gap-4">
                             <div className="w-[90%] p-2 bg-white ml-2 mt-2">
-                                <Image src="/png/event-bg.png" />
+                                <Image
+                                    src={
+                                        card === undefined
+                                            ? "/png/event-bg.png"
+                                            : gameModule.getCard(card.id).imgSrc
+                                    }
+                                />
                             </div>
                             <div className="px-4 text-sm ml-2">
                                 {description}
