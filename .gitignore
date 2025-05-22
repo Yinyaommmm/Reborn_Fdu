@@ -23,9 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 
-public/png/event/**
-public/event/**
+public/png/**
 deploy.sh
 generateImages.js
-
-public/**
