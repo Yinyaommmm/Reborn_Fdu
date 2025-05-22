@@ -5,36 +5,41 @@ const icons = ["A", "C", "H", "L", "M"];
 const sequence = [0, 1, 2, 3, 4];
 const tools = [1, 2, 3, 4, 5, 6, 7, 8];
 
+export const ImageType: "png" | "webp" = "webp";
+
+export const getImagePath = (name: string) =>
+    `${ImageType}/${name}.${ImageType}`;
+
 export const ImageUrls = [
-    "png/background.png",
-    "png/calender.png",
-    "png/card-decoration.png",
-    "png/card-go.png",
-    "png/data-icon.png",
-    "png/event-bg.png",
-    "png/portrait-girl.png",
-    "/png/icon-h.png",
-    "/png/icon-l.png",
-    "/png/icon-a.png",
-    "/png/icon-c.png",
-    "/png/icon-m.png",
-    "/png/after-decoration.png",
-    "/png/back-blue.png",
-    "/png/back-green.png",
-    "/png/back-pink.png",
-    "/png/back-purple.png",
-    "/png/back-red.png",
-    "/png/back-yellow.png",
-    "/png/failure.png",
-    "/png/success.png",
-    "/png/light.png",
-    "/png/wall-calender.png",
-    "/png/board.png",
-    ...tools.map((tool) => `png/tools/${tool}.png`),
+    getImagePath("background"),
+    getImagePath("calender"),
+    getImagePath("card-decoration"),
+    getImagePath("card-go"),
+    getImagePath("data-icon"),
+    getImagePath("event-bg"),
+    getImagePath("portrait-girl"),
+    getImagePath("icon-h"),
+    getImagePath("icon-l"),
+    getImagePath("icon-a"),
+    getImagePath("icon-c"),
+    getImagePath("icon-m"),
+    getImagePath("after-decoration"),
+    getImagePath("back-blue"),
+    getImagePath("back-green"),
+    getImagePath("back-pink"),
+    getImagePath("back-purple"),
+    getImagePath("back-red"),
+    getImagePath("back-yellow"),
+    getImagePath("failure"),
+    getImagePath("success"),
+    getImagePath("light"),
+    getImagePath("wall-calender"),
+    getImagePath("board"),
+    ...tools.map((tool) => getImagePath(`tools/${tool}`)),
     ...levels
-        .flatMap((level) =>
-            icons.map((icon) => `png/${level}/${icon}-${level}`),
-        )
-        .flatMap((levelPath) => sequence.map((i) => `${levelPath}-${i}.png`)),
+        .flatMap((level) => icons.map((icon) => `${level}/${icon}-${level}`))
+        .flatMap((levelPath) =>
+            sequence.map((i) => getImagePath(`${levelPath}-${i}`)),
+        ),
     ...CGFileList,
 ];

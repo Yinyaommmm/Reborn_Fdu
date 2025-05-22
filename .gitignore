@@ -27,3 +27,5 @@ public/png/event/**
 public/event/**
 deploy.sh
 generateImages.js
+
+public/**

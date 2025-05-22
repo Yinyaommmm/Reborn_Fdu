@@ -3,6 +3,7 @@ import { FC, useEffect } from "react";
 
 import Image from "@/components/image";
 import { CircleTransition } from "@/components/transition";
+import { getImagePath } from "@/types/images";
 
 export const Dev: FC = () => {
     const controls = useAnimation();
@@ -45,7 +46,7 @@ export const Dev: FC = () => {
             >
                 <div className="relative h-full mr-[5%]">
                     <Image
-                        src={"png/light.png"}
+                        src={getImagePath("light")}
                         adjustHeight
                         adjustWidth={false}
                         square={false}
@@ -55,14 +56,14 @@ export const Dev: FC = () => {
             <div className="mt-[3%] flex items-center justify-end">
                 <div className="relative w-[95%]">
                     <Image
-                        src={"png/board.png"}
+                        src={getImagePath("board")}
                         adjustHeight
                         adjustWidth
                         square={false}
                     />
                     <div className="absolute left-[53%] top-[43%] w-[40%] -translate-x-1/2 -translate-y-1/2">
                         <Image
-                            src={"png/wall-calender.png"}
+                            src={getImagePath("wall-calender")}
                             adjustHeight
                             adjustWidth
                             square={false}

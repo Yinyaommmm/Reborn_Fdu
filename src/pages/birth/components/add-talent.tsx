@@ -7,6 +7,7 @@ import { Talent } from "./talent";
 import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
 import { $Data } from "@/store/data";
+import { getImagePath } from "@/types/images";
 
 const getPoints = () => {
     const data = $Data.get();
@@ -82,7 +83,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative pt-[10%] h-[33%] px-[8%] w-full flex justify-between gap-4">
                 <Image
                     className="p-1 bg-[#F6F6F2] h-full aspect-[3/4]"
-                    src="png/portrait-girl.png"
+                    src={getImagePath("portrait-girl")}
                     adjustHeight
                     adjustWidth={false}
                 />
@@ -129,7 +130,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/icon-l.png"
+                    src={getImagePath("icon-l")}
                     value={lucky}
                     title="幸运"
                     onAdd={() => {
@@ -146,7 +147,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     }}
                 />
                 <Talent
-                    src="png/icon-h.png"
+                    src={getImagePath("icon-h")}
                     value={honesty}
                     title="诚信"
                     onAdd={() => {
@@ -165,7 +166,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/icon-a.png"
+                    src={getImagePath("icon-a")}
                     value={academic}
                     title="学术"
                     onAdd={() => {
@@ -182,7 +183,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     }}
                 />
                 <Talent
-                    src="png/icon-c.png"
+                    src={getImagePath("icon-c")}
                     value={creativity}
                     title="创造"
                     onAdd={() => {
@@ -201,7 +202,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
-                    src="png/icon-m.png"
+                    src={getImagePath("icon-m")}
                     value={management}
                     title="管理"
                     onAdd={() => {

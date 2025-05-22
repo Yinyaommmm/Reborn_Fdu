@@ -9,6 +9,7 @@ import Image from "@/components/image";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { YearItem } from "@/stage2/stage2";
+import { getImagePath } from "@/types/images";
 
 export const After: FC = () => {
     const { vh: viewportHeight } = useViewport();
@@ -75,7 +76,7 @@ export const After: FC = () => {
         <div className="relative w-screen h-screen game-background">
             <Image
                 className="w-full"
-                src="png/after-decoration.png"
+                src={getImagePath("after-decoration")}
                 square={false}
             />
             <div

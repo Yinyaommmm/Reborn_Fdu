@@ -10,6 +10,7 @@ import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
+import { getImagePath } from "@/types/images";
 
 interface BirthProps {
     trigger: CircularTransitionTrigger;
@@ -29,7 +30,7 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
         <div className="relative w-screen h-screen game-background box-border">
             <Image
                 className="absolute w-full h-full mt-[1vh]"
-                src="png/calender.png"
+                src={getImagePath("calender")}
                 square={false}
             />
             <div className="h-[30vh]" />

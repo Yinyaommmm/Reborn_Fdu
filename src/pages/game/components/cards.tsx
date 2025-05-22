@@ -27,6 +27,7 @@ import { gameModule, PickRes } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 import { EventCategory } from "@/type/type";
+import { getImagePath } from "@/types/images";
 import { calYFromDeltaX } from "@/utils/circle";
 
 interface GameCardsProps {
@@ -403,7 +404,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                                 <Image
                                     src={
                                         card === undefined
-                                            ? "/png/event-bg.png"
+                                            ? getImagePath("event-bg")
                                             : gameModule.getCard(card.id).imgSrc
                                     }
                                 />

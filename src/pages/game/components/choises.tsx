@@ -10,6 +10,7 @@ import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 import { EventCategory } from "@/type/type";
+import { getImagePath } from "@/types/images";
 
 export const GameChoices: FC = () => {
     const { vw: viewportWidth, vh: viewportHeight } = useViewport();
@@ -336,8 +337,8 @@ export const GameChoices: FC = () => {
                                     <Image
                                         src={
                                             endingType === "F"
-                                                ? "/png/failure.png"
-                                                : "/png/success.png"
+                                                ? getImagePath("failure")
+                                                : getImagePath("success")
                                         }
                                     />
                                 </motion.div>

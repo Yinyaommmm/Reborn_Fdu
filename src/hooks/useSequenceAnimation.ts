@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 
+import { getImagePath } from "@/types/images";
+
 const sequence = [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0];
 
 export function useSequenceAnimation(
@@ -40,7 +42,9 @@ export function useSequenceAnimation(
     }, [animating, index, frameDuration]);
 
     return {
-        frame: `/png/levels/${levelFrame}/${prefix}-${levelFrame}-${sequence[index]}.png`,
+        frame: getImagePath(
+            `levels/${levelFrame}/${prefix}-${levelFrame}-${sequence[index]}`,
+        ),
         trigger,
     };
 }

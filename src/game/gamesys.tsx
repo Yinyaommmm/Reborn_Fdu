@@ -32,6 +32,7 @@ import {
     跳过考研,
     跳过辅导员青椒,
 } from "@/type/type";
+import { ImageType } from "@/types/images";
 export interface FiveProps {
     H: number;
     L: number;
@@ -189,10 +190,10 @@ export class StandardEvent {
         const startNum = String(this.getID() + 1).padStart(3, "0");
         e.imgSrc =
             this._readableEvt.bgCategory === BgCategory.CLOSEUP
-                ? `/event/special/${startNum}-${e.title}-${gender}.png`
+                ? `/${ImageType}/event/special/${startNum}-${e.title}-${gender}.${ImageType}`
                 : this._readableEvt.bgCategory === BgCategory.POSTER
-                  ? `/event/special/${startNum}-${e.title}.png`
-                  : "/png/event-bg.png";
+                  ? `/${ImageType}/event/special/${startNum}-${e.title}.${ImageType}`
+                  : `/${ImageType}/event/special/${startNum}-${e.title}.${ImageType}`;
         e.choiceAText = this._readableEvt.choiceA;
         e.choiceBText = this._readableEvt.choiceB;
 

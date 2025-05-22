@@ -4,6 +4,7 @@ import { FC, useEffect, useState } from "react";
 import Image from "@/components/image";
 import { useSequenceAnimation } from "@/hooks/useSequenceAnimation";
 import { $Data } from "@/store/data";
+import { getImagePath } from "@/types/images";
 
 const levels = ["D", "D+", "C", "C+", "B", "B+", "A", "A+", "S", "S+"];
 const getLevel = (level: number) => {
@@ -17,11 +18,11 @@ const GameHeader: FC = () => {
     const creativity = $Data.use((state) => state.creativity);
     const management = $Data.use((state) => state.management);
     const iconImages = [
-        "/png/icon-h.png",
-        "/png/icon-l.png",
-        "/png/icon-a.png",
-        "/png/icon-c.png",
-        "/png/icon-m.png",
+        getImagePath("icon-h"),
+        getImagePath("icon-l"),
+        getImagePath("icon-a"),
+        getImagePath("icon-c"),
+        getImagePath("icon-m"),
     ];
     const progressColor = [
         "#A79DD1",

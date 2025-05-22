@@ -2,6 +2,7 @@ import { HTMLMotionProps, motion } from "motion/react";
 import { FC } from "react";
 
 import Image from "@/components/image";
+import { getImagePath } from "@/types/images";
 
 export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
     const { ...rest } = props;
@@ -16,7 +17,7 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
         >
             <Image
                 className="absolute bottom-0 left-0 w-full"
-                src="png/card-decoration.png"
+                src={getImagePath("card-decoration")}
                 square={false}
             />
             <div className="absolute top-[10%] right-[20%] font-cursive text-white">
@@ -26,14 +27,14 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
                 <div className="p-1 w-[30%]">
                     <Image
                         className="relative p-1 bg-white h-full aspect-[3/4]"
-                        src="png/portrait-girl.png"
+                        src={getImagePath("portrait-girl")}
                         adjustHeight
                         adjustWidth={false}
                         square={false}
                     >
                         <Image
                             className="absolute -bottom-[20%] left-[50%] w-[50%]"
-                            src="png/card-go.png"
+                            src={getImagePath("card-go")}
                             square={false}
                         />
                     </Image>
