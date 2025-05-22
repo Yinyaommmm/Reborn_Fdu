@@ -97,7 +97,7 @@ export class GameModule {
         console.log("--!!!!进入二阶段!!!!--");
         const stage2Sys = new Stage2Sys(player);
         stage2Sys.setAllLine();
-        console.log(stage2Sys.show());
+        stage2Sys.show();
         console.log(stage2Sys.getAll());
     }
 }

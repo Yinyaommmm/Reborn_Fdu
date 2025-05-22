@@ -69,7 +69,7 @@ export class Stage2Sys {
 
     constructor(private player: Player) {
         this.careerMap = this.initCareerMap(player.gradDestination);
-        console.log(this.endYear, this.startYear);
+
         this.hashArr = new Array(this.endYear - this.startYear);
     }
 
@@ -142,17 +142,14 @@ export class Stage2Sys {
             const addYear = randomIntBetween(item.min, item.max);
             year += addYear;
             this.insert(year, item.path, item.doc);
-            // 青椒插入后置
+            // 青椒插入前置
             if (
                 this.player.gradDestination === "青椒" &&
                 i <= this.youngPreMap.size &&
                 i >= 4
             ) {
                 const item = this.youngPreMap.get(i) as Stage2Map;
-                const afterYear = (year += randomIntBetween(
-                    item.min,
-                    item.max,
-                ));
+                const afterYear = year + randomIntBetween(item.min, item.max);
                 this.insert(afterYear, item.path, item.doc, "前向");
             }
         }
@@ -172,10 +169,7 @@ export class Stage2Sys {
             // 插入后置事件
             if (i <= this.loveAfterMap.size) {
                 const item = this.loveAfterMap.get(i) as Stage2Map;
-                const afterYear = (year += randomIntBetween(
-                    item.min,
-                    item.max,
-                ));
+                const afterYear = year + randomIntBetween(item.min, item.max);
                 this.insert(afterYear, item.path, item.doc, "后向");
             }
         }
@@ -299,7 +293,13 @@ export class Stage2Sys {
     }
 
     public show() {
-        console.log(
+        this.logger.info(
+            "起始年龄:",
+            this.startYear,
+            "结束年龄:",
+            this.endYear,
+        );
+        this.logger.info(
             "startyear",
             this.startYear,
             "endyear",
@@ -311,8 +311,8 @@ export class Stage2Sys {
             "结局",
             this.player.gradDestination,
         );
-        console.log("careermap", this.careerMap);
-        console.log("hashArr", this.hashArr);
+        this.logger.info("careermap", this.careerMap);
+        this.logger.info("hashArr", this.hashArr);
     }
     public getAll(): YearItem[] {
         return this.hashArr
