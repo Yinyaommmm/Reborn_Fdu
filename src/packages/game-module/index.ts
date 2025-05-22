@@ -4,6 +4,7 @@ import { events as readableEvents } from "@/data/events_loaded";
 import { FiveProps, GameSystem, StandardEvent } from "@/game/gamesys";
 import { ItemFactory, ItemID } from "@/game/item";
 import { Player } from "@/game/player";
+import { getPoints } from "@/pages/birth/components/add-talent";
 import { tools } from "@/pages/birth/types/props";
 import { Stage2Sys } from "@/stage2/stage2";
 import { $Data, DataModel } from "@/store/data";
@@ -71,7 +72,14 @@ const toolId2itemId = (toolId: number): ItemID => {
 // };
 
 const init = () => {
-    player.Init(data2props($Data.get()));
+    player.randomInit(data2props($Data.get()), getPoints());
+    $Data.update("player random init", (draft) => {
+        draft.honesty = player.props.H;
+        draft.lucky = player.props.L;
+        draft.academic = player.props.A;
+        draft.creativity = player.props.C;
+        draft.management = player.props.M;
+    });
     // player.fixedInit();
     system = new GameSystem(player, standardEvents);
 };

@@ -82,6 +82,7 @@ export class Player {
             values[randomKey]++;
             leftPoint--;
         }
+
         this._props = values;
     }
 

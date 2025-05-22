@@ -9,7 +9,7 @@ import Image from "@/components/image";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
 
-const getPoints = () => {
+export const getPoints = () => {
     const data = $Data.get();
     return (
         70 -
