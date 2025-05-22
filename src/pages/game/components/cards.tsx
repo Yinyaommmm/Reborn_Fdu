@@ -287,21 +287,29 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         };
         const handleTouchEnd = (e: TouchEvent) => {
             if (!showEnding || !touchClickRef.current) return;
-            if (!gameModule.alive()) {
-                $Data.update("update ending", (draft) => {
-                    draft.eduDestination = gameModule.end().eduDestination;
-                    draft.gradDestination = gameModule.end().gradDestination;
-                });
-                triggerUI?.(e, "graduation");
-            }
+
             if (cards.length === 0) {
                 console.log("trigger 新学期");
                 newSemesterRef.current = false;
                 gameModule.nextSemester();
                 setSemester((prev) => prev + 1);
                 // newSemester();
+            }
+            if (!gameModule.alive()) {
+                console.log("trigger 游戏结束");
+
+                $Data.update("update ending", (draft) => {
+                    draft.eduDestination = gameModule.end().eduDestination;
+                    draft.gradDestination = gameModule.end().gradDestination;
+                });
+                triggerUI?.(e, "graduation");
+            }
+            if (cards.length === 0 && gameModule.alive()) {
                 trigger(e);
             }
+
+            console.log("trigger 游戏继续");
+
             e.preventDefault();
             touchClickRef.current = false;
             setShowEnding(false);
