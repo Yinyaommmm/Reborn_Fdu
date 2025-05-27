@@ -32,6 +32,8 @@ export const ImageUrls = [
     getImagePath("back-yellow"),
     getImagePath("failure"),
     getImagePath("success"),
+    getImagePath("pass"),
+    getImagePath("punishment"),
     getImagePath("light"),
     getImagePath("wall-calender"),
     getImagePath("board"),
