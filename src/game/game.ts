@@ -14,8 +14,9 @@ export class GameModule {
         player.randomInit(player.props, 50);
         player.mainProp = "A"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
+        system.addItem(ItemFactory("Misfortune Certificate") as Item);
         // system.addItem(ItemFactory("Skincare Set") as Item);
-        system.addItem(ItemFactory("Secretary's Letter") as Item);
+        // system.addItem(ItemFactory("Secretary's Letter") as Item);
         // system.addItem(ItemFactory("Academician's Guidebook") as Item);
         // system.addItem(ItemFactory("Thanos Glove") as Item);
         // system.addItem(ItemFactory("Lucky Student ID") as Item);
@@ -30,41 +31,39 @@ export class GameModule {
             const nextRes = system.nextEvt(ctx);
             // 判断该事件是否需要跳过(例如属性要求不满足)
             const shouldJump = system.requiredEvtJump(nextRes.evtID);
-            console.log("使用次数", system.showAllItem()[0].usageLeft);
+            // console.log("使用次数", system.showAllItem()[0].usageLeft);
             if (!shouldJump) {
                 console.log(
                     `${system.getYear()}-${nextRes.indexInYear}`,
                     // system.showEvt(nextRes.evtID),
                 );
                 // 根据用户选择和‘上下文’进行结算，这里模拟使用70%概率选A
-                const choice: "A" | "B" = Math.random() < 1 ? "A" : "B";
-                const useRes = system.useItem(
-                    "Secretary's Letter",
-                    nextRes.ctx,
-                );
-                console.log(
-                    "道具使用结果",
-                    useRes,
-                    nextRes.ctx.probContext?.succProb,
-                );
-                // const unuseRes = system.unUseItem(
-                //     "Buddha Foot",
+                const choice: "A" | "B" = Math.random() < 0.7 ? "A" : "B";
+                // const useRes = system.useItem(
+                //     "Secretary's Letter",
                 //     nextRes.ctx,
                 // );
                 // console.log(
-                //     "佛脚撤销结果",
-                //     unuseRes,
+                //     "道具使用结果",
+                //     useRes,
                 //     nextRes.ctx.probContext?.succProb,
                 // );
-
                 const rsltRes = system.resoluteEvt(
                     nextRes.evtID,
                     choice,
                     nextRes.indexInYear,
                     nextRes.ctx,
                 );
-                if (nextRes.evtID === 77 || nextRes.evtID === 78)
-                    console.log(rsltRes);
+
+                console.log("结算结果", rsltRes);
+                console.log("结算详细信息", system.lastContextLog);
+                console.log(
+                    "事件标题",
+                    system
+                        .getAllEvents()
+                        [nextRes.evtID].forShow(player.gender, system.getYear())
+                        .mainText,
+                );
             }
             //再执行学年移动
             if (nextRes.shouldMoveToNextYear) {
@@ -91,11 +90,19 @@ export class GameModule {
         );
         console.log("日志", system.getEventLog());
         console.log("成功高光事件", system.getHighLightLog());
-        console.log("全部事件", system.getAllEvents());
-
+        console.log("获取结算上下文", system.getContextLog());
         // 二阶段
-        console.log("--!!!!进入二阶段!!!!--");
-        const stage2Sys = new Stage2Sys(player);
+        console.log("--!!!!进入[自定义]二阶段!!!!--");
+        const selfmade_player = new Player({
+            H: 60,
+            L: 60,
+            A: 60,
+            C: 60,
+            M: 60,
+        });
+        selfmade_player.eduDestination = "研究生";
+        selfmade_player.gradDestination = "辅导员";
+        const stage2Sys = new Stage2Sys(selfmade_player);
         stage2Sys.setAllLine();
         stage2Sys.show();
         console.log(stage2Sys.getAll());

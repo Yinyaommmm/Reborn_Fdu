@@ -6,9 +6,11 @@ import { Player } from "./player";
 import { RsltModule } from "./resolute";
 import { TimelineModule } from "./timeline";
 import {
+    addPropsTo_InPlace,
     clampFiveProps_choiceA,
     clampFiveProps_choiceB,
     clampProb,
+    cloneProps,
     didMeetRequireProps,
     formatDialog,
     getTwoRandomItems,
@@ -20,7 +22,11 @@ import {
 
 import { GameErrorFactory } from "@/error/game-error";
 import { Logger } from "@/logger/logger";
-import { BaseProbability, UpgradeProbability } from "@/type/config";
+import {
+    BaseProbability,
+    ResultBLevel,
+    UpgradeProbability,
+} from "@/type/config";
 import {
     BgCategory,
     EventCategory,
@@ -40,6 +46,13 @@ export interface FiveProps {
     C: number;
     M: number;
 }
+export interface FivePropsRange {
+    H: [number, number];
+    L: [number, number];
+    A: [number, number];
+    C: [number, number];
+    M: [number, number];
+}
 export const zeroFiveProps: () => FiveProps = () => {
     return {
         H: 0,
@@ -57,7 +70,7 @@ export interface EvtResultType {
 export interface ResoluteEventRes {
     deltaProps: FiveProps;
     endingText: string;
-    resType: "BigS" | "S" | "F" | "B"; // 引入B选项;
+    resType: "BigS" | "S" | "F" | "B" | "Punish"; // 引入B选项;
 }
 
 export class EventForShow {
@@ -179,11 +192,21 @@ export class StandardEvent {
             this._readableEvt.randIdice,
         );
     }
+    isB_Punish() {
+        if (
+            this.getHGear_ChoiceB() === ResultBLevel.Punish ||
+            this.getLGear_ChoiceB() === ResultBLevel.Punish
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
     private shouldUpgrade() {
         return this._readableEvt.upgrade;
     }
 
-    forShow(gender: "男" | "女"): EventForShow {
+    forShow(gender: "男" | "女", year: number): EventForShow {
         const e = new EventForShow();
         e.category = this._readableEvt.category;
         e.title = this._readableEvt.title;
@@ -216,10 +239,17 @@ export class StandardEvent {
                     `${c1}` + "和" + c2,
                 );
             } else {
-                tmpMainText = this._readableEvt.mainDialog.replace(
-                    "$$",
-                    `${c1}`,
-                );
+                if (this.getID() === 71) {
+                    tmpMainText = this._readableEvt.mainDialog.replace(
+                        "$$",
+                        year < 5 ? `优秀学生奖学金` : "学业奖学金",
+                    );
+                } else {
+                    tmpMainText = this._readableEvt.mainDialog.replace(
+                        "$$",
+                        `${c1}`,
+                    );
+                }
             }
 
             e.mainText = formatDialog(tmpMainText, c1, c2, this.getCategory());
@@ -328,6 +358,7 @@ export class StandardEvent {
 export class GameSystem {
     public logger: Logger = new Logger("GameSyS", false);
     private eventLog: EventLog[] = [];
+    private contextLog: ContextLog[] = [];
     private rsltMod: RsltModule;
     private timelineMod: TimelineModule;
     private year = 1;
@@ -338,6 +369,17 @@ export class GameSystem {
     ) {
         this.rsltMod = new RsltModule(this);
         this.timelineMod = new TimelineModule(this.player, this);
+    }
+    get lastContextLog(): ContextLog {
+        if (this.contextLog.length === 0) {
+            return {
+                evtID: -1,
+                evtTitle: "你不应该看到这个",
+                changeProp: {},
+            };
+        } else {
+            return this.contextLog.at(-1)!;
+        }
     }
     getYear() {
         return this.year;
@@ -376,12 +418,16 @@ export class GameSystem {
         const evt = this.allEvents[evtID];
         // 事件对概率影响
         const evtProb = evt.getEvtProb(this.year);
+        this.lastContextLog.baseAndUpgrade_prob = evtProb;
         // 人属性对事件影响
         const humanBuffProb = this.player.getProbBuff(evt.getMainProp());
+        this.lastContextLog.HLAndMainpropEffect_prob = humanBuffProb;
         const electionBuffProb =
             evt.getCategory() === EventCategory.JXPY
                 ? this.player.getElectionBuff()
                 : 0;
+        this.lastContextLog.electionBuff = electionBuffProb;
+
         this.logger.info(
             "calcStandardSuccProb:",
             "evt" + evtProb,
@@ -394,6 +440,7 @@ export class GameSystem {
         // 卓博计划和人才工程强制保研成功
         if (evtID === 17 && this.player.specialTag.has(保研百分百)) {
             this.logger.info("强制保研成功");
+            this.lastContextLog.mustbePostGraduate = 1;
             return 1;
         }
         return 0;
@@ -410,9 +457,14 @@ export class GameSystem {
             succProb: prob + spProb + (ctx.probContext?.succProb ?? 0),
             rand,
         };
-        // 引入装备的被动效果
-        this.itemManager.applyProbPassiveEffects(ctx);
+        this.lastContextLog.succProbWithoutItemPassive =
+            ctx.probContext.succProb;
+        this.lastContextLog.rand = ctx.probContext.rand;
+        this.itemManager // 引入装备的被动效果
+            .applyProbPassiveEffects(ctx);
+        this.lastContextLog.succProbAfterItemPassive = ctx.probContext.succProb;
         ctx.probContext.succProb = clampProb(ctx.probContext.succProb);
+        this.lastContextLog.succProbFinalClamped = ctx.probContext.succProb;
         const evtResType: EvtResultType = {
             succProb: prob,
             rand,
@@ -428,6 +480,7 @@ export class GameSystem {
                 evtResType.resType = "S";
             }
         }
+        this.lastContextLog.resType = evtResType.resType;
         return evtResType;
     }
 
@@ -445,19 +498,36 @@ export class GameSystem {
         if (ctx.deltaPropContext === undefined) {
             ctx.deltaPropContext = zeroFiveProps();
         }
-        const dc = ctx.deltaPropContext!;
-        dc.H += randRangeArr(evt.getHRange_ChoiceA());
-        dc.L += this.rsltMod.rsltL_ChoiceA(luck, evt, resType);
-        dc.A += this.rsltMod.rsltACM_ChoiceA(luck, crty, evt, "A", resType);
-        dc.M += this.rsltMod.rsltACM_ChoiceA(luck, crty, evt, "M", resType);
-        dc.C += this.rsltMod.rsltC_ChoiceA(
-            ctx.deltaPropContext!,
-            luck,
-            crty,
-            evt,
-            resType,
+        this.lastContextLog.changeProp.itemPassiveContribute = cloneProps(
+            ctx.deltaPropContext,
         );
+        const dc = ctx.deltaPropContext!;
+        const evtContribute: FiveProps = {
+            H: randRangeArr(evt.getHRange_ChoiceA()),
+            L: this.rsltMod.rsltL_ChoiceA(luck, evt, resType),
+            A: this.rsltMod.rsltACM_ChoiceA(luck, crty, evt, "A", resType),
+            M: this.rsltMod.rsltACM_ChoiceA(luck, crty, evt, "M", resType),
+            C: this.rsltMod.rsltC_ChoiceA(
+                ctx.deltaPropContext!,
+                luck,
+                crty,
+                evt,
+                resType,
+            ),
+        };
+        addPropsTo_InPlace(dc, evtContribute);
+        this.lastContextLog.changeProp.evtOriginContribute =
+            cloneProps(evtContribute);
         clampFiveProps_choiceA(dc, evt, this.player.props);
+        this.lastContextLog.changeProp.finallyContributeByClamp =
+            cloneProps(dc);
+        this.lastContextLog.changeProp.rangeLimit = {
+            H: evt.getHRange_ChoiceA(),
+            L: evt.getLRange_ChoiceA(),
+            A: evt.getARange_ChoiceA(),
+            C: evt.getCRange_ChoiceA(),
+            M: evt.getMRange_ChoiceA(),
+        };
         this.logger.info("ChoiceA after clamp", dc.H, dc.L, dc.A, dc.C, dc.M);
         return {
             deltaProps: ctx.deltaPropContext!,
@@ -474,8 +544,10 @@ export class GameSystem {
         const evt = this.allEvents[evtID];
         if (evt.isEqualRight()) {
             this.logger.info("等权重, 转换成A的结算");
+            this.lastContextLog.playerChoice = "B but EqualRight";
             return this.chooseA(evtID, ctx);
         }
+        this.lastContextLog.playerChoice = "B";
         return this.resoluteEvent_ChoiceB(evtID, ctx);
     }
     // 真的选了一个B选项，非等权重
@@ -492,6 +564,7 @@ export class GameSystem {
         // 竞选事件下次一定补偿
         if (evt.getCategory() === EventCategory.JXPY) {
             this.player.setElectionBuff();
+            this.lastContextLog.addElectinoBuffBecauseEscape = true;
             this.logger.info("进行了竞选失败补偿");
         }
         // 使用
@@ -499,37 +572,34 @@ export class GameSystem {
         if (ctx.deltaPropContext === undefined) {
             ctx.deltaPropContext = zeroFiveProps();
         }
+        this.lastContextLog.changeProp.itemPassiveContribute = cloneProps(
+            ctx.deltaPropContext,
+        );
         // H 属性结算
         const newHRange = HLRangeConvert_ChoiceB(
             evt.getHGear_ChoiceB(),
             evt.getHRange_ChoiceA(),
         );
-        ctx.deltaPropContext!.H += randRangeArr(newHRange);
-        // L属性结算
         const newLRange = HLRangeConvert_ChoiceB(
             evt.getLGear_ChoiceB(),
             evt.getLRange_ChoiceA(),
         );
-        ctx.deltaPropContext!.L += randRangeArr(newLRange);
-        // A C M属性结算
-        ctx.deltaPropContext!.A += this.rsltMod.rsltACM_ChoiceB(
-            luck,
-            crty,
-            evt,
-            "A",
-        );
-        ctx.deltaPropContext!.M += this.rsltMod.rsltACM_ChoiceB(
-            luck,
-            crty,
-            evt,
-            "M",
-        );
-        ctx.deltaPropContext!.C += this.rsltMod.rsltC_ChoiceB(
-            ctx.deltaPropContext!,
-            luck,
-            crty,
-            evt,
-        );
+
+        const evtOriginContribute: FiveProps = {
+            H: randRangeArr(newHRange),
+            L: randRangeArr(newLRange),
+            A: this.rsltMod.rsltACM_ChoiceB(luck, crty, evt, "A"),
+            M: this.rsltMod.rsltACM_ChoiceB(luck, crty, evt, "M"),
+            C: this.rsltMod.rsltC_ChoiceB(
+                ctx.deltaPropContext!,
+                luck,
+                crty,
+                evt,
+            ),
+        };
+        addPropsTo_InPlace(ctx.deltaPropContext!, evtOriginContribute);
+        this.lastContextLog.changeProp.evtOriginContribute =
+            cloneProps(evtOriginContribute);
         clampFiveProps_choiceB(
             ctx.deltaPropContext!,
             evt,
@@ -537,17 +607,26 @@ export class GameSystem {
             newLRange,
             this.player.props,
         );
+        this.lastContextLog.changeProp.finallyContributeByClamp = cloneProps(
+            ctx.deltaPropContext!,
+        );
+        this.lastContextLog.changeProp.rangeLimit = {
+            H: newHRange as [number, number],
+            L: newLRange as [number, number],
+            A: evt.getARange_ChoiceB(),
+            C: evt.getCRange_ChoiceB(),
+            M: evt.getMRange_ChoiceB(),
+        };
         this.logger.info("ChoiceB 真·中间随机结果", ctx.deltaPropContext);
-
         return {
             deltaProps: ctx.deltaPropContext!,
             endingText: evt.getEndingB(),
-            resType: "B",
+            resType: evt.isB_Punish() ? "Punish" : "B",
         };
     }
     // 前端展示事件调用该函数，根据信息去绘制展示该活动的页面
     showEvt(evtID: number) {
-        return this.allEvents[evtID].forShow(this.player.gender);
+        return this.allEvents[evtID].forShow(this.player.gender, this.year);
     }
     resoluteEvt(
         evtID: number,
@@ -555,8 +634,17 @@ export class GameSystem {
         index: number,
         ctx: SingleRoundContext,
     ) {
+        this.contextLog.push({
+            evtID,
+            evtTitle: this.allEvents[evtID].forShow(
+                this.player.gender,
+                this.year,
+            ).title,
+            changeProp: {},
+        });
         let res: ResoluteEventRes;
         if (choice === "A") {
+            this.lastContextLog.playerChoice = "A";
             res = this.chooseA(evtID, ctx);
         } else {
             res = this.chooseB(evtID, ctx);
@@ -574,7 +662,7 @@ export class GameSystem {
         this.player.changeProps(res.deltaProps);
         // 事件经历的记录
         this.allEvents[evtID].experienceCount++; // 经历次数
-        if (res.resType !== "F") this.timelineMod.succEventIDs.add(evtID);
+        if (isSuccess(res.resType)) this.timelineMod.succEventIDs.add(evtID);
         // 特殊影响： 党员身份√、毕业去向、升学去向、删除后续活动
         this.allEvents[evtID].specialEffect(res, this.player, this.getYear());
         // 清空lastItemID
@@ -661,4 +749,29 @@ export class GameSystem {
     createEmptyContext(): SingleRoundContext {
         return createEmptyContext(this.player, this);
     }
+    getContextLog() {
+        return this.contextLog;
+    }
+}
+
+export interface ContextLog {
+    evtID: number;
+    evtTitle: string;
+    baseAndUpgrade_prob?: number; //事件基础概率+进阶影响
+    HLAndMainpropEffect_prob?: number; //  人物H L 和主属性对成功概率加成
+    electionBuff?: number; // 由于下次一定，从而在第二次选举具有的buff
+    mustbePostGraduate?: number; // 保研百分百事件产生的buff
+    succProbWithoutItemPassive?: number; // 没有装备被动影响的成功概率（但会有主动技能的影响）
+    succProbAfterItemPassive?: number; // 考虑了装备被动后的成功概率，也会有主动技能的影响
+    rand?: number; // 随机数
+    succProbFinalClamped?: number; // 经过clamp后的成功概率
+    resType?: string; // 选项结果
+    playerChoice?: "A" | "B" | "B but EqualRight"; // 玩家选择
+    changeProp: {
+        itemPassiveContribute?: FiveProps; // 被动对属性变更的影响
+        evtOriginContribute?: FiveProps; // 事件本身对属性变更的影响
+        finallyContributeByClamp?: FiveProps; // 最终影响
+        rangeLimit?: FivePropsRange;
+    };
+    addElectinoBuffBecauseEscape?: boolean; // 由于下次一定增加选举buff
 }

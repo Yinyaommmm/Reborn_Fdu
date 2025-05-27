@@ -50,7 +50,8 @@ export class RandomPickModule {
 
     updateAllPools(allEvents: StandardEvent[]) {
         const currentYear = this.gameSys.getYear();
-        const completedIDs = new Set(this.timeline.getChosedEventIDs());
+        // const completedIDs = new Set(this.timeline.getChosedEventIDs());
+        const completedIDs = this.timeline.succEventIDs;
         const playerProps = this.player.props;
         const mainProp = this.player.mainProp;
 
@@ -65,6 +66,7 @@ export class RandomPickModule {
         // 3. 满足属性要求
         // 4. 尚未做过
         // 5. 不是两个幸运事件
+        // 6. 不是出国读研
         const filteredEvts = allEvents
             .filter((evt) => !evt.isRequired())
             .filter((evt) => evt.getHappenYear().includes(currentYear))

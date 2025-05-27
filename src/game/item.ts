@@ -169,6 +169,7 @@ export class BuddhaFoot extends SimpleItem {
 }
 
 export class MiddlePartPants extends SimpleItem {
+    usageLeft = 0;
     id: ItemID = "Middle Part Pants";
     name = "中分背带裤";
     description = "凭借《哎呦TA干嘛》火爆F大的明星套装";
@@ -378,7 +379,7 @@ export class ItemManager {
         return { result: true, msg: "成功" };
     }
     resetLastItemID() {
-        console.log("本轮使用了主动道具 ", this.lastItemUsedID, "现在清空");
+        // console.log("本轮使用了主动道具 ", this.lastItemUsedID, "现在清空");
         this.lastItemUsedID = undefined;
     }
 

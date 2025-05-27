@@ -369,3 +369,33 @@ export function didMeetRequireProps(
 
     return true;
 }
+
+export function cloneProps(o: FiveProps): FiveProps {
+    return {
+        H: o.H,
+        L: o.L,
+        A: o.A,
+        C: o.C,
+        M: o.M,
+    };
+}
+
+export function addPropsTo_ReturnNew(
+    o: FiveProps,
+    adder: FiveProps,
+): FiveProps {
+    return {
+        H: o.H + adder.H,
+        L: o.L + adder.L,
+        A: o.A + adder.A,
+        C: o.C + adder.C,
+        M: o.M + adder.M,
+    };
+}
+export function addPropsTo_InPlace(o: FiveProps, adder: FiveProps): void {
+    o.H += adder.H;
+    o.L += adder.L;
+    o.A += adder.A;
+    o.C += adder.C;
+    o.M += adder.M;
+}
