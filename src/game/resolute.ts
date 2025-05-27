@@ -5,6 +5,8 @@ import { Logger } from "@/logger/logger";
 
 export class RsltModule {
     private logger: Logger;
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     constructor(private gameSys: GameSystem) {
         // this.logger = new Logger("RsltMod", gameSys.logger.getEnable());
         this.logger = new Logger("RsltMod", false);

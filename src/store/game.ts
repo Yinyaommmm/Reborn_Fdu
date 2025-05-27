@@ -1,11 +1,12 @@
 import { model } from "@/packages/model";
 
+export type EndingType = "BigS" | "S" | "F" | "B" | "Punish";
 export interface GameModel {
     isCardAnimating: boolean;
     isChoiceAnimating: boolean;
     exitDirection: "left" | "right";
     trigger: boolean;
-    endingType: "BigS" | "S" | "F" | "B";
+    endingType: EndingType;
 }
 
 export const $Game = model<GameModel>("GAME", {

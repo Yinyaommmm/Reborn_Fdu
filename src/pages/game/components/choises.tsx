@@ -8,9 +8,22 @@ import Image from "@/components/image";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
-import { $Game } from "@/store/game";
+import { $Game, EndingType } from "@/store/game";
 import { EventCategory } from "@/type/type";
 import { getImagePath } from "@/types/images";
+
+const getPostmark = (et: EndingType) => {
+    switch (et) {
+        case "B":
+            return getImagePath("pass");
+        case "Punish":
+            return getImagePath("punishment");
+        case "F":
+            return getImagePath("failure");
+        default:
+            return getImagePath("success");
+    }
+};
 
 export const GameChoices: FC = () => {
     const { vw: viewportWidth, vh: viewportHeight } = useViewport();
@@ -322,27 +335,19 @@ export const GameChoices: FC = () => {
                             <div className="absolute top-[59%] -right-[2%] h-[2%] w-decorate bg-decorate-border" />
                             <div className="absolute top-[75%] -right-[2%] h-[30%] w-decorate bg-decorate-border" />
                             <div className="absolute top-[25%] left-[2%] h-[80%] w-decorate bg-decorate-border" />
-                            {endingType !== "B" && (
-                                <motion.div
-                                    className="absolute bottom-[-20%] right-[-5%] w-[25%] aspect-square rotate-[-20deg] opacity-70"
-                                    initial={{ scale: 4, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    transition={{
-                                        type: "tween",
-                                        ease: "easeInOut",
-                                        delay: 0.3,
-                                        duration: 0.2,
-                                    }}
-                                >
-                                    <Image
-                                        src={
-                                            endingType === "F"
-                                                ? getImagePath("failure")
-                                                : getImagePath("success")
-                                        }
-                                    />
-                                </motion.div>
-                            )}
+                            <motion.div
+                                className="absolute bottom-[-20%] right-[-5%] w-[25%] aspect-square rotate-[-20deg] opacity-70"
+                                initial={{ scale: 4, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                transition={{
+                                    type: "tween",
+                                    ease: "easeInOut",
+                                    delay: 0.3,
+                                    duration: 0.2,
+                                }}
+                            >
+                                <Image src={getPostmark(endingType)} />
+                            </motion.div>
                         </div>
                     </motion.div>
                 )}
