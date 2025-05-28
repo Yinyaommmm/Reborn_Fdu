@@ -7,6 +7,10 @@ body, html {
     touch-action: none;            /* 阻止手势导致的滚动/缩放 */
     overscroll-behavior: contain;  /* 避免 iOS “回弹” */
     user-select: none;
+    -webkit-touch-callout: none;
+    /* pointer-events:none; */
+    -webkit-user-select:none;
+    -moz-user-select:none;
 }
 
 @theme {

@@ -8,6 +8,7 @@ import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
+import { TalentContent } from "@/types/talent";
 
 export const getPoints = () => {
     const data = $Data.get();
@@ -132,6 +133,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                 <Talent
                     src={getImagePath("icon-l")}
                     value={lucky}
+                    description={TalentContent.lucky}
                     title="幸运"
                     onAdd={() => {
                         if (points > 0 && lucky < 20) {
@@ -148,6 +150,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                 />
                 <Talent
                     src={getImagePath("icon-h")}
+                    description={TalentContent.honesty}
                     value={honesty}
                     title="诚信"
                     onAdd={() => {
@@ -168,6 +171,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                 <Talent
                     src={getImagePath("icon-a")}
                     value={academic}
+                    description={TalentContent.academic}
                     title="学术"
                     onAdd={() => {
                         if (points > 0 && academic < 20) {
@@ -185,6 +189,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                 <Talent
                     src={getImagePath("icon-c")}
                     value={creativity}
+                    description={TalentContent.creativity}
                     title="创造"
                     onAdd={() => {
                         if (points > 0 && creativity < 20) {
@@ -204,6 +209,7 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                 <Talent
                     src={getImagePath("icon-m")}
                     value={management}
+                    description={TalentContent.management}
                     title="管理"
                     onAdd={() => {
                         if (points > 0 && management < 20) {

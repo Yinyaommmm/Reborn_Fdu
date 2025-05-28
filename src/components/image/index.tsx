@@ -93,7 +93,7 @@ const Image: FC<ImageProps> = (props) => {
                 alt={alt}
                 onLoad={handleImageLoad}
                 className={twMerge(
-                    "w-full object-cover",
+                    "w-full object-cover pointer-events-none",
                     square && "aspect-square",
                     isImageLoaded ? "block" : "hidden",
                 )}

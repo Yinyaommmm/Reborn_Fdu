@@ -24,6 +24,13 @@ function App() {
 
     useEffect(() => {
         GameModule.gamestart();
+        const handleContextMenu = (e: Event) => {
+            e.preventDefault();
+        };
+        document.addEventListener("contextmenu", handleContextMenu);
+        return () => {
+            document.removeEventListener("contextmenu", handleContextMenu);
+        };
     }, []);
 
     return (
