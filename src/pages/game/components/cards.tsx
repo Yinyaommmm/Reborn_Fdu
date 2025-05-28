@@ -206,7 +206,12 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                 jumpCount += 1;
             }
             // 更新 UI
-            setCards((prev) => [...prev.slice(jumpCount), ...next]);
+            setCards((prev) => {
+                if (jumpCount > prev.length) {
+                    return [...next.slice(jumpCount - prev.length)];
+                }
+                return [...prev.slice(jumpCount), ...next];
+            });
             console.log("new", ...next, "jump", jumpCount);
         } else {
             setCards((prev) => [...prev.slice(1)]);
