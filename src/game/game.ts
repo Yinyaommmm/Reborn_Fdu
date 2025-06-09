@@ -12,17 +12,18 @@ export class GameModule {
         // 初始化player和system
         const player = new Player();
         player.randomInit(player.props, 50);
-        player.mainProp = "A"; // 玩家选择的方向
+        player.mainProp = "M"; // 玩家选择的方向
         const system = new GameSystem(player, standardEvents);
-        system.addItem(ItemFactory("Misfortune Certificate") as Item);
+        // system.addItem(ItemFactory("Misfortune Certificate") as Item);
         // system.addItem(ItemFactory("Skincare Set") as Item);
         // system.addItem(ItemFactory("Secretary's Letter") as Item);
         // system.addItem(ItemFactory("Academician's Guidebook") as Item);
         // system.addItem(ItemFactory("Thanos Glove") as Item);
         // system.addItem(ItemFactory("Lucky Student ID") as Item);
         // system.addItem(ItemFactory("Buddha Foot") as Item);
-        // system.addItem(ItemFactory("Middle Part Pants") as Item);
+        system.addItem(ItemFactory("Middle Part Pants") as Item);
         console.log("用户装备的所有装备：", system.showAllItem());
+
         // 游戏系统
         while (system.GameContinue) {
             // 创建一个新的结算上下文

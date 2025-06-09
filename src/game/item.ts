@@ -37,13 +37,15 @@ export interface Item {
     cancelEffect?: ActiveEffect;
 
     usageLeft: number;
+
+    hasActiveEffect: boolean;
 }
 export abstract class SimpleItem implements Item {
     abstract id: ItemID;
     abstract name: string;
     abstract description: string;
     usageLeft: number = 1;
-    protected hasActiveEffect: boolean = true;
+    hasActiveEffect: boolean = true;
     targetCategories: EventCategory[] = [];
 
     protected passiveBoost: number = 0;
@@ -175,7 +177,7 @@ export class MiddlePartPants extends SimpleItem {
     description = "凭借《哎呦TA干嘛》火爆F大的明星套装";
     protected passiveBoost = 1;
     targetCategories = [EventCategory.SZTZ];
-    protected hasActiveEffect = false;
+    hasActiveEffect = false;
 }
 
 export class MisfortuneCertificate implements Item {
@@ -184,6 +186,7 @@ export class MisfortuneCertificate implements Item {
     description = "人非命不非，西边不亮东边亮～";
     usageLeft = 0; // 无主动使用效果
     logger: Logger = new Logger("非酋证书", false);
+    hasActiveEffect: boolean = false;
     targetCategories = [
         EventCategory.PYFA,
         EventCategory.CGQY,
@@ -254,6 +257,7 @@ export class SkincareSet implements Item {
     usageLeft = 0; // 无主动使用效果
     logger: Logger = new Logger("护肤套装", true);
     targetCategories = [EventCategory.XYSJ];
+    hasActiveEffect: boolean = false;
     // 概率阶段：所有事件成功率 -2%
     probPassiveEffect = (ctx: SingleRoundContext): void => {
         if (ctx.currentEvent === undefined) return;
