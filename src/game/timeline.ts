@@ -120,7 +120,7 @@ export class TimelineModule {
             start.length + RANDOM_EVTNUM_PERYEAR
         ) {
             evtID = this.getRandomEventID(); // 随机事件
-            this.logger.info("执行随机事件", evtID);
+            this.logger.info("抽取随机事件", evtID);
         } else if (
             this.eventNextIndexInYear <
             start.length + RANDOM_EVTNUM_PERYEAR + end.length
@@ -170,8 +170,8 @@ export class TimelineModule {
         this.randpickMod.updateAllPools(this.gameSys.getAllEvents());
         const evt = this.randpickMod.pickRandomEvent();
         if (evt === null) {
-            this.logger.warn("抽取出了NULL事件,返回开学典礼事件");
-            return 0;
+            this.logger.warn("抽取出了NULL事件,返回出国读研事件");
+            return 65;
         }
         return evt.getID();
     }
@@ -224,5 +224,8 @@ export class TimelineModule {
                 );
             }
         }
+    }
+    public lastFiveRandomEvt() {
+        this.randpickMod.printLastFive();
     }
 }

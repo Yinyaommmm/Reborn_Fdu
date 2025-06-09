@@ -149,7 +149,7 @@ export function formatDialog(
     dialog: string,
     c1: string,
     c2: string,
-    _category: EventCategory,
+    // _category: EventCategory,
 ): React.ReactNode {
     const parts: React.ReactNode[] = [];
 
@@ -398,4 +398,11 @@ export function addPropsTo_InPlace(o: FiveProps, adder: FiveProps): void {
     o.A += adder.A;
     o.C += adder.C;
     o.M += adder.M;
+}
+
+export function reverseMainprop(mainProp: "A" | "M") {
+    if (mainProp === "A") return "M";
+    else {
+        return "A";
+    }
 }

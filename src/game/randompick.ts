@@ -1,8 +1,9 @@
 // RandomPickModule.ts
+import { FixedSizeNumberQueue } from "./fixedarr";
 import { GameSystem, StandardEvent } from "./gamesys";
 import { Player } from "./player";
 import { TimelineModule } from "./timeline";
-import { didMeetRequireProps } from "./util";
+import { didMeetRequireProps, reverseMainprop } from "./util";
 import { EventCategory } from "../type/type";
 
 import { Logger } from "@/logger/logger";
@@ -42,6 +43,7 @@ export class RandomPickModule {
         { pyfa: 0, jxpy: 1, main: 3, nonMain: 2, sztz: 1 },
         { pyfa: 0, jxpy: 2, main: 3, nonMain: 1, sztz: 1 },
     ];
+    private lastFiveEvtIDs: FixedSizeNumberQueue = new FixedSizeNumberQueue(8);
     constructor(player: Player, gameSys: GameSystem, timeline: TimelineModule) {
         this.player = player;
         this.gameSys = gameSys;
@@ -51,7 +53,7 @@ export class RandomPickModule {
     updateAllPools(allEvents: StandardEvent[]) {
         const currentYear = this.gameSys.getYear();
         // const completedIDs = new Set(this.timeline.getChosedEventIDs());
-        const completedIDs = this.timeline.succEventIDs;
+        const completedIDs = this.timeline.succEventIDs; // 现在是选过并且成功了的事件
         const playerProps = this.player.props;
         const mainProp = this.player.mainProp;
 
@@ -86,22 +88,37 @@ export class RandomPickModule {
             .filter(
                 (evt) =>
                     evt.isRepetable ||
-                    !this.timeline.getChosedEventIDs().has(evt.getID()), //
+                    !this.timeline.getChosedEventIDs().has(evt.getID()), // 要么是可重复的，要么是不能重复但是还没选过的
             )
             .filter((evt) => evt.getID() !== 77 && evt.getID() !== 78)
             .filter((evt) => evt.getID() !== 65); // 先把出国读研屏蔽了
 
+        const solelyEvts = [];
         for (const evt of filteredEvts) {
-            // 满足所有条件，分发入池
-            if (evt.getCategory() === EventCategory.PYFA)
-                this.pools.pyfa.push(evt);
-            if (evt.getCategory() === EventCategory.JXPY)
-                this.pools.jxpy.push(evt);
-            if (evt.getCategory() === EventCategory.SZTZ)
-                this.pools.sztz.push(evt);
+            // 满足所有条件，分发入池，优先满足主属性、竞选评优、非主属性
             if (evt.getMainProp() === mainProp) this.pools.main.push(evt);
-            else this.pools.nonMain.push(evt);
+            else if (evt.getCategory() === EventCategory.JXPY)
+                this.pools.jxpy.push(evt);
+            else if (evt.getMainProp() === reverseMainprop(mainProp))
+                this.pools.nonMain.push(evt);
+            else if (evt.getCategory() === EventCategory.PYFA)
+                this.pools.pyfa.push(evt);
+            else if (evt.getCategory() === EventCategory.SZTZ)
+                this.pools.sztz.push(evt);
+            // else this.pools.nonMain.push(evt);  // nonmain事件是随意一个事件
+            else {
+                solelyEvts.push({
+                    id: evt.getID(),
+                    title: evt.getTitle(),
+                    category: evt.getCategory(),
+                    isMain: evt.getMainProp() === mainProp,
+                    isReverseMain:
+                        evt.getMainProp() === reverseMainprop(mainProp),
+                });
+            }
         }
+        if (solelyEvts.length !== 0)
+            console.log("不属于任何一个池子事件们", solelyEvts, "");
     }
 
     pickRandomEvent(): StandardEvent | null {
@@ -118,16 +135,25 @@ export class RandomPickModule {
 
         if (availablePools.length === 0) {
             this.logger.warn("没有一个池子可以抽取，但是仍要强制抽取");
-            console.warn("此时还剩余需求", configThisYear);
+            let s = "此时还剩余需求(池子中数量/还需要的数量)：";
+            for (const key of EventPoolKeyArr) {
+                s += `${configThisYear[key] > 0 ? "【警告】" : ""}${key}事件${this.pools[key].length}/${configThisYear[key]}   `;
+            }
+            console.warn(s);
             return null;
         }
 
         // 随机选择一个池
         const chosenPoolKey = this.randomPickArr(availablePools);
         const chosenPool = this.pools[chosenPoolKey];
-        const pickedEvent = this.weightedRandomPickArr(chosenPool);
+        console.log("dodo");
+        const pickedEvent = this.weightedRandomPickArr(
+            chosenPool,
+            chosenPoolKey,
+        );
         // 更新配置中该池数量，这里不用去动this.pool，因为在外部调用一定会先updateAllpools,会自动更新pool的
         configThisYear[chosenPoolKey]--;
+        this.lastFiveEvtIDs.enqueue(pickedEvent.getID());
         // console.log("picked", pickedEvent);
         return pickedEvent;
     }
@@ -135,7 +161,10 @@ export class RandomPickModule {
     private randomPickArr<T>(arr: T[]): T {
         return arr[Math.floor(Math.random() * arr.length)];
     }
-    private weightedRandomPickArr(poolEvents: StandardEvent[]): StandardEvent {
+    private weightedRandomPickArr(
+        poolEvents: StandardEvent[],
+        poolKey: EventPoolKey,
+    ): StandardEvent {
         // 收集该池子中所有未被选过的二级事件
         const unpicked2ji = poolEvents.filter(
             (evt) => evt.is2ji() && evt.experienceCount === 0,
@@ -159,23 +188,42 @@ export class RandomPickModule {
                 1,
             ); // 1 ~ 3
             const expFactor = Math.max(2 - evt.experienceCount, 0.01); // 超过3次概率大幅
-            return prereqFactor * happenYearFactor * expFactor;
+            const recent5Factor = this.lastFiveEvtIDs.isInQueue(evt.getID())
+                ? 0.001
+                : 1;
+            return prereqFactor * happenYearFactor * expFactor * recent5Factor;
         });
-
         const totalWeight = weights.reduce((acc, w) => acc + w, 0);
         if (totalWeight === 0) {
+            console.warn("不应该走到这里");
             return poolEvents[Math.floor(Math.random() * poolEvents.length)];
         }
 
         const rand = Math.random() * totalWeight;
+
         let cumulative = 0;
+        let finalEvt: StandardEvent;
         for (let i = 0; i < poolEvents.length; i++) {
             cumulative += weights[i];
-            if (rand < cumulative) {
-                return poolEvents[i];
+            if (rand <= cumulative) {
+                finalEvt = poolEvents[i];
+                break;
             }
         }
-
-        return poolEvents[poolEvents.length - 1]; // fallback
+        console.log("last5", this.lastFiveEvtIDs.toArray());
+        if (this.lastFiveEvtIDs.isInQueue(finalEvt!.getID())) {
+            console.warn(
+                `与最近5次产生了重复但是还选${finalEvt!.getID()}，当前池子${poolKey},rand/totalWeight: ${rand}/${totalWeight}具有的事件👉`,
+                poolEvents.map((item, index) => ({
+                    id: item.getID(),
+                    title: item.getTitle(),
+                    factor: weights[index],
+                })),
+            );
+        }
+        return finalEvt!; // fallback
+    }
+    public printLastFive() {
+        this.lastFiveEvtIDs.print();
     }
 }

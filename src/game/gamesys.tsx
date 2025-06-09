@@ -102,6 +102,9 @@ export class StandardEvent {
     getID() {
         return this._readableEvt.id;
     }
+    getTitle() {
+        return this._readableEvt.title;
+    }
     getEndingB(): string {
         return this._readableEvt.endingB;
     }
@@ -670,16 +673,21 @@ export class GameSystem {
         return res;
     }
     nextEvt(ctx: SingleRoundContext) {
-        // TODO: 这里需要引入装备被动
         this.itemManager.applyHappenPassiveEffects(this.timelineMod);
         const nextRes = this.timelineMod.getNextEvent(ctx);
         return nextRes;
     }
     requiredEvtJump(evtID: number) {
         const evt = this.allEvents[evtID];
+        // 65事件都直接滚蛋
+        if (evtID === 65) {
+            this.logger.info(`返回事件65说明抽不出事件,直接跳过`);
+            return true;
+        }
         if (evt.isRequired() === false) {
             return false;
         }
+
         // 基础条件的跳过判断
         if (
             evt
@@ -751,6 +759,9 @@ export class GameSystem {
     }
     getContextLog() {
         return this.contextLog;
+    }
+    lastFiveRandEvt() {
+        this.timelineMod.lastFiveRandomEvt();
     }
 }
 
