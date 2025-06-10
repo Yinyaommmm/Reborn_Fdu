@@ -2,6 +2,7 @@ import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 
 import { ToolDisplay } from "./tool-display";
+import { ChoiceUp } from "./up";
 import { CardColorMap } from "../utils/colors";
 
 import Image from "@/components/image";
@@ -54,6 +55,7 @@ export const GameChoices: FC = () => {
     const isAnimating = $Game.use((state) => state.isCardAnimating);
     const endingType = $Game.use((state) => state.endingType);
     const toolId = $Data.use((state) => state.toolId);
+    const toolUsing = $Data.use((state) => state.toolUsing);
 
     const handleSwipeComplete = () => {
         setShowEnding(true);
@@ -220,6 +222,11 @@ export const GameChoices: FC = () => {
                         </div>
                         <div className="bg-[#79B] text-white h-full w-[60vw] p-2 flex items-center text-sm">
                             {choiceA}
+                        </div>
+                        <div className="absolute w-[40%] top-[-45%] left-[-5%]">
+                            <AnimatePresence mode="sync">
+                                {toolUsing && <ChoiceUp />}
+                            </AnimatePresence>
                         </div>
                     </motion.div>
                 )}

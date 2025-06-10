@@ -4,6 +4,7 @@ import { FC, PointerEventHandler, useRef, useState } from "react";
 import Image from "@/components/image";
 import { gameModule } from "@/packages/game-module";
 import { tools } from "@/pages/birth/types/props";
+import { $Data } from "@/store/data";
 
 interface ToolDisplayProps {
     toolId: number;
@@ -47,8 +48,14 @@ export const ToolDisplay: FC<ToolDisplayProps> = (props) => {
             if (left > 0) {
                 if (!use) {
                     gameModule.useTool();
+                    $Data.update("use tool", (draft) => {
+                        draft.toolUsing = true;
+                    });
                 } else {
                     gameModule.unUseTool();
+                    $Data.update("use tool", (draft) => {
+                        draft.toolUsing = false;
+                    });
                 }
                 onUse?.(!use);
                 setUse((prev) => !prev);
