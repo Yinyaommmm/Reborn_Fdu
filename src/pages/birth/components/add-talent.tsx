@@ -25,7 +25,15 @@ export const getPoints = () => {
 export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
     const [points, setPoints] = useState<number>(getPoints());
-    const [sex, setSex] = useState<number>(1);
+    const sex = $Data.use((state) => state.sex);
+    const setSex = (updater: SetStateAction<number>) => {
+        $Data.update("update sex", (draft) => {
+            draft.sex =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.sex)
+                    : updater;
+        });
+    };
     const [prefer, setPrefer] = useState<number>(1);
     const honesty = $Data.use((state) => state.honesty);
     const setHonesty = (updater: SetStateAction<number>) => {
@@ -84,7 +92,9 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative pt-[10%] h-[33%] px-[8%] w-full flex justify-between gap-4">
                 <Image
                     className="p-1 bg-[#F6F6F2] h-full aspect-[3/4]"
-                    src={getImagePath("portrait-girl")}
+                    src={getImagePath(
+                        sex === 0 ? "portrait-male" : "portrait-female",
+                    )}
                     adjustHeight
                     adjustWidth={false}
                 />

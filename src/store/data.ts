@@ -16,6 +16,7 @@ export interface DataModel {
     gradDestination: GRADDESTINATION;
     semester: number;
     toolUsing: boolean;
+    sex: number;
 }
 
 export const $Data = model<DataModel>("DATA", {
@@ -32,4 +33,5 @@ export const $Data = model<DataModel>("DATA", {
     gradDestination: "灵活就业",
     semester: 1,
     toolUsing: false,
+    sex: 1,
 });
