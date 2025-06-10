@@ -89,7 +89,7 @@ export const ToolDisplay: FC<ToolDisplayProps> = (props) => {
             <div className="aspect-square" style={{ height }}>
                 <Image src={tools[toolId].src} adjustHeight adjustWidth></Image>
             </div>
-            {left > 0 && (
+            {tools[toolId].active !== undefined && (
                 <div className="absolute bottom-0 right-0 rounded-full bg-white shadow-2xl h-5 w-5 flex items-center justify-center text-sm font-bold font-cursive">
                     {left}
                 </div>
