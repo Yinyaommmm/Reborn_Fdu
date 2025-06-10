@@ -74,6 +74,7 @@ const toolId2itemId = (toolId: number): ItemID => {
 const init = () => {
     player.randomInit(data2props($Data.get()), getPoints());
     player.setGender($Data.get().sex === 0 ? "男" : "女");
+    player.mainProp = $Data.get().prefer === 0 ? "A" : "M";
     $Data.update("player random init", (draft) => {
         draft.honesty = player.props.H;
         draft.lucky = player.props.L;

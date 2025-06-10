@@ -34,7 +34,15 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     : updater;
         });
     };
-    const [prefer, setPrefer] = useState<number>(1);
+    const prefer = $Data.use((state) => state.prefer);
+    const setPrefer = (updater: SetStateAction<number>) => {
+        $Data.update("update prefer", (draft) => {
+            draft.prefer =
+                typeof updater === "function"
+                    ? (updater as (prev: number) => number)(draft.prefer)
+                    : updater;
+        });
+    };
     const honesty = $Data.use((state) => state.honesty);
     const setHonesty = (updater: SetStateAction<number>) => {
         $Data.update("update honesty", (draft) => {
