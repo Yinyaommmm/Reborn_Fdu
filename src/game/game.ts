@@ -11,8 +11,9 @@ export class GameModule {
         const standardEvents = readablEvents.map((e) => new StandardEvent(e));
         // 初始化player和system
         const player = new Player();
-        player.randomInit(player.props, 50);
+        player.randomInit(player.props, 70);
         player.mainProp = "A"; // 玩家选择的方向
+        console.log("玩家初始属性", player.props);
         const system = new GameSystem(player, standardEvents);
         // system.addItem(ItemFactory("Misfortune Certificate") as Item);
         // system.addItem(ItemFactory("Skincare Set") as Item);
@@ -34,14 +35,13 @@ export class GameModule {
             const shouldJump = system.requiredEvtJump(nextRes.evtID);
             // console.log("使用次数", system.showAllItem()[0].usageLeft);
             if (!shouldJump) {
-                console.log("最近至多5次有效的抽取事件ID:");
-                system.lastFiveRandEvt();
                 console.log(
                     `${system.getYear()}-${nextRes.indexInYear}`,
                     // system.showEvt(nextRes.evtID),
                 );
                 // 根据用户选择和‘上下文’进行结算，这里模拟使用70%概率选A
-                const choice: "A" | "B" = Math.random() < 0.7 ? "A" : "B";
+                let choice: "A" | "B" = Math.random() < 0.8 ? "A" : "B";
+                if (nextRes.evtID === 27) choice = "A";
                 // const useRes = system.useItem(
                 //     "Secretary's Letter",
                 //     nextRes.ctx,

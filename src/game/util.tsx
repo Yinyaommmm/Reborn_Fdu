@@ -1,6 +1,7 @@
 import React from "react";
 
 import { FiveProps, StandardEvent } from "./gamesys";
+import { TimelineModule } from "./timeline";
 
 import { Logger } from "@/logger/logger";
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
@@ -405,4 +406,64 @@ export function reverseMainprop(mainProp: "A" | "M") {
     else {
         return "A";
     }
+}
+
+export function filterEvts(
+    allEvents: StandardEvent[],
+    currentYear: number,
+    completedIDs: Set<number>,
+    playerProps: FiveProps,
+    timeline: TimelineModule,
+    debug: boolean = false,
+) {
+    const log = (label: string, events: StandardEvent[]) => {
+        if (debug) {
+            console.log(
+                `[${label}] 剩余事件数: ${events.length}`,
+                events.map((e) => e.getID()),
+            );
+        }
+    };
+
+    // 1. 非必选事件
+    const step1 = allEvents.filter((evt) => !evt.isRequired());
+    log("Step 1 - 非必选事件", step1);
+
+    // 2. 年份符合
+    const step2 = step1.filter((evt) =>
+        evt.getHappenYear().includes(currentYear),
+    );
+    log("Step 2 - 年份符合", step2);
+
+    // 3. 前置条件都满足
+    const step3 = step2.filter((evt) =>
+        evt.getPrerequisites().every((prereq) => completedIDs.has(prereq)),
+    );
+    log("Step 3 - 前置条件满足", step3);
+
+    // 4. 属性符合
+    const step4 = step3.filter((evt) =>
+        didMeetRequireProps(evt, playerProps, null),
+    );
+    log("Step 4 - 属性条件满足", step4);
+
+    // 5. 可重复 或 未曾选择
+    const step5 = step4.filter(
+        (evt) =>
+            // evt.isRepetable || !timeline.getChosedEventIDs().has(evt.getID()),
+            !timeline.getChosedEventIDs().has(evt.getID()),
+    );
+    log("Step 5 - 可重复或未选过", step5);
+
+    // 6. 排除 ID 77 和 78
+    const step6 = step5.filter(
+        (evt) => evt.getID() !== 77 && evt.getID() !== 78,
+    );
+    log("Step 6 - 去除 ID 77 和 78", step6);
+
+    // 7. 排除 ID 65（出国读研）
+    const step7 = step6.filter((evt) => evt.getID() !== 65);
+    log("Step 7 - 去除 ID 65", step7);
+    console.log("此时人物属性", playerProps);
+    return step7;
 }

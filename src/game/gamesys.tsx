@@ -320,7 +320,10 @@ export class StandardEvent {
             player.gradDestination = "企业";
             this.logger.info(20 + "触发企业");
         }
-        if (this.getID() === 27 && resoluteRes.resType === "B") {
+        if (
+            this.getID() === 27 &&
+            (resoluteRes.resType === "B" || resoluteRes.resType === "Punish")
+        ) {
             // 期末
             player.gradDestination = "退学";
             this.logger.info(27 + "触发退学");

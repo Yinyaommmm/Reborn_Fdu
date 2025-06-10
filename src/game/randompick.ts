@@ -3,7 +3,7 @@ import { FixedSizeNumberQueue } from "./fixedarr";
 import { GameSystem, StandardEvent } from "./gamesys";
 import { Player } from "./player";
 import { TimelineModule } from "./timeline";
-import { didMeetRequireProps, reverseMainprop } from "./util";
+import { filterEvts, reverseMainprop } from "./util";
 import { EventCategory } from "../type/type";
 
 import { Logger } from "@/logger/logger";
@@ -69,29 +69,14 @@ export class RandomPickModule {
         // 4. 尚未做过
         // 5. 不是两个幸运事件
         // 6. 不是出国读研
-        const filteredEvts = allEvents
-            .filter((evt) => !evt.isRequired())
-            .filter((evt) => evt.getHappenYear().includes(currentYear))
-            .filter((evt) =>
-                evt
-                    .getPrerequisites()
-                    .every((prereq) => completedIDs.has(prereq)),
-            )
-            .filter((evt) =>
-                didMeetRequireProps(
-                    evt,
-                    playerProps,
-                    // this.logger,
-                    null,
-                ),
-            )
-            .filter(
-                (evt) =>
-                    evt.isRepetable ||
-                    !this.timeline.getChosedEventIDs().has(evt.getID()), // 要么是可重复的，要么是不能重复但是还没选过的
-            )
-            .filter((evt) => evt.getID() !== 77 && evt.getID() !== 78)
-            .filter((evt) => evt.getID() !== 65); // 先把出国读研屏蔽了
+        const filteredEvts = filterEvts(
+            allEvents,
+            currentYear,
+            completedIDs,
+            playerProps,
+            this.timeline,
+            false,
+        );
 
         const solelyEvts = [];
         for (const evt of filteredEvts) {
@@ -140,6 +125,9 @@ export class RandomPickModule {
                 s += `${configThisYear[key] > 0 ? "【警告】" : ""}${key}事件${this.pools[key].length}/${configThisYear[key]}   `;
             }
             console.warn(s);
+            console.log("最近至多8次有效的抽取事件ID:");
+            this.lastFiveEvtIDs.print();
+
             return null;
         }
 
