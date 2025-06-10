@@ -15,6 +15,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
     );
     const [passive, setPassive] = useState<string | undefined>(undefined);
     const [active, setActive] = useState<string | undefined>(undefined);
+    const toolId = $Data.use((state) => state.toolId);
 
     return (
         <motion.div
@@ -33,7 +34,10 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative mt-[8%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
                 {tools.slice(0, 4).map((tool, index) => (
                     <Image
-                        className="relative h-full aspect-square bg-[#F6F6F2]"
+                        className={twMerge(
+                            "relative h-full aspect-square bg-[#F6F6F2]",
+                            toolId !== index ? "grayscale-75" : "grayscale-0",
+                        )}
                         src={tool.src}
                         adjustHeight
                         adjustWidth={false}
@@ -55,7 +59,12 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
             <div className="relative mt-[5%] px-[8%] w-full box-border flex items-center justify-evenly h-[12%] gap-4">
                 {tools.slice(4, 8).map((tool, index) => (
                     <Image
-                        className="relative h-full aspect-square bg-[#F6F6F2]"
+                        className={twMerge(
+                            "relative h-full aspect-square bg-[#F6F6F2]",
+                            toolId !== index + 4
+                                ? "grayscale-75"
+                                : "grayscale-0",
+                        )}
                         src={tool.src}
                         adjustHeight
                         adjustWidth={false}
