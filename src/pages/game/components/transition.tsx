@@ -85,7 +85,6 @@ export const CardsTransition: FC<{ ref: Ref<CardsTransitionHandler> }> = ({
                             >
                                 <div className="text-xl">Sep.</div>
                                 <div className="text-2xl">
-                                    {" "}
                                     {semester2Title(semester - 1)}
                                 </div>
                             </motion.div>

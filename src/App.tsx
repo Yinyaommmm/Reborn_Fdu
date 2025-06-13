@@ -21,6 +21,10 @@ function App() {
         0.6,
         0.5,
     );
+    const {
+        trigger: cardsTrigger,
+        TransitionComponent: TransitionComponentCards,
+    } = useCircularTransition(undefined, 0.6, 2, "cards");
 
     useEffect(() => {
         GameModule.gamestart();
@@ -36,8 +40,9 @@ function App() {
     return (
         <>
             {TransitionComponent}
+            {TransitionComponentCards}
             {route === "game" && <Game trigger={trigger} />}
-            {route === "birth" && <Birth trigger={trigger} />}
+            {route === "birth" && <Birth trigger={cardsTrigger} />}
             {route === "launch" && <Launch trigger={trigger} />}
             {route === "graduation" && <Graduation trigger={trigger} />}
             {route === "after" && <After />}

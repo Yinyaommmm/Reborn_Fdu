@@ -1,4 +1,4 @@
-import { HTMLMotionProps, motion } from "motion/react";
+import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { FC, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
@@ -6,9 +6,10 @@ import { tools } from "../types/props";
 
 import Image from "@/components/image";
 import { $Data } from "@/store/data";
+import { getImagePath } from "@/types/images";
 
 export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
-    const { className, ...rest } = props;
+    const { className, onClick, onTouchEnd, ...rest } = props;
     const toolId = $Data.use((state) => state.toolId);
     const chosenTool = toolId ? tools[toolId] : undefined;
     const [name, setName] = useState(chosenTool?.name ?? "请选择道具");
@@ -109,6 +110,26 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
                     </div>
                 </div>
             </div>
+            <AnimatePresence>
+                {toolId !== undefined && (
+                    <motion.div
+                        className="absolute bottom-0 left-0 h-[12%] w-full flex justify-end pr-6 pb-4"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                        <Image
+                            className="h-full"
+                            src={getImagePath("card-go")}
+                            square={false}
+                            adjustHeight={true}
+                            adjustWidth={false}
+                            onClick={onClick}
+                            onTouchEnd={onTouchEnd}
+                        />
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 };

@@ -32,7 +32,7 @@ export const $Data = model<DataModel>("DATA", {
     ending: "",
     eduDestination: "本科",
     gradDestination: "灵活就业",
-    semester: 1,
+    semester: 0,
     toolUsing: false,
     sex: 1,
     prefer: 1,

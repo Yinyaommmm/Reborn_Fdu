@@ -2,16 +2,20 @@ import { HTMLMotionProps, motion } from "motion/react";
 import { FC } from "react";
 
 import Image from "@/components/image";
+import { useViewport } from "@/hooks/useViewPort";
+import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
 
 export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
     const { ...rest } = props;
+    const { vw, vh } = useViewport();
+    const sex = $Data.use((state) => state.sex);
 
     return (
         <motion.div
-            className="fixed bottom-0 right-0 bg-[#9DCE9C] aspect-[16/10] h-[22vh]"
+            className="fixed bg-[#9DCE9C] aspect-[16/10] h-[24vh] translate-x-1/2 translate-y-1/2"
             initial={{ bottom: -200, right: 200, rotate: 0 }}
-            animate={{ bottom: 0, right: -50, rotate: 8 }}
+            animate={{ bottom: vh / 2, right: vw / 2, rotate: 8 }}
             transition={{ type: "spring", duration: 0.8 }}
             {...rest}
         >
@@ -27,7 +31,9 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
                 <div className="p-1 w-[30%]">
                     <Image
                         className="relative p-1 bg-white h-full aspect-[3/4]"
-                        src={getImagePath("portrait-girl")}
+                        src={getImagePath(
+                            sex === 0 ? "portrait-male" : "portrait-female",
+                        )}
                         adjustHeight
                         adjustWidth={false}
                         square={false}
@@ -44,7 +50,8 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
                         学号: <span className="ml-2">52019050514</span>
                     </div>
                     <div>
-                        性别: <span className="ml-2">女</span>
+                        性别:{" "}
+                        <span className="ml-2">{sex === 0 ? "男" : "女"}</span>
                     </div>
                 </div>
             </div>

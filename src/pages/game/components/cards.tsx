@@ -36,6 +36,8 @@ interface GameCardsProps {
 
 export const semester2Title = (semester: number) => {
     switch (semester) {
+        case 0:
+            return "报道";
         case 1:
             return "大一";
         case 2:
