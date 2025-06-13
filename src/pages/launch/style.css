@@ -1,0 +1,14 @@
+.clip-1 {
+    clip-path: polygon(0.8% 0.5%, 99.2% 0.5%, 99.2% 22.2%, 0.8% 33.1%);
+    overflow: hidden;
+}
+
+.clip-2 {
+    clip-path: polygon(0.8% 37.2%, 99.2% 26.2%, 99.2% 57.7%, 0.8% 70.1%);
+    overflow: hidden;
+}
+
+.clip-3 {
+    clip-path: polygon(0.8% 74.2%, 99.2% 61.8%, 99.2% 99.5%, 0.8% 99.5%);
+    overflow: hidden;
+}

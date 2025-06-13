@@ -1,10 +1,6 @@
-// import { useEffect } from "react";
-
 import { useEffect } from "react";
 
 import "./App.css";
-// import { GameModule } from "./game/game";
-import { GameModule } from "./game/game";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
@@ -28,7 +24,7 @@ function App() {
     } = useCircularTransition(undefined, 0.6, 2, "cards");
 
     useEffect(() => {
-        GameModule.gamestart();
+        // GameModule.gamestart();
         const handleContextMenu = (e: Event) => {
             e.preventDefault();
         };
