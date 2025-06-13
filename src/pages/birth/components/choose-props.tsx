@@ -9,13 +9,18 @@ import { $Data } from "@/store/data";
 
 export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
-    const [name, setName] = useState("请选择道具");
-    const [description, setDescription] = useState<string | undefined>(
-        undefined,
-    );
-    const [passive, setPassive] = useState<string | undefined>(undefined);
-    const [active, setActive] = useState<string | undefined>(undefined);
     const toolId = $Data.use((state) => state.toolId);
+    const chosenTool = toolId ? tools[toolId] : undefined;
+    const [name, setName] = useState(chosenTool?.name ?? "请选择道具");
+    const [description, setDescription] = useState<string | undefined>(
+        chosenTool?.description,
+    );
+    const [passive, setPassive] = useState<string | undefined>(
+        chosenTool?.passive,
+    );
+    const [active, setActive] = useState<string | undefined>(
+        chosenTool?.active,
+    );
 
     return (
         <motion.div
