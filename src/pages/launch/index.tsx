@@ -97,7 +97,9 @@ export const Launch: FC<LaunchProps> = (props) => {
                             <motion.div
                                 className="absolute h-[2.09%] top-[81%] left-[14%] flex items-center overflow-hidden"
                                 initial={{ width: "0%" }}
-                                animate={{ width: `${progress}%` }}
+                                animate={{
+                                    width: `${(73.7 / 100) * progress}%`,
+                                }}
                                 exit={{ opacity: 0, y: -20 }}
                                 key="launch-progress"
                             >
