@@ -20,7 +20,7 @@ export interface LaunchProps {
 export const Launch: FC<LaunchProps> = (props) => {
     const { trigger } = props;
     const debug = $Debug.use((state) => state.isDebug);
-    const [chosenKeys, chosenSex] = UseRandomCG();
+    const { chosenKeys, chosenSex } = UseRandomCG();
 
     const fontFinished = useFontLoader("CursiveFont", "font/cursive-font.ttf");
     const {

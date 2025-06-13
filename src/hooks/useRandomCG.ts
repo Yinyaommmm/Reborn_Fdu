@@ -18,7 +18,7 @@ const IMAGE_KEYS = [
     "event/special/129-校企合作实习",
 ];
 
-export const UseRandomCG = () => {
+export const UseRandomCG = (): { chosenKeys: string[]; chosenSex: number } => {
     const chosenKeys = useMemo(() => {
         const keys = [...IMAGE_KEYS];
         const result: string[] = [];
@@ -34,5 +34,5 @@ export const UseRandomCG = () => {
         return idx;
     }, []);
 
-    return [chosenKeys, chosenSex];
+    return { chosenKeys, chosenSex };
 };
