@@ -9,10 +9,13 @@ import { Dev } from "./pages/dev";
 import Game from "./pages/game";
 import { Graduation } from "./pages/graduation";
 import { Launch } from "./pages/launch";
+import { $Debug } from "./store/debug";
 import { $UI } from "./store/ui";
 
 function App() {
     const route = $UI.use((state) => state.route);
+    const debug = $Debug.use((state) => state.isDebug);
+
     const { trigger, TransitionComponent } = useCircularTransition(
         undefined,
         0.6,
@@ -36,6 +39,19 @@ function App() {
 
     return (
         <>
+            <div className="fixed top-0 left-0 flex items-center z-[99998]">
+                Debug:{" "}
+                <input
+                    className="ml-2"
+                    type="checkbox"
+                    checked={debug}
+                    onChange={(e) => {
+                        $Debug.update("trigger debug", (draft) => {
+                            draft.isDebug = e.target.checked;
+                        });
+                    }}
+                />
+            </div>
             {TransitionComponent}
             {TransitionComponentCards}
             <Debug />

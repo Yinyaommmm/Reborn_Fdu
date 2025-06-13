@@ -8,7 +8,6 @@ import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFontLoader } from "@/hooks/useFontLoader";
 import { useImagePreloader } from "@/hooks/useImagePreloader";
 import { UseRandomCG } from "@/hooks/useRandomCG";
-import { $Debug } from "@/store/debug";
 import { getImagePath, ImageUrls } from "@/types/images";
 
 import "./style.css";
@@ -19,7 +18,6 @@ export interface LaunchProps {
 
 export const Launch: FC<LaunchProps> = (props) => {
     const { trigger } = props;
-    const debug = $Debug.use((state) => state.isDebug);
     const { chosenKeys, chosenSex } = UseRandomCG();
 
     const fontFinished = useFontLoader("CursiveFont", "font/cursive-font.ttf");
@@ -37,19 +35,6 @@ export const Launch: FC<LaunchProps> = (props) => {
 
     return (
         <div className="w-screen h-screen flex items-center justify-center">
-            <div className="fixed top-0 left-0 flex items-center">
-                Debug:{" "}
-                <input
-                    className="ml-2"
-                    type="checkbox"
-                    checked={debug}
-                    onChange={(e) => {
-                        $Debug.update("trigger debug", (draft) => {
-                            draft.isDebug = e.target.checked;
-                        });
-                    }}
-                />
-            </div>
             <div className="w-full h-full px-3 flex items-center">
                 <Image
                     className="relative"
