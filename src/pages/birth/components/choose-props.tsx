@@ -9,7 +9,7 @@ import { $Data } from "@/store/data";
 
 export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
-    const [name, setName] = useState("暂未选择");
+    const [name, setName] = useState("请选择道具");
     const [description, setDescription] = useState<string | undefined>(
         undefined,
     );

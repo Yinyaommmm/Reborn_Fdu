@@ -243,6 +243,9 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     }}
                 />
             </div>
+            <div className="font-cursive w-full flex justify-end text-sm pr-2">
+                未主动加点将随机分配
+            </div>
         </motion.div>
     );
 };
