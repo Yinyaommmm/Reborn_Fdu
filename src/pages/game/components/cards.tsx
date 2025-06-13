@@ -193,6 +193,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         // 卡片颜色相关
         $Data.update("set ending card", (draft) => {
             draft.endingCard = draft.cards[0];
+            draft.toolUsing = false;
         });
 
         // 抽卡
