@@ -1,7 +1,7 @@
-import { motion } from "motion/react";
 import { FC, useEffect, useState } from "react";
 
-import Image from "@/components/image";
+import { HeaderIcon } from "./header-icon";
+
 import { useSequenceAnimation } from "@/hooks/useSequenceAnimation";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
@@ -78,77 +78,14 @@ const GameHeader: FC = () => {
         <div className="relative w-full h-[9vh] bg-[#EBE6D3] z-50 flex items-center justify-evenly">
             {[honesty, lucky, academic, creativity, management].map(
                 (item, index) => (
-                    <div
+                    <HeaderIcon
                         key={`header-${index}`}
-                        className="flex flex-col items-center gap-0.5"
-                    >
-                        <div
-                            className="relative w-[10vw] h-[10vw] bg-center bg-cover"
-                            style={{
-                                backgroundImage: `url(${iconImages[index]})`,
-                            }}
-                        >
-                            <div className="absolute right-0 bottom-0 w-[55%] h-[55%] translate-x-[85%]">
-                                <Image src={levelAnimations[index].frame} />
-                            </div>
-                        </div>
-                        <div className="relative w-[12vw] h-2">
-                            <div
-                                className="absolute border-decorate h-full w-full overflow-hidden"
-                                style={{ borderColor: progressColor[index] }}
-                            >
-                                <motion.div
-                                    className="relative h-full"
-                                    initial={{
-                                        width: 0,
-                                    }}
-                                    style={{
-                                        backgroundColor: progressColor[index],
-                                    }}
-                                    animate={{
-                                        width: `${((item % 10) / 10) * 100}%`,
-                                    }}
-                                >
-                                    <div
-                                        className="absolute h-0 left-full"
-                                        style={{
-                                            borderTop: `6px solid ${progressColor[index]}`,
-                                            borderRight: `6px solid transparent`,
-                                        }}
-                                    />
-                                </motion.div>
-                            </div>
-                            <div className="absolute top-px left-0.5 border-decorate border-decorate-border w-[12vw] h-2 overflow-hidden">
-                                <motion.div
-                                    className="absolute bg-black h-decorate w-2.5 rotate-135 origin-top-left"
-                                    initial={{
-                                        left: 0,
-                                    }}
-                                    animate={{
-                                        left: `calc(${((item % 10) / 10) * 100}% + 6px)`,
-                                    }}
-                                />
-                                <motion.div
-                                    className="absolute bg-black h-decorate w-[5px] rotate-135 origin-top-left"
-                                    initial={{
-                                        left: 0,
-                                    }}
-                                    animate={{
-                                        left: `calc(${((item % 10) / 10) * 100}% - 2px)`,
-                                    }}
-                                />
-                                <motion.div
-                                    className="absolute bg-black top-0.5 h-decorate w-[5px] rotate-135 origin-top-left"
-                                    initial={{
-                                        left: 0,
-                                    }}
-                                    animate={{
-                                        left: `calc(${((item % 10) / 10) * 100}% - 8px)`,
-                                    }}
-                                />
-                            </div>
-                        </div>
-                    </div>
+                        iconImages={iconImages}
+                        index={index}
+                        levelAnimations={levelAnimations}
+                        progressColor={progressColor}
+                        item={item}
+                    />
                 ),
             )}
         </div>
