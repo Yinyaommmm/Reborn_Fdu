@@ -11,6 +11,15 @@ export const getImagePath = (name: string) =>
     `${ImageType}/${name}.${ImageType}`;
 
 export const ImageUrls = [
+    getImagePath("launch-border"),
+    getImagePath("launch-bar"),
+    getImagePath("launch-female"),
+    getImagePath("launch-fly"),
+    getImagePath("launch-logo"),
+    getImagePath("launch-male"),
+    getImagePath("launch-progress"),
+    getImagePath("launch-star"),
+    getImagePath("launch-start"),
     getImagePath("background"),
     getImagePath("calender"),
     getImagePath("card-decoration"),
@@ -37,15 +46,6 @@ export const ImageUrls = [
     getImagePath("light"),
     getImagePath("wall-calender"),
     getImagePath("board"),
-    getImagePath("launch-border"),
-    getImagePath("launch-bar"),
-    getImagePath("launch-female"),
-    getImagePath("launch-fly"),
-    getImagePath("launch-logo"),
-    getImagePath("launch-male"),
-    getImagePath("launch-progress"),
-    getImagePath("launch-star"),
-    getImagePath("launch-start"),
     ...tools.map((tool) => getImagePath(`tools/${tool}`)),
     ...levels
         .flatMap((level) => icons.map((icon) => `${level}/${icon}-${level}`))
