@@ -8,6 +8,7 @@ import { GameModule } from "./game/game";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
+import { Debug } from "./pages/debug";
 import { Dev } from "./pages/dev";
 import Game from "./pages/game";
 import { Graduation } from "./pages/graduation";
@@ -41,6 +42,7 @@ function App() {
         <>
             {TransitionComponent}
             {TransitionComponentCards}
+            <Debug />
             {route === "game" && <Game trigger={trigger} />}
             {route === "birth" && <Birth trigger={cardsTrigger} />}
             {route === "launch" && <Launch trigger={trigger} />}

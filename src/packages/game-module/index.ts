@@ -274,6 +274,14 @@ const toolAvailable = () => {
     }
 };
 
+const debug = () => {
+    if (system) {
+        return system.lastContextLog;
+    } else {
+        return undefined;
+    }
+};
+
 export const gameModule = {
     init,
     equip,
@@ -293,4 +301,5 @@ export const gameModule = {
     useTool,
     unUseTool,
     toolAvailable,
+    debug,
 };
