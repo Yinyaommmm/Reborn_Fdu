@@ -5,7 +5,7 @@ import { TimelineModule } from "./timeline";
 
 import { Logger } from "@/logger/logger";
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
-import { EventCategory } from "@/type/type";
+// import { EventCategory } from "@/type/type";
 
 // export function timeLogger<T extends (...args: unknown[]) => unkn>(
 //     _target: object,

@@ -255,7 +255,7 @@ export class StandardEvent {
                 }
             }
 
-            e.mainText = formatDialog(tmpMainText, c1, c2, this.getCategory());
+            e.mainText = formatDialog(tmpMainText, c1, c2);
             if (this.getCategory() === EventCategory.SZTZ) {
                 e.choiceAText = `选择${c1}`;
                 e.choiceBText = `选择${c2}`;
