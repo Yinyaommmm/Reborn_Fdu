@@ -67,6 +67,8 @@ export class GameModule {
                 //         [nextRes.evtID].forShow(player.gender, system.getYear())
                 //         .mainText,
                 // );
+            } else {
+                console.log("跳过事件", nextRes.evtID);
             }
             //再执行学年移动
             if (nextRes.shouldMoveToNextYear) {

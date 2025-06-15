@@ -65,12 +65,12 @@ export const zeroFiveProps: () => FiveProps = () => {
 export interface EvtResultType {
     succProb: number;
     rand: number;
-    resType: "BigS" | "S" | "F";
+    resType: "BigS" | "S" | "F" | "Pass";
 }
 export interface ResoluteEventRes {
     deltaProps: FiveProps;
     endingText: string;
-    resType: "BigS" | "S" | "F" | "B" | "Punish"; // 引入B选项;
+    resType: "BigS" | "S" | "F" | "B" | "Punish" | "Pass"; // 引入B选项;
 }
 
 export class EventForShow {
@@ -133,7 +133,7 @@ export class StandardEvent {
     is2ji() {
         return this._readableEvt.repalceDialog.length !== 0;
     }
-    getEndingA(resType: "BigS" | "S" | "F"): string {
+    getEndingA(resType: "BigS" | "S" | "F" | "Pass"): string {
         const ending = this._readableEvt.endingA;
         if (resType === "BigS") {
             if (ending.length < 3) {
@@ -486,6 +486,13 @@ export class GameSystem {
                 evtResType.resType = "S";
             }
         }
+        if (
+            [13, 21, 22, 27, 88, 124].map((i) => i - 1).includes(evtID) &&
+            evtResType.resType === "F"
+        ) {
+            // 这里是对特殊事件的判定-1是为了读取的与excel的不一样，失败为Pass
+            evtResType.resType = "Pass";
+        }
         this.lastContextLog.resType = evtResType.resType;
         return evtResType;
     }
@@ -721,6 +728,7 @@ export class GameSystem {
         if (evtID === 19) {
             if (this.player.mainProp === "A") {
                 console.log("evt===选调考试，由于不走学工路线，直接跳过");
+                return true;
             }
             if (this.year === 4 && this.player.specialTag.has(跳过本科选调)) {
                 console.log("evt===（本科）选调考试，但是允许跳过");
@@ -733,12 +741,19 @@ export class GameSystem {
         }
         if (evtID === 88 && this.player.specialTag.has(跳过辅导员青椒)) {
             console.log("evt === 辅导员招聘，但是允许跳过");
+            return true;
         }
         if (evtID === 89 && this.player.specialTag.has(跳过辅导员青椒)) {
             console.log("evt === 青椒留校，但是允许跳过");
+            return true;
         }
         if (evtID === 90 && this.player.specialTag.has(跳过招聘会)) {
             console.log("evt === 招聘会，但是允许跳过");
+            return true;
+        }
+        if (evtID === 43 && this.player.specialTag.has(保研百分百)) {
+            console.log("evt === 研支团，因为已经保研所以跳过");
+            return true;
         }
         return false;
     }
