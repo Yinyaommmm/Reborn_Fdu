@@ -728,6 +728,7 @@ export class GameSystem {
         if (evtID === 19) {
             if (this.player.mainProp === "A") {
                 console.log("evt===选调考试，由于不走学工路线，直接跳过");
+                return true;
             }
             if (this.year === 4 && this.player.specialTag.has(跳过本科选调)) {
                 console.log("evt===（本科）选调考试，但是允许跳过");
@@ -740,12 +741,19 @@ export class GameSystem {
         }
         if (evtID === 88 && this.player.specialTag.has(跳过辅导员青椒)) {
             console.log("evt === 辅导员招聘，但是允许跳过");
+            return true;
         }
         if (evtID === 89 && this.player.specialTag.has(跳过辅导员青椒)) {
             console.log("evt === 青椒留校，但是允许跳过");
+            return true;
         }
         if (evtID === 90 && this.player.specialTag.has(跳过招聘会)) {
             console.log("evt === 招聘会，但是允许跳过");
+            return true;
+        }
+        if (evtID === 43 && this.player.specialTag.has(保研百分百)) {
+            console.log("evt === 研支团，因为已经保研所以跳过");
+            return true;
         }
         return false;
     }
