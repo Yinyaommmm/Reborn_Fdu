@@ -65,12 +65,12 @@ export const zeroFiveProps: () => FiveProps = () => {
 export interface EvtResultType {
     succProb: number;
     rand: number;
-    resType: "BigS" | "S" | "F";
+    resType: "BigS" | "S" | "F" | "Pass";
 }
 export interface ResoluteEventRes {
     deltaProps: FiveProps;
     endingText: string;
-    resType: "BigS" | "S" | "F" | "B" | "Punish"; // 引入B选项;
+    resType: "BigS" | "S" | "F" | "B" | "Punish" | "Pass"; // 引入B选项;
 }
 
 export class EventForShow {
@@ -133,7 +133,7 @@ export class StandardEvent {
     is2ji() {
         return this._readableEvt.repalceDialog.length !== 0;
     }
-    getEndingA(resType: "BigS" | "S" | "F"): string {
+    getEndingA(resType: "BigS" | "S" | "F" | "Pass"): string {
         const ending = this._readableEvt.endingA;
         if (resType === "BigS") {
             if (ending.length < 3) {
@@ -255,7 +255,7 @@ export class StandardEvent {
                 }
             }
 
-            e.mainText = formatDialog(tmpMainText, c1, c2, this.getCategory());
+            e.mainText = formatDialog(tmpMainText, c1, c2);
             if (this.getCategory() === EventCategory.SZTZ) {
                 e.choiceAText = `选择${c1}`;
                 e.choiceBText = `选择${c2}`;
@@ -485,6 +485,13 @@ export class GameSystem {
             } else {
                 evtResType.resType = "S";
             }
+        }
+        if (
+            [13, 21, 22, 27, 88, 124].map((i) => i - 1).includes(evtID) &&
+            evtResType.resType === "F"
+        ) {
+            // 这里是对特殊事件的判定-1是为了读取的与excel的不一样，失败为Pass
+            evtResType.resType = "Pass";
         }
         this.lastContextLog.resType = evtResType.resType;
         return evtResType;

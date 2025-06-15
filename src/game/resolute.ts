@@ -14,7 +14,7 @@ export class RsltModule {
     rsltL_ChoiceA(
         luck: number,
         evt: StandardEvent,
-        resType: "S" | "BigS" | "F",
+        resType: "S" | "BigS" | "F" | "Pass",
     ) {
         const luckList = luckRollArr(luck, evt);
         this.logger.info("rsltL_ChoicA lucklist", luckList);
@@ -35,7 +35,7 @@ export class RsltModule {
         creativity: number,
         evt: StandardEvent,
         prop: "A" | "C" | "M",
-        resType: "S" | "BigS" | "F",
+        resType: "S" | "BigS" | "F" | "Pass",
     ): number {
         const range =
             prop === "A"
@@ -44,7 +44,7 @@ export class RsltModule {
                   ? evt.getCRange_ChoiceA()
                   : evt.getMRange_ChoiceA();
         const propRange = [...range]; // 构造深拷贝，防止修改原范围
-        if (resType === "F") {
+        if (resType === "F" || resType === "Pass") {
             propRange[1] = (propRange[0] + propRange[1]) / 2;
             propRange[0] = 0;
             if (Math.random() < luckEnchanceACM(luck)) {
@@ -88,10 +88,10 @@ export class RsltModule {
         luck: number,
         creativity: number,
         evt: StandardEvent,
-        resType: "S" | "BigS" | "F",
+        resType: "S" | "BigS" | "F" | "Pass",
     ) {
         const mainProp = evt.getMainProp();
-        if (resType === "F") {
+        if (resType === "F" || resType === "Pass") {
             return this.rsltACM_ChoiceA(luck, creativity, evt, "C", resType);
         } else {
             if (
