@@ -695,6 +695,7 @@ export class GameSystem {
             return true;
         }
         if (evt.isRequired() === false) {
+            // 可选事件不会被跳过
             return false;
         }
 
@@ -751,10 +752,7 @@ export class GameSystem {
             console.log("evt === 招聘会，但是允许跳过");
             return true;
         }
-        if (evtID === 43 && this.player.specialTag.has(保研百分百)) {
-            console.log("evt === 研支团，因为已经保研所以跳过");
-            return true;
-        }
+
         return false;
     }
     addItem(item: Item) {
