@@ -58,26 +58,27 @@ function App() {
             {TransitionComponent}
             {TransitionComponentCards}
             <Debug />
-            <AnimatePresence>
-                {route === "game" && <Game key="Game" trigger={trigger} />}
-                {route === "birth" && (
-                    <Birth
-                        key="Birth"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        trigger={cardsTrigger}
-                    />
-                )}
+            {route === "game" && <Game key="Game" trigger={trigger} />}
+            {route === "birth" && (
+                <Birth
+                    key="Birth"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    trigger={cardsTrigger}
+                />
+            )}
+            {route === "graduation" && (
+                <Graduation key="Graduation" trigger={trigger} />
+            )}
+            {route === "after" && <After key="After" />}
+            <AnimatePresence mode="wait">
                 {route === "launch" && (
                     <Launch
                         key="Launch"
                         trigger={trigger}
                         exit={{ opacity: 0 }}
                     />
-                )}
-                {route === "graduation" && (
-                    <Graduation key="Graduation" trigger={trigger} />
                 )}
                 {route === "introduction" && (
                     <Introduction
@@ -87,7 +88,6 @@ function App() {
                         exit={{ opacity: 0 }}
                     />
                 )}
-                {route === "after" && <After key="After" />}
             </AnimatePresence>
             {route === "dev" && <Dev />}
         </>

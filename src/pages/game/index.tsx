@@ -1,4 +1,4 @@
-import { HTMLMotionProps } from "motion/react";
+import { HTMLMotionProps, motion } from "motion/react";
 import { FC } from "react";
 
 import GameCards from "./components/cards";
@@ -13,13 +13,16 @@ interface GameProps extends HTMLMotionProps<"div"> {
     trigger?: CircularTransitionTrigger;
 }
 
-const Game: FC<GameProps> = ({ trigger }) => {
+const Game: FC<GameProps> = ({ trigger, ...rest }) => {
     return (
-        <div className="w-screen h-screen overflow-hidden game-background">
+        <motion.div
+            className="w-screen h-screen overflow-hidden game-background"
+            {...rest}
+        >
             <GameHeader />
             <GameCards trigger={trigger} />
             <GameChoices />
-        </div>
+        </motion.div>
     );
 };
 
