@@ -77,7 +77,7 @@ function App() {
                     <Launch
                         key="Launch"
                         trigger={trigger}
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, display: "none" }}
                     />
                 )}
                 {route === "introduction" && (
@@ -85,7 +85,7 @@ function App() {
                         key="Introduction"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
+                        exit={{ opacity: 0, display: "none" }}
                     />
                 )}
             </AnimatePresence>
