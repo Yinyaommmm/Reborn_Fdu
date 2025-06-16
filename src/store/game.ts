@@ -1,6 +1,6 @@
 import { model } from "@/packages/model";
 
-export type EndingType = "BigS" | "S" | "F" | "B" | "Punish";
+export type EndingType = "BigS" | "S" | "F" | "B" | "Punish" | "Pass";
 export interface GameModel {
     isCardAnimating: boolean;
     isChoiceAnimating: boolean;

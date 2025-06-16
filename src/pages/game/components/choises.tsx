@@ -17,6 +17,8 @@ const getPostmark = (et: EndingType) => {
     switch (et) {
         case "B":
             return getImagePath("pass");
+        case "Pass":
+            return getImagePath("pass");
         case "Punish":
             return getImagePath("punishment");
         case "F":
