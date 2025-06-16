@@ -11,6 +11,20 @@ export const getImagePath = (name: string) =>
     `${ImageType}/${name}.${ImageType}`;
 
 export const ImageUrls = [
+    getImagePath("introduction/introduction-1"),
+    getImagePath("introduction/introduction-2"),
+    getImagePath("introduction/introduction-3"),
+    getImagePath("introduction/introduction-4"),
+    getImagePath("introduction/introduction-5"),
+    getImagePath("introduction/introduction-6"),
+    getImagePath("introduction/introduction-7"),
+    getImagePath("introduction/introduction-text-1"),
+    getImagePath("introduction/introduction-text-2"),
+    getImagePath("introduction/introduction-text-3"),
+    getImagePath("introduction/introduction-text-4"),
+    getImagePath("introduction/introduction-text-5"),
+    getImagePath("introduction/introduction-text-6"),
+    getImagePath("introduction/introduction-text-7"),
     getImagePath("launch-border"),
     getImagePath("launch-bar"),
     getImagePath("launch-female"),

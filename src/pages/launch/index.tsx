@@ -8,6 +8,7 @@ import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFontLoader } from "@/hooks/useFontLoader";
 import { useImagePreloader } from "@/hooks/useImagePreloader";
 import { UseRandomCG } from "@/hooks/useRandomCG";
+import { $UI } from "@/store/ui";
 import { getImagePath, ImageUrls } from "@/types/images";
 
 import "./style.css";
@@ -17,7 +18,7 @@ export interface LaunchProps extends HTMLMotionProps<"div"> {
 }
 
 export const Launch: FC<LaunchProps> = (props) => {
-    const { trigger } = props;
+    const { ...rest } = props;
     const { chosenKeys, chosenSex } = UseRandomCG();
 
     const fontFinished = useFontLoader("CursiveFont", "font/cursive-font.ttf");
@@ -34,7 +35,10 @@ export const Launch: FC<LaunchProps> = (props) => {
     }, [fontFinished]);
 
     return (
-        <div className="w-screen h-screen flex items-center justify-center">
+        <motion.div
+            className="w-screen h-screen flex items-center justify-center"
+            {...rest}
+        >
             <div className="w-full h-full px-3 flex items-center">
                 <Image
                     className="relative"
@@ -154,8 +158,14 @@ export const Launch: FC<LaunchProps> = (props) => {
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 key="launch-start"
-                                onClick={(e) => {
-                                    trigger(e, "birth");
+                                onClick={() => {
+                                    // trigger(e, "birth");
+                                    $UI.update(
+                                        "switch introduction",
+                                        (draft) => {
+                                            draft.route = "introduction";
+                                        },
+                                    );
                                 }}
                             >
                                 <Image
@@ -169,6 +179,6 @@ export const Launch: FC<LaunchProps> = (props) => {
                     </AnimatePresence>
                 </Image>
             </div>
-        </div>
+        </motion.div>
     );
 };

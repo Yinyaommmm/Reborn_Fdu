@@ -8,6 +8,7 @@ import { Debug } from "./pages/debug";
 import { Dev } from "./pages/dev";
 import Game from "./pages/game";
 import { Graduation } from "./pages/graduation";
+import { Introduction } from "./pages/introduction";
 import { Launch } from "./pages/launch";
 import { $Debug } from "./store/debug";
 import { $UI } from "./store/ui";
@@ -60,7 +61,13 @@ function App() {
             <AnimatePresence>
                 {route === "game" && <Game key="Game" trigger={trigger} />}
                 {route === "birth" && (
-                    <Birth key="Birth" trigger={cardsTrigger} />
+                    <Birth
+                        key="Birth"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        trigger={cardsTrigger}
+                    />
                 )}
                 {route === "launch" && (
                     <Launch
@@ -71,6 +78,14 @@ function App() {
                 )}
                 {route === "graduation" && (
                     <Graduation key="Graduation" trigger={trigger} />
+                )}
+                {route === "introduction" && (
+                    <Introduction
+                        key="Introduction"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    />
                 )}
                 {route === "after" && <After key="After" />}
             </AnimatePresence>

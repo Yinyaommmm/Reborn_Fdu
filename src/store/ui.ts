@@ -6,7 +6,8 @@ export type UIRoute =
     | "launch"
     | "graduation"
     | "after"
-    | "dev";
+    | "dev"
+    | "introduction";
 export interface UIModel {
     messageContent: string;
     messageType: "success" | "danger" | "warning";

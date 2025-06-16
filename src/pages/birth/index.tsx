@@ -16,7 +16,7 @@ interface BirthProps extends HTMLMotionProps<"div"> {
     trigger: CircularTransitionTrigger;
 }
 
-export const Birth: FC<BirthProps> = ({ trigger }) => {
+export const Birth: FC<BirthProps> = ({ trigger, ...rest }) => {
     const [step, setStep] = useState<number>(1);
     const { onClick: onClickStep1, onTouchEnd: onTouchEnd1 } = useFastClick(
         () => setStep(1),
@@ -30,7 +30,10 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
     const toolId = $Data.use((state) => state.toolId);
 
     return (
-        <div className="relative w-screen h-screen game-background box-border">
+        <motion.div
+            className="relative w-screen h-screen game-background box-border"
+            {...rest}
+        >
             <Image
                 className="absolute w-full h-full mt-[1vh]"
                 src={getImagePath("calender")}
@@ -102,6 +105,6 @@ export const Birth: FC<BirthProps> = ({ trigger }) => {
                     />
                 )}
             </AnimatePresence>
-        </div>
+        </motion.div>
     );
 };
