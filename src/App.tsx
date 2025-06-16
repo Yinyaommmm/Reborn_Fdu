@@ -1,6 +1,6 @@
+import { AnimatePresence } from "motion/react";
 import { useEffect } from "react";
 
-import "./App.css";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
@@ -11,6 +11,8 @@ import { Graduation } from "./pages/graduation";
 import { Launch } from "./pages/launch";
 import { $Debug } from "./store/debug";
 import { $UI } from "./store/ui";
+
+import "./App.css";
 
 function App() {
     const route = $UI.use((state) => state.route);
@@ -55,11 +57,23 @@ function App() {
             {TransitionComponent}
             {TransitionComponentCards}
             <Debug />
-            {route === "game" && <Game trigger={trigger} />}
-            {route === "birth" && <Birth trigger={cardsTrigger} />}
-            {route === "launch" && <Launch trigger={trigger} />}
-            {route === "graduation" && <Graduation trigger={trigger} />}
-            {route === "after" && <After />}
+            <AnimatePresence>
+                {route === "game" && <Game key="Game" trigger={trigger} />}
+                {route === "birth" && (
+                    <Birth key="Birth" trigger={cardsTrigger} />
+                )}
+                {route === "launch" && (
+                    <Launch
+                        key="Launch"
+                        trigger={trigger}
+                        exit={{ opacity: 0 }}
+                    />
+                )}
+                {route === "graduation" && (
+                    <Graduation key="Graduation" trigger={trigger} />
+                )}
+                {route === "after" && <After key="After" />}
+            </AnimatePresence>
             {route === "dev" && <Dev />}
         </>
     );

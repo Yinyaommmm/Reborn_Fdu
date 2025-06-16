@@ -1,9 +1,10 @@
+import { HTMLMotionProps } from "motion/react";
 import { FC } from "react";
 
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { $Data } from "@/store/data";
 
-interface GraduationProps {
+interface GraduationProps extends HTMLMotionProps<"div"> {
     trigger?: CircularTransitionTrigger;
 }
 

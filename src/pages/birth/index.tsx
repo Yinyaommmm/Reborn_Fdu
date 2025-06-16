@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { FC, useState } from "react";
 
 import { AddTalent } from "./components/add-talent";
@@ -12,7 +12,7 @@ import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
 
-interface BirthProps {
+interface BirthProps extends HTMLMotionProps<"div"> {
     trigger: CircularTransitionTrigger;
 }
 

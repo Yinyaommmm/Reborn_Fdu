@@ -1,4 +1,4 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, HTMLMotionProps, motion } from "motion/react";
 import { FC, useEffect } from "react";
 
 import { LaunchCG } from "./components/launch-cg";
@@ -12,7 +12,7 @@ import { getImagePath, ImageUrls } from "@/types/images";
 
 import "./style.css";
 
-export interface LaunchProps {
+export interface LaunchProps extends HTMLMotionProps<"div"> {
     trigger: CircularTransitionTrigger;
 }
 

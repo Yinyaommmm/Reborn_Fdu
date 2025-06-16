@@ -1,13 +1,15 @@
+import { HTMLMotionProps } from "motion/react";
 import { FC } from "react";
 
 import GameCards from "./components/cards";
 import { GameChoices } from "./components/choises";
 import GameHeader from "./components/header";
 
-import "./index.css";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 
-interface GameProps {
+import "./index.css";
+
+interface GameProps extends HTMLMotionProps<"div"> {
     trigger?: CircularTransitionTrigger;
 }
 

@@ -1,5 +1,5 @@
+import { HTMLMotionProps } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
-import "./index.css";
 import { twMerge } from "tailwind-merge";
 
 import { useTapHandler } from "./hooks/useTapHandler";
@@ -10,8 +10,9 @@ import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { YearItem } from "@/stage2/stage2";
 import { getImagePath } from "@/types/images";
+import "./index.css";
 
-export const After: FC = () => {
+export const After: FC<HTMLMotionProps<"div">> = () => {
     const { vh: viewportHeight } = useViewport();
     const height = Math.ceil(0.035 * viewportHeight);
     const [items, setItems] = useState<YearItem[]>([]);
