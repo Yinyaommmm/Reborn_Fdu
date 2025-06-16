@@ -217,7 +217,19 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             });
             console.log("new", ...next, "jump", jumpCount);
         } else {
-            setCards((prev) => [...prev.slice(1)]);
+            let isJump = true;
+            let jumpCount = 0;
+            while (isJump && jumpCount <= cards.length) {
+                isJump = gameModule.jump() ?? true;
+                jumpCount += 1;
+            }
+            // 更新 UI
+            setCards((prev) => {
+                if (jumpCount > prev.length) {
+                    return [...next.slice(jumpCount - prev.length)];
+                }
+                return [...prev.slice(jumpCount), ...next];
+            });
         }
         setDescription(gameModule.info()?.mainText);
         setTitle(gameModule.info()?.title ?? "");
