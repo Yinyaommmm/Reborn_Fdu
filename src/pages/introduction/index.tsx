@@ -6,7 +6,7 @@ import { $UI } from "@/store/ui";
 import { getImagePath } from "@/types/images";
 export const Introduction: FC<HTMLMotionProps<"div">> = (props) => {
     const { ...rest } = props;
-    const [current, setCurrent] = useState<number>(0);
+    const [current, setCurrent] = useState<number>(1);
 
     const newCurrent = () => {
         setCurrent((prev) => prev + 1);
