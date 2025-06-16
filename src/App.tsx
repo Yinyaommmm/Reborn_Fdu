@@ -72,23 +72,21 @@ function App() {
                 <Graduation key="Graduation" trigger={trigger} />
             )}
             {route === "after" && <After key="After" />}
-            <AnimatePresence mode="wait">
-                {route === "launch" && (
-                    <Launch
-                        key="Launch"
-                        trigger={trigger}
-                        exit={{ opacity: 0, display: "none" }}
-                    />
-                )}
-                {route === "introduction" && (
-                    <Introduction
-                        key="Introduction"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0, display: "none" }}
-                    />
-                )}
-            </AnimatePresence>
+            {route === "launch" && (
+                <Launch
+                    key="Launch"
+                    trigger={trigger}
+                    exit={{ opacity: 0, display: "none" }}
+                />
+            )}
+            {route === "introduction" && (
+                <Introduction
+                    key="Introduction"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0, display: "none" }}
+                />
+            )}
             {route === "dev" && <Dev />}
         </>
     );
