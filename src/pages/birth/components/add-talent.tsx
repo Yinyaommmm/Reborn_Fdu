@@ -145,7 +145,10 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     个人信息
                     <div className="absolute top-0 left-0 bg-[#F6F6F2] w-full h-full rotate-[6deg] z-[-1]" />
                 </div>
-                <div className="text-xs">剩余加点: {points}</div>
+                <div className="text-xs font-bold underline underline-offset-1">
+                    <div>剩余加点: {points}</div>
+                    <div>未主动加点将随机分配</div>
+                </div>
             </div>
             <div className="relative mt-[6%] px-[8%] flex items-center justify-between h-[12%]">
                 <Talent
@@ -242,9 +245,6 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         }
                     }}
                 />
-            </div>
-            <div className="font-cursive w-full flex justify-end text-sm pr-2">
-                未主动加点将随机分配
             </div>
         </motion.div>
     );
