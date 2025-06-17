@@ -38,6 +38,8 @@ export const ImageUrls = [
     getImagePath("letter"),
     getImagePath("petal-1"),
     getImagePath("petal-2"),
+    getImagePath("end-footer"),
+    getImagePath("end-header"),
     getImagePath("launch-border"),
     getImagePath("launch-bar"),
     getImagePath("launch-female"),

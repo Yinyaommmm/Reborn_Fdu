@@ -22,3 +22,9 @@ body, html {
   
   --font-cursive: 'CursiveFont';
 }
+
+.game-background {
+    background-image: url("/webp/background.webp");
+    background-size: 110vw auto;
+    background-position: 0% 100%;
+}
