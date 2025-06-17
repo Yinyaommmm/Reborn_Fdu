@@ -704,8 +704,7 @@ export class GameSystem {
             evt
                 .getPrerequisites()
                 .some(
-                    (prereq) =>
-                        !this.timelineMod.getChosedEventIDs().has(prereq),
+                    (prereq) => !this.timelineMod.getSuccEventIDs().has(prereq),
                 )
         ) {
             this.logger.info(`必然事件${evtID}前置事件未满足！，直接跳过`);

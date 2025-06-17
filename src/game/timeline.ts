@@ -159,6 +159,9 @@ export class TimelineModule {
     public getChosedEventIDs(): Set<number> {
         return this.chosedEventIDs;
     }
+    public getSuccEventIDs(): Set<number> {
+        return this.succEventIDs;
+    }
 
     private resolveFixedSelector(selector: FixedEventSelector): number {
         if (typeof selector === "function") {
