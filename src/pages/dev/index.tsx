@@ -1,88 +1,74 @@
-import { motion, useAnimation } from "motion/react";
-import { FC, useEffect } from "react";
+import { motion } from "motion/react";
+import { FC } from "react";
 
+import { AutoScrollText } from "@/components/auto-scroll-text";
 import Image from "@/components/image";
-import { CircleTransition } from "@/components/transition";
 import { getImagePath } from "@/types/images";
 
 export const Dev: FC = () => {
-    const controls = useAnimation();
-
-    const handleTear = async () => {
-        // 第一步：以右上角为锚点，先撕开（向下旋转）
-        await controls.start({
-            rotate: -15, // 向左下旋转
-            // y: 30,
-            transformOrigin: "100% 0%", // 右上角作为旋转中心
-            transition: { duration: 0.4, ease: "easeOut" },
-        });
-
-        // 第二步：飘出去（右下，旋转+透明）
-        await controls.start({
-            x: 200,
-            y: 200,
-            rotate: -60,
-            opacity: 0,
-            transition: { duration: 0.6, ease: "easeIn" },
-        });
-
-        // 第三步：复原到原始状态
-        controls.set({
-            x: 0,
-            y: 0,
-            rotate: 0,
-            opacity: 1,
-            transformOrigin: "100% 0%",
-        });
-    };
-
-    useEffect(() => {}, []);
-
     return (
-        <CircleTransition isActive cx={0} cy={0}>
-            <div
-                className="h-[12%] flex items-center justify-end"
-                onClick={() => handleTear()}
-            >
-                <div className="relative h-full mr-[5%]">
-                    <Image
-                        src={getImagePath("light")}
-                        adjustHeight
-                        adjustWidth={false}
-                        square={false}
-                    />
+        <div>
+            <div className="absolute top-0 left-0 w-screen flex items-center justify-center z-50">
+                <div className="w-[75vw]">
+                    <Image src={getImagePath("flower")} square={false} />
+                </div>
+                <motion.div
+                    className="absolute top-[7vh] right-[27vw] w-[10vw]"
+                    animate={{
+                        x: [0, -10, 0, 10, 0],
+                        y: ["-3vh", "2vh"],
+                    }}
+                    transition={{
+                        x: {
+                            repeat: Infinity,
+                            duration: 8,
+                            ease: "linear",
+                        },
+                        y: {
+                            duration: 30,
+                            ease: "linear",
+                        },
+                    }}
+                >
+                    <Image src={getImagePath("petal-1")} square={false} />
+                </motion.div>
+                <div className="absolute top-[2vh] right-[12vw] w-[10vw]">
+                    <Image src={getImagePath("petal-2")} square={false} />
                 </div>
             </div>
-            <div className="mt-[3%] flex items-center justify-end">
-                <div className="relative w-[95%]">
-                    <Image
-                        src={getImagePath("board")}
-                        adjustHeight
-                        adjustWidth
-                        square={false}
-                    />
-                    <div className="absolute left-[53%] top-[43%] w-[40%] -translate-x-1/2 -translate-y-1/2">
-                        <Image
-                            src={getImagePath("wall-calender")}
-                            adjustHeight
-                            adjustWidth
-                            square={false}
-                        >
-                            <div className="absolute left-[52%] bottom-[3.5%] font-cursive -translate-x-1/2 text-[#C18C6D] flex flex-col items-center justify-center gap-1 w-[93%] h-[58%]">
-                                <div className="text-xl">Sep.</div>
-                                <div className="text-2xl">大二</div>
-                            </div>
-                            <motion.div
-                                className="absolute left-[52%] bottom-[3.5%] font-cursive -translate-x-1/2 text-[#C18C6D] flex flex-col items-center justify-center gap-1 w-[93%] h-[58%] bg-white"
-                                animate={controls}
-                            >
-                                <div className="text-xl">Sep.</div>
-                                <div className="text-2xl">大一</div>
-                            </motion.div>
-                        </Image>
-                    </div>
-                </div>
+            <motion.div className="absolute top-[15vh] right-[10vw] z-30 w-[70vw] bg-[#EBCEBF] h-[45vh] py-[5%]">
+                <div className="absolute top-[-6px] right-[-6px] w-full h-full border-decorate border-decorate-border border-r-0 border-b-0"></div>
+                <div className="absolute top-[-6px] right-[-6px] h-[45%] w-decorate bg-decorate-border"></div>
+                <div className="absolute bottom-[6px] left-[6px] h-decorate w-[70%] bg-decorate-border"></div>
+                <AutoScrollText
+                    className="w-full h-full px-[10%] flex flex-col gap-[2%] overflow-y-scroll"
+                    delay={1.5}
+                >
+                    <div>梧桐叶间的阳光终将变成回忆</div>
+                    <div>在母校的教诲下</div>
+                    <div>我们淬炼了“追求卓越”的勇气</div>
+                    <div>也温养了“坦然自洽”的底气</div>
+                    <div>感谢导师和辅导员老师点亮我们成长</div>
+                    <div>感谢课题组同门与同学们共赴青春之约</div>
+                    <div>更别忘了晨光中食堂阿姨的热粥 </div>
+                    <div>和深夜守候的保安大叔</div>
+                    <div>毕业钟声敲响</div>
+                    <div>此去天高海阔</div>
+                    <div>且从容，且峥嵘</div>
+                </AutoScrollText>
+            </motion.div>
+            <div className="absolute left-[25vw] top-[51vh] w-[75vw]">
+                <Image
+                    className="absolute top-0 left-0 z-20"
+                    src={getImagePath("letter-bottom")}
+                    square={false}
+                />
+                <Image
+                    className="absolute top-0 left-0 z-40"
+                    src={getImagePath("letter")}
+                    square={false}
+                />
             </div>
-        </CircleTransition>
+        </div>
     );
 };
