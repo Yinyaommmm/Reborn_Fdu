@@ -25,7 +25,6 @@ export const After: FC<AfterProps> = ({ trigger }) => {
     const [autoPlay, setAutoPlay] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const autoPlayRef = useRef<NodeJS.Timeout>(undefined);
-    const triggerRef = useRef<NodeJS.Timeout>(undefined);
 
     useTapHandler(items, setDisplayItems);
 
@@ -53,22 +52,6 @@ export const After: FC<AfterProps> = ({ trigger }) => {
             });
         }
     }, [displayItems]);
-
-    useEffect(() => {
-        const handleClick = (e: PointerEvent) => {
-            if (displayItems.length === items.length) {
-                if (!triggerRef.current) {
-                    triggerRef.current = setTimeout(() => {
-                        trigger?.(e, "end");
-                    }, 2000);
-                }
-            }
-        };
-        document.addEventListener("pointerdown", handleClick);
-        return () => {
-            document.removeEventListener("pointerdown", handleClick);
-        };
-    }, [displayItems, items]);
 
     useEffect(() => {
         if (autoPlay > 0) {
@@ -169,6 +152,15 @@ export const After: FC<AfterProps> = ({ trigger }) => {
                         <div className="-translate-x-[50%]">x{autoPlay}</div>
                     )}
                 </div>
+                {items.length === displayItems.length && (
+                    <div
+                        onClick={(e) => {
+                            trigger?.(e, "end");
+                        }}
+                    >
+                        跳转
+                    </div>
+                )}
             </div>
         </div>
     );
