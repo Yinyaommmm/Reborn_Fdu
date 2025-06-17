@@ -1,28 +1,38 @@
 import { HTMLMotionProps, motion } from "motion/react";
-import { FC, useEffect, useState } from "react";
+import { FC, useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 import Image from "@/components/image";
+import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
-import { $UI } from "@/store/ui";
 import { getImagePath } from "@/types/images";
 
-export const Introduction: FC<HTMLMotionProps<"div">> = (props) => {
-    const { ...rest } = props;
+export interface IntroductionProps extends HTMLMotionProps<"div"> {
+    trigger?: CircularTransitionTrigger;
+}
+
+export const Introduction: FC<IntroductionProps> = (props) => {
+    const { trigger, ...rest } = props;
     const [current, setCurrent] = useState<number>(1);
-    const { onClick, onTouchEnd } = useFastClick(() => {
-        setCurrent((prev) => prev + 1);
+    const { onClick, onTouchEnd } = useFastClick((e) => {
+        let isTrigger = false;
+        setCurrent((prev) => {
+            if (prev > 7) {
+                isTrigger = true;
+                return prev;
+            }
+            return prev + 1;
+        });
+        if (isTrigger) trigger?.(e, "birth");
     });
 
-    useEffect(() => {
-        if (current > 7) {
-            $UI.update("goto add talent", (draft) => {
-                draft.route = "birth";
-            });
-        }
-    }, [current]);
-
     return (
-        <motion.div {...rest} onClick={onClick} onTouchEnd={onTouchEnd}>
+        <motion.div
+            {...rest}
+            onClick={onClick}
+            onTouchEnd={onTouchEnd}
+            className="w-screen h-screen game-background"
+        >
             {Array.from(
                 { length: current > 4 ? 4 : current },
                 (_, i) => i + 1,
@@ -71,7 +81,10 @@ export const Introduction: FC<HTMLMotionProps<"div">> = (props) => {
             ).map((i) => (
                 <motion.div
                     key={`introduction-${i}`}
-                    className="absolute top-0 left-0 w-full h-full flex items-center"
+                    className={twMerge(
+                        "absolute top-0 left-0 w-full h-full flex items-center",
+                        i === 5 && "game-background",
+                    )}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: 20 }}

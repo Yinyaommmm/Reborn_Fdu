@@ -99,7 +99,7 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
 
     return (
         <motion.div
-            className="overlay fixed top-0 left-0 w-screen h-screen z-[9999]"
+            className="overlay fixed top-0 left-0 w-screen h-screen z-[9999] game-background"
             style={
                 {
                     "--cx": `${cx}px`,

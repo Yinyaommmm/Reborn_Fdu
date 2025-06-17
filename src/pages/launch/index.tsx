@@ -8,7 +8,6 @@ import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFontLoader } from "@/hooks/useFontLoader";
 import { useImagePreloader } from "@/hooks/useImagePreloader";
 import { UseRandomCG } from "@/hooks/useRandomCG";
-import { $UI } from "@/store/ui";
 import { getImagePath, ImageUrls } from "@/types/images";
 
 import "./style.css";
@@ -18,7 +17,7 @@ export interface LaunchProps extends HTMLMotionProps<"div"> {
 }
 
 export const Launch: FC<LaunchProps> = (props) => {
-    const { ...rest } = props;
+    const { trigger, ...rest } = props;
     const { chosenKeys, chosenSex } = UseRandomCG();
 
     const fontFinished = useFontLoader("CursiveFont", "font/cursive-font.ttf");
@@ -158,14 +157,8 @@ export const Launch: FC<LaunchProps> = (props) => {
                                 initial={{ opacity: 0, y: -20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 key="launch-start"
-                                onClick={() => {
-                                    // trigger(e, "birth");
-                                    $UI.update(
-                                        "switch introduction",
-                                        (draft) => {
-                                            draft.route = "introduction";
-                                        },
-                                    );
+                                onClick={(e) => {
+                                    trigger(e, "introduction");
                                 }}
                             >
                                 <Image

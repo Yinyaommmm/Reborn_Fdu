@@ -83,6 +83,7 @@ function App() {
             {route === "introduction" && (
                 <Introduction
                     key="Introduction"
+                    trigger={trigger}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0, display: "none" }}
