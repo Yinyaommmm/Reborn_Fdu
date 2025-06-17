@@ -6,6 +6,7 @@ import { ChooseProps } from "./components/choose-props";
 import { GoCard } from "./components/go-card";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
 import { gameModule } from "@/packages/game-module";
@@ -24,8 +25,12 @@ export const Birth: FC<BirthProps> = ({ trigger, ...rest }) => {
     const { onClick: onClickStep2, onTouchEnd: onTouchEnd2 } = useFastClick(
         () => setStep(2),
     );
+    const { play } = useAudio("audio/03 启动按钮.wav", 1);
     const { onClick: onClickStep3, onTouchEnd: onTouchEnd3 } = useFastClick(
-        () => setStep(3),
+        () => {
+            play();
+            setStep(3);
+        },
     );
     const toolId = $Data.use((state) => state.toolId);
 
@@ -95,6 +100,7 @@ export const Birth: FC<BirthProps> = ({ trigger, ...rest }) => {
                     <GoCard
                         key={`step-3`}
                         onClick={(e) => {
+                            play();
                             gameModule.init();
                             gameModule.equip();
                             $Data.update("new semester", (draft) => {

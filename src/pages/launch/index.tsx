@@ -4,6 +4,7 @@ import { FC, useEffect } from "react";
 import { LaunchCG } from "./components/launch-cg";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFontLoader } from "@/hooks/useFontLoader";
 import { useImagePreloader } from "@/hooks/useImagePreloader";
@@ -19,6 +20,7 @@ export interface LaunchProps extends HTMLMotionProps<"div"> {
 export const Launch: FC<LaunchProps> = (props) => {
     const { trigger, ...rest } = props;
     const { chosenKeys, chosenSex } = UseRandomCG();
+    const { play } = useAudio("audio/03 启动按钮.wav", 1);
 
     const fontFinished = useFontLoader("CursiveFont", "font/cursive-font.ttf");
     const {
@@ -158,6 +160,7 @@ export const Launch: FC<LaunchProps> = (props) => {
                                 animate={{ opacity: 1, y: 0 }}
                                 key="launch-start"
                                 onClick={(e) => {
+                                    play();
                                     trigger(e, "introduction");
                                 }}
                             >
