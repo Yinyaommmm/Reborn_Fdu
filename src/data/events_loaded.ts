@@ -280,7 +280,7 @@ export const events: ReadableEvent[] = [
       ]
     },
     "choiceB": "菜鸡本人，去估计也是去当炮灰。",
-    "endingB": "不参加学生会，不代表不care校园活动。无意间，你发现了一个学术社团，既有有爱的团体，也找到了学习搭字。",
+    "endingB": "不参加学生会，不代表不care校园活动。无意间，你发现了一个学术社团，既有有爱的团体，也找到了学习搭子。",
     "resultB": {
       "H": 1,
       "L": 1,
@@ -1056,7 +1056,7 @@ export const events: ReadableEvent[] = [
     ],
     "baseProbability": "TRIVIAL",
     "upgrade": false,
-    "choiceA": "提交入党志愿书（本选项将影响政治面貌）。",
+    "choiceA": "提交入党志愿书（本事件无选项区分，将改变政治面貌）。",
     "endingA": [
       "你递交了入党志愿书，党支书召开支部大会表决你的发展事宜。你的努力得到了认可，经过党组织的培养和考察，你成为了一名光荣的党员。"
     ],
@@ -1082,7 +1082,7 @@ export const events: ReadableEvent[] = [
         2.5
       ]
     },
-    "choiceB": "提交入党志愿书（本选项将影响政治面貌）。",
+    "choiceB": "提交入党志愿书（本事件无选项区分，将改变政治面貌）。",
     "endingB": "",
     "resultB": {
       "H": 0,
@@ -1118,7 +1118,7 @@ export const events: ReadableEvent[] = [
       3
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 30,
       "C": 20,
@@ -1191,7 +1191,7 @@ export const events: ReadableEvent[] = [
       3
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -1266,7 +1266,7 @@ export const events: ReadableEvent[] = [
       4
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 30,
       "C": 0,
@@ -2379,7 +2379,7 @@ export const events: ReadableEvent[] = [
       3
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 20,
       "C": 0,
@@ -2544,7 +2544,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -2634,7 +2634,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -2792,7 +2792,7 @@ export const events: ReadableEvent[] = [
       8
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -2886,7 +2886,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -2978,7 +2978,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -3068,7 +3068,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -3160,7 +3160,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -3233,7 +3233,7 @@ export const events: ReadableEvent[] = [
       3
     ],
     "requireProps": {
-      "H": 30,
+      "H": 20,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -3306,7 +3306,7 @@ export const events: ReadableEvent[] = [
       3
     ],
     "requireProps": {
-      "H": 30,
+      "H": 20,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -3376,10 +3376,10 @@ export const events: ReadableEvent[] = [
     "repalceDialog": [],
     "repetable": false,
     "happenYear": [
-      4
+      3
     ],
     "requireProps": {
-      "H": 30,
+      "H": 20,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -4669,10 +4669,8 @@ export const events: ReadableEvent[] = [
     ],
     "repetable": true,
     "happenYear": [
-      1,
       2,
-      3,
-      4
+      3
     ],
     "requireProps": {
       "H": 0,
@@ -4926,7 +4924,7 @@ export const events: ReadableEvent[] = [
       3
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 20,
       "C": 0,
@@ -5316,7 +5314,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 20,
       "C": 0,
@@ -5395,7 +5393,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 20,
       "C": 20,
@@ -5474,7 +5472,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 20,
       "C": 20,
@@ -5551,7 +5549,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 30,
       "C": 30,
@@ -5630,7 +5628,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 30,
       "C": 30,
@@ -5712,7 +5710,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 20,
       "C": 20,
@@ -5786,7 +5784,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 20,
       "C": 20,
@@ -5860,7 +5858,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 30,
+      "H": 20,
       "L": 0,
       "A": 30,
       "C": 30,
@@ -5935,7 +5933,7 @@ export const events: ReadableEvent[] = [
       4
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -6012,7 +6010,7 @@ export const events: ReadableEvent[] = [
       8
     ],
     "requireProps": {
-      "H": 40,
+      "H": 30,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -6088,7 +6086,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 30,
+      "H": 20,
       "L": 0,
       "A": 30,
       "C": 0,
@@ -6167,7 +6165,7 @@ export const events: ReadableEvent[] = [
       8
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 20,
       "A": 0,
       "C": 0,
@@ -6241,7 +6239,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 40,
+      "H": 30,
       "L": 40,
       "A": 0,
       "C": 0,
@@ -6327,7 +6325,7 @@ export const events: ReadableEvent[] = [
       5
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7295,7 +7293,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7376,7 +7374,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7458,7 +7456,7 @@ export const events: ReadableEvent[] = [
       8
     ],
     "requireProps": {
-      "H": 40,
+      "H": 30,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7535,7 +7533,7 @@ export const events: ReadableEvent[] = [
       8
     ],
     "requireProps": {
-      "H": 40,
+      "H": 30,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7697,7 +7695,7 @@ export const events: ReadableEvent[] = [
       7
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7793,7 +7791,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7874,7 +7872,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -7955,7 +7953,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 0,
@@ -9248,7 +9246,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -9334,7 +9332,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -9411,7 +9409,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -9490,7 +9488,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -9569,7 +9567,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 30,
+      "H": 20,
       "L": 0,
       "A": 0,
       "C": 30,
@@ -9645,7 +9643,7 @@ export const events: ReadableEvent[] = [
       8
     ],
     "requireProps": {
-      "H": 40,
+      "H": 30,
       "L": 0,
       "A": 0,
       "C": 40,
@@ -9719,7 +9717,7 @@ export const events: ReadableEvent[] = [
       8
     ],
     "requireProps": {
-      "H": 40,
+      "H": 30,
       "L": 0,
       "A": 0,
       "C": 40,
@@ -9798,7 +9796,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -9970,7 +9968,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 30,
+      "H": 20,
       "L": 0,
       "A": 0,
       "C": 30,
@@ -10057,7 +10055,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -10144,7 +10142,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -10226,7 +10224,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -10315,7 +10313,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
@@ -10400,7 +10398,7 @@ export const events: ReadableEvent[] = [
       9
     ],
     "requireProps": {
-      "H": 20,
+      "H": 10,
       "L": 0,
       "A": 0,
       "C": 20,
