@@ -35,7 +35,7 @@ export const Launch: FC<LaunchProps> = (props) => {
 
     return (
         <motion.div
-            className="w-screen h-screen flex items-center justify-center"
+            className="w-screen h-screen flex items-center justify-center game-background"
             {...rest}
         >
             <div className="w-full h-full px-3 flex items-center">
