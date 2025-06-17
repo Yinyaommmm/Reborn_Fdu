@@ -432,7 +432,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                                 <Image
                                     src={
                                         card === undefined
-                                            ? getImagePath("event-bg")
+                                            ? getImagePath("")
                                             : gameModule.getCard(card.id).imgSrc
                                     }
                                 />
