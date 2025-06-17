@@ -2,25 +2,16 @@ import { HTMLMotionProps, motion } from "motion/react";
 import { FC, useEffect, useState } from "react";
 
 import Image from "@/components/image";
+import { useFastClick } from "@/hooks/useFastClick";
 import { $UI } from "@/store/ui";
 import { getImagePath } from "@/types/images";
+
 export const Introduction: FC<HTMLMotionProps<"div">> = (props) => {
     const { ...rest } = props;
     const [current, setCurrent] = useState<number>(1);
-
-    const newCurrent = () => {
+    const { onClick, onTouchEnd } = useFastClick(() => {
         setCurrent((prev) => prev + 1);
-    };
-
-    useEffect(() => {
-        const handleClick = () => {
-            newCurrent();
-        };
-        window.addEventListener("click", handleClick);
-        return () => {
-            window.removeEventListener("click", handleClick);
-        };
-    }, []);
+    });
 
     useEffect(() => {
         if (current > 7) {
@@ -31,7 +22,7 @@ export const Introduction: FC<HTMLMotionProps<"div">> = (props) => {
     }, [current]);
 
     return (
-        <motion.div {...rest}>
+        <motion.div {...rest} onClick={onClick} onTouchEnd={onTouchEnd}>
             {Array.from(
                 { length: current > 4 ? 4 : current },
                 (_, i) => i + 1,
