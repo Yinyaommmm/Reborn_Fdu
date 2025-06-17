@@ -5,6 +5,7 @@ import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
 import { Debug } from "./pages/debug";
 import { Dev } from "./pages/dev";
+import { End } from "./pages/end";
 import Game from "./pages/game";
 import { Graduation } from "./pages/graduation";
 import { Introduction } from "./pages/introduction";
@@ -70,7 +71,8 @@ function App() {
             {route === "graduation" && (
                 <Graduation key="Graduation" trigger={trigger} />
             )}
-            {route === "after" && <After key="After" />}
+            {route === "after" && <After key="After" trigger={trigger} />}
+            {route === "end" && <End />}
             {route === "launch" && (
                 <Launch
                     key="Launch"

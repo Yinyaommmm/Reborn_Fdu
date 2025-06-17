@@ -6,13 +6,18 @@ import { useTapHandler } from "./hooks/useTapHandler";
 
 import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
+import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { YearItem } from "@/stage2/stage2";
 import { getImagePath } from "@/types/images";
 import "./index.css";
 
-export const After: FC<HTMLMotionProps<"div">> = () => {
+interface AfterProps extends HTMLMotionProps<"div"> {
+    trigger?: CircularTransitionTrigger;
+}
+
+export const After: FC<AfterProps> = ({ trigger }) => {
     const { vh: viewportHeight } = useViewport();
     const height = Math.ceil(0.035 * viewportHeight);
     const [items, setItems] = useState<YearItem[]>([]);
@@ -20,6 +25,7 @@ export const After: FC<HTMLMotionProps<"div">> = () => {
     const [autoPlay, setAutoPlay] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const autoPlayRef = useRef<NodeJS.Timeout>(undefined);
+    const triggerRef = useRef<NodeJS.Timeout>(undefined);
 
     useTapHandler(items, setDisplayItems);
 
@@ -47,6 +53,22 @@ export const After: FC<HTMLMotionProps<"div">> = () => {
             });
         }
     }, [displayItems]);
+
+    useEffect(() => {
+        const handleClick = (e: PointerEvent) => {
+            if (displayItems.length === items.length) {
+                if (!triggerRef.current) {
+                    triggerRef.current = setTimeout(() => {
+                        trigger?.(e, "end");
+                    }, 2000);
+                }
+            }
+        };
+        document.addEventListener("pointerdown", handleClick);
+        return () => {
+            document.removeEventListener("pointerdown", handleClick);
+        };
+    }, [displayItems, items]);
 
     useEffect(() => {
         if (autoPlay > 0) {
