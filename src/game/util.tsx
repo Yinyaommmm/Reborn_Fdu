@@ -5,6 +5,7 @@ import { TimelineModule } from "./timeline";
 
 import { Logger } from "@/logger/logger";
 import { RequirePropLevel, ResultBLevel } from "@/type/config";
+import { EventCategory } from "@/type/type";
 // import { EventCategory } from "@/type/type";
 
 // export function timeLogger<T extends (...args: unknown[]) => unkn>(
@@ -401,10 +402,19 @@ export function addPropsTo_InPlace(o: FiveProps, adder: FiveProps): void {
     o.M += adder.M;
 }
 
-export function reverseMainprop(mainProp: "A" | "M") {
-    if (mainProp === "A") return "M";
-    else {
-        return "A";
+export function isMainPropEvt(evt: StandardEvent, mainProp: "A" | "M") {
+    if (mainProp === "A") {
+        return evt.getCategory() === EventCategory.XSTS;
+    } else {
+        return evt.getCategory() === EventCategory.XSGZ;
+    }
+}
+
+export function isReverseMainPropEvt(evt: StandardEvent, mainProp: "A" | "M") {
+    if (mainProp === "A") {
+        return evt.getCategory() === EventCategory.XSGZ;
+    } else {
+        return evt.getCategory() === EventCategory.XSTS;
     }
 }
 

@@ -3,7 +3,7 @@ import { FixedSizeNumberQueue } from "./fixedarr";
 import { GameSystem, StandardEvent } from "./gamesys";
 import { Player } from "./player";
 import { TimelineModule } from "./timeline";
-import { filterEvts, reverseMainprop } from "./util";
+import { filterEvts, isMainPropEvt, isReverseMainPropEvt } from "./util";
 import { EventCategory } from "../type/type";
 
 import { Logger } from "@/logger/logger";
@@ -81,10 +81,10 @@ export class RandomPickModule {
         const solelyEvts = [];
         for (const evt of filteredEvts) {
             // 满足所有条件，分发入池，优先满足主属性、竞选评优、非主属性
-            if (evt.getMainProp() === mainProp) this.pools.main.push(evt);
+            if (isMainPropEvt(evt, mainProp)) this.pools.main.push(evt);
             else if (evt.getCategory() === EventCategory.JXPY)
                 this.pools.jxpy.push(evt);
-            else if (evt.getMainProp() === reverseMainprop(mainProp))
+            else if (isReverseMainPropEvt(evt, mainProp))
                 this.pools.nonMain.push(evt);
             else if (evt.getCategory() === EventCategory.PYFA)
                 this.pools.pyfa.push(evt);
@@ -97,8 +97,7 @@ export class RandomPickModule {
                     title: evt.getTitle(),
                     category: evt.getCategory(),
                     isMain: evt.getMainProp() === mainProp,
-                    isReverseMain:
-                        evt.getMainProp() === reverseMainprop(mainProp),
+                    isReverseMain: isReverseMainPropEvt(evt, mainProp),
                 });
             }
         }
