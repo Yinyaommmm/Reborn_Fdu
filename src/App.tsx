@@ -1,4 +1,3 @@
-import { AnimatePresence } from "motion/react";
 import { useEffect } from "react";
 
 import { useCircularTransition } from "./hooks/useCircularTransition";
