@@ -464,6 +464,6 @@ export function filterEvts(
     // 7. 排除 ID 65（出国读研）
     const step7 = step6.filter((evt) => evt.getID() !== 65);
     log("Step 7 - 去除 ID 65", step7);
-    console.log("此时人物属性", playerProps);
+    // console.log("此时人物属性", playerProps);
     return step7;
 }
