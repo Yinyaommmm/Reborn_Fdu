@@ -17,10 +17,11 @@ import "./style.css";
 
 export interface LaunchProps extends HTMLMotionProps<"div"> {
     trigger: CircularTransitionTrigger;
+    playBackgroundMusic?: () => void;
 }
 
 export const Launch: FC<LaunchProps> = (props) => {
-    const { trigger, ...rest } = props;
+    const { trigger, playBackgroundMusic, ...rest } = props;
     const { chosenKeys, chosenSex } = UseRandomCG();
     const { play } = useAudio("audio/03 启动按钮.wav", 1);
 
@@ -169,6 +170,7 @@ export const Launch: FC<LaunchProps> = (props) => {
                                 key="launch-start"
                                 onClick={(e) => {
                                     play();
+                                    playBackgroundMusic?.();
                                     trigger(e, "introduction");
                                 }}
                             >
