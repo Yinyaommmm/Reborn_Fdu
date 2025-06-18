@@ -477,3 +477,13 @@ export function filterEvts(
     // console.log("此时人物属性", playerProps);
     return step7;
 }
+
+export function finetuneResolute(p: FiveProps): FiveProps {
+    return {
+        H: p.H,
+        L: p.L * 0.8,
+        A: p.A * 0.9,
+        C: p.C * 0.9,
+        M: p.M * 0.9,
+    };
+}
