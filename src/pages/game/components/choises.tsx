@@ -1,6 +1,7 @@
 import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
 import { FC, useEffect, useRef, useState } from "react";
 
+import { Postmark } from "./postmark";
 import { ToolDisplay } from "./tool-display";
 import { ChoiceUp } from "./up";
 import { CardColorMap } from "../utils/colors";
@@ -359,7 +360,7 @@ export const GameChoices: FC = () => {
                                     duration: 0.2,
                                 }}
                             >
-                                <Image src={getPostmark(endingType)} />
+                                <Postmark endingType={endingType} />
                             </motion.div>
                         </div>
                     </motion.div>
