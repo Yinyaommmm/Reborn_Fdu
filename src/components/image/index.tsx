@@ -66,7 +66,10 @@ const Image: FC<ImageProps> = (props) => {
         if (imageRef.current !== null) {
             const origin =
                 window.location.origin + (src.startsWith("/") ? "" : "/");
-            imageRef.current.src = src.startsWith("data") ? src : origin + src;
+            imageRef.current.src =
+                src.startsWith("data") || src.startsWith("http")
+                    ? src
+                    : origin + src;
         }
     }, [src]);
 

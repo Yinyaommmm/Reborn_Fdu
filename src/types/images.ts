@@ -7,8 +7,16 @@ const tools = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export const ImageType: "png" | "webp" = "webp";
 
-export const getImagePath = (name: string) =>
-    `${ImageType}/${name}.${ImageType}`;
+const isDev = import.meta.env.MODE === "development";
+
+export const baseUrl =
+    "https://reborn-fdu-1306028870.cos.ap-shanghai.myqcloud.com";
+
+export const getImagePath = (path: string): string => {
+    const fullPath = `${ImageType}/${path}.${ImageType}`;
+    const encoded = encodeURIComponent(fullPath);
+    return isDev ? fullPath : `${baseUrl}/${encoded}`;
+};
 
 export const ImageUrls = [
     getImagePath("introduction/introduction-1"),
@@ -79,7 +87,7 @@ export const ImageUrls = [
     ...levels
         .flatMap((level) => icons.map((icon) => `${level}/${icon}-${level}`))
         .flatMap((levelPath) =>
-            sequence.map((i) => getImagePath(`${levelPath}-${i}`)),
+            sequence.map((i) => getImagePath(`levels/${levelPath}-${i}`)),
         ),
-    ...CGFileList,
+    ...CGFileList.map((i) => getImagePath(i)),
 ];

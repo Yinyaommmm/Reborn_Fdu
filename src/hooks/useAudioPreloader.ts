@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef } from "react";
 
+import { baseUrl } from "@/types/images";
+
+const isDev = import.meta.env.MODE === "development";
+
 export function useAudioPreloader(urls: string[]) {
     const [loadedCount, setLoadedCount] = useState(0);
     const [start, setStart] = useState(false);
@@ -13,7 +17,7 @@ export function useAudioPreloader(urls: string[]) {
         urls.forEach((url) => {
             const audio = new Audio();
             audio.preload = "auto";
-            audio.src = url;
+            audio.src = isDev ? url : baseUrl + "/" + encodeURIComponent(url);
             audioMapRef.current[url] = audio;
 
             const onLoaded = () => {

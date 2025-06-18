@@ -24,7 +24,7 @@ body, html {
 }
 
 .game-background {
-    background-image: url("/webp/background.webp");
+    background-image: url("https://reborn-fdu-1306028870.cos.ap-shanghai.myqcloud.com/webp%2Fbackground.webp");
     background-size: 110vw auto;
     background-position: 0% 100%;
 }
