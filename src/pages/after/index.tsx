@@ -6,6 +6,7 @@ import { useTapHandler } from "./hooks/useTapHandler";
 
 import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
@@ -18,6 +19,7 @@ interface AfterProps extends HTMLMotionProps<"div"> {
 }
 
 export const After: FC<AfterProps> = ({ trigger }) => {
+    const { play: playClick } = useAudio("audio/01 点击.wav", 1);
     const { vh: viewportHeight } = useViewport();
     const height = Math.ceil(0.035 * viewportHeight);
     const [items, setItems] = useState<YearItem[]>([]);
@@ -29,6 +31,7 @@ export const After: FC<AfterProps> = ({ trigger }) => {
     useTapHandler(items, setDisplayItems);
 
     const handleOnclickAutoPlay = () => {
+        playClick();
         if (autoPlay === 0) {
             setAutoPlay(1);
         } else if (autoPlay === 1) {
@@ -155,6 +158,7 @@ export const After: FC<AfterProps> = ({ trigger }) => {
                 {items.length === displayItems.length && (
                     <div
                         onClick={(e) => {
+                            playClick();
                             trigger?.(e, "end");
                         }}
                     >

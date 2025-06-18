@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 
+import { useAudio } from "./hooks/useAudio";
 import { AudioProvider } from "./hooks/useAudioEnabled";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { After } from "./pages/after";
@@ -29,6 +30,11 @@ function App() {
         trigger: cardsTrigger,
         TransitionComponent: TransitionComponentCards,
     } = useCircularTransition(undefined, 0.6, 2, "cards");
+    const { play: playBackgroundMusic } = useAudio(
+        "audio/今生永相伴.mp3",
+        0.5,
+        true,
+    );
 
     useEffect(() => {
         // GameModule.gamestart();
@@ -80,6 +86,7 @@ function App() {
                         key="Launch"
                         trigger={trigger}
                         exit={{ opacity: 0, display: "none" }}
+                        playBackgroundMusic={playBackgroundMusic}
                     />
                 )}
                 {route === "introduction" && (

@@ -6,6 +6,7 @@ import { Talent } from "./talent";
 
 import { IconArrowButton } from "@/assets";
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
 import { TalentContent } from "@/types/talent";
@@ -24,6 +25,7 @@ export const getPoints = () => {
 
 export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
     const { className, ...rest } = props;
+    const { play: playClick } = useAudio("audio/01 点击.wav", 1);
     const [points, setPoints] = useState<number>(getPoints());
     const sex = $Data.use((state) => state.sex);
     const setSex = (updater: SetStateAction<number>) => {
@@ -118,24 +120,36 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                         <div className="mr-4">性别:</div>
                         <IconArrowButton
                             className="text-[#7897B5] text-xl"
-                            onClick={() => setSex((prev) => (prev + 1) % 2)}
+                            onClick={() => {
+                                playClick();
+                                setSex((prev) => (prev + 1) % 2);
+                            }}
                         />
                         {sex === 0 ? "男" : "女"}
                         <IconArrowButton
                             className="text-[#C6796C] text-xl -scale-x-100"
-                            onClick={() => setSex((prev) => (prev + 1) % 2)}
+                            onClick={() => {
+                                playClick();
+                                setSex((prev) => (prev + 1) % 2);
+                            }}
                         />
                     </div>
                     <div className="w-full mt-2 text-xs flex items-center gap-2">
                         <div className="mr-4">偏好:</div>
                         <IconArrowButton
                             className="text-[#7897B5] text-xl"
-                            onClick={() => setPrefer((prev) => (prev + 1) % 2)}
+                            onClick={() => {
+                                playClick();
+                                setPrefer((prev) => (prev + 1) % 2);
+                            }}
                         />
                         {prefer === 0 ? "专注科研" : "均衡发展"}
                         <IconArrowButton
                             className="text-[#C6796C] text-xl -scale-x-100"
-                            onClick={() => setPrefer((prev) => (prev + 1) % 2)}
+                            onClick={() => {
+                                playClick();
+                                setPrefer((prev) => (prev + 1) % 2);
+                            }}
                         />
                     </div>
                 </div>
@@ -158,12 +172,14 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     title="幸运"
                     onAdd={() => {
                         if (points > 0 && lucky < 20) {
+                            playClick();
                             setLucky((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
                     }}
                     onMinus={() => {
                         if (lucky > 10) {
+                            playClick();
                             setLucky((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -176,12 +192,14 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     title="诚信"
                     onAdd={() => {
                         if (points > 0 && honesty < 20) {
+                            playClick();
                             setHonesty((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
                     }}
                     onMinus={() => {
                         if (honesty > 10) {
+                            playClick();
                             setHonesty((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -196,12 +214,14 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     title="学术"
                     onAdd={() => {
                         if (points > 0 && academic < 20) {
+                            playClick();
                             setAcademic((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
                     }}
                     onMinus={() => {
                         if (academic > 10) {
+                            playClick();
                             setAcademic((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -214,12 +234,14 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     title="创造"
                     onAdd={() => {
                         if (points > 0 && creativity < 20) {
+                            playClick();
                             setCreativity((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
                     }}
                     onMinus={() => {
                         if (creativity > 10) {
+                            playClick();
                             setCreativity((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }
@@ -234,12 +256,14 @@ export const AddTalent: FC<HTMLMotionProps<"div">> = (props) => {
                     title="管理"
                     onAdd={() => {
                         if (points > 0 && management < 20) {
+                            playClick();
                             setManagement((prev) => prev + 1);
                             setPoints((prev) => prev - 1);
                         }
                     }}
                     onMinus={() => {
                         if (management > 10) {
+                            playClick();
                             setManagement((prev) => prev - 1);
                             setPoints((prev) => prev + 1);
                         }

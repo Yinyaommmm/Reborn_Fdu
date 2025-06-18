@@ -17,10 +17,11 @@ import "./style.css";
 
 export interface LaunchProps extends HTMLMotionProps<"div"> {
     trigger: CircularTransitionTrigger;
+    playBackgroundMusic?: () => void;
 }
 
 export const Launch: FC<LaunchProps> = (props) => {
-    const { trigger, ...rest } = props;
+    const { trigger, playBackgroundMusic, ...rest } = props;
     const { chosenKeys, chosenSex } = UseRandomCG();
     const { play } = useAudio("audio/03 启动按钮.wav", 1);
 
@@ -78,7 +79,7 @@ export const Launch: FC<LaunchProps> = (props) => {
                     </div>
 
                     <AnimatePresence>
-                        {!imageFinished && !audioFinished && (
+                        {(!imageFinished || !audioFinished) && (
                             <motion.div
                                 className="absolute w-full h-full top-0 left-0 flex items-center"
                                 exit={{ opacity: 0, y: -20 }}
@@ -91,7 +92,7 @@ export const Launch: FC<LaunchProps> = (props) => {
                                 />
                             </motion.div>
                         )}
-                        {!imageFinished && !audioFinished && (
+                        {(!imageFinished || !audioFinished) && (
                             <motion.div
                                 className="absolute h-[2.09%] top-[81%] left-[14%] flex items-center overflow-hidden"
                                 initial={{ width: "0%" }}
@@ -109,7 +110,7 @@ export const Launch: FC<LaunchProps> = (props) => {
                                 />
                             </motion.div>
                         )}
-                        {!imageFinished && !audioFinished && (
+                        {(!imageFinished || !audioFinished) && (
                             <motion.div
                                 className="absolute w-full h-[6%] top-[79%] flex items-center overflow-hidden"
                                 initial={{ left: "7%" }}
@@ -169,6 +170,7 @@ export const Launch: FC<LaunchProps> = (props) => {
                                 key="launch-start"
                                 onClick={(e) => {
                                     play();
+                                    playBackgroundMusic?.();
                                     trigger(e, "introduction");
                                 }}
                             >
