@@ -194,6 +194,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         $Data.update("set ending card", (draft) => {
             draft.endingCard = draft.cards[0];
             draft.toolUsing = false;
+            draft.upContext = "概率UP";
         });
 
         // 抽卡

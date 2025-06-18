@@ -16,6 +16,7 @@ export interface DataModel {
     gradDestination: GRADDESTINATION;
     semester: number;
     toolUsing: boolean;
+    upContext: "必胜" | "概率UP";
     sex: number;
     prefer: number;
 }
@@ -34,6 +35,7 @@ export const $Data = model<DataModel>("DATA", {
     gradDestination: "灵活就业",
     semester: 0,
     toolUsing: false,
+    upContext: "概率UP",
     sex: 1,
     prefer: 1,
 });

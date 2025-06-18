@@ -1,5 +1,5 @@
 import { animate, AnimatePresence, motion, useMotionValue } from "motion/react";
-import { FC, useEffect, useRef, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 
 import { Postmark } from "./postmark";
 import { ToolDisplay } from "./tool-display";
@@ -44,6 +44,20 @@ export const GameChoices: FC = () => {
     const endingType = $Game.use((state) => state.endingType);
     const toolId = $Data.use((state) => state.toolId);
     const toolUsing = $Data.use((state) => state.toolUsing);
+    const equal = useMemo(() => {
+        return gameModule.info()?.highLightChoice === "AB";
+    }, [cards]);
+
+    const electionBuff = useMemo(() => {
+        return gameModule.info()?.electionBuff ?? false;
+    }, [cards]);
+
+    console.log(
+        "electionBuff",
+        electionBuff,
+        toolUsing,
+        toolUsing || electionBuff,
+    );
 
     const handleSwipeComplete = () => {
         setShowEnding(true);
@@ -214,7 +228,9 @@ export const GameChoices: FC = () => {
                         </div>
                         <div className="absolute w-[40%] top-[-45%] left-[-5%]">
                             <AnimatePresence mode="sync">
-                                {toolUsing && <ChoiceUp />}
+                                {(toolUsing || electionBuff) && (
+                                    <ChoiceUp electionBuff={electionBuff} />
+                                )}
                             </AnimatePresence>
                         </div>
                     </motion.div>
@@ -299,10 +315,21 @@ export const GameChoices: FC = () => {
                                 }}
                             />
                         </div>
+                        <div className="absolute w-[40%] top-[-45%] left-[-5%]">
+                            <AnimatePresence mode="sync">
+                                {(toolUsing || electionBuff) && equal && (
+                                    <ChoiceUp electionBuff={electionBuff} />
+                                )}
+                            </AnimatePresence>
+                        </div>
                     </motion.div>
                 )}
                 {!showEnding && cards.length !== 0 && toolId !== undefined && (
-                    <ToolDisplay toolId={toolId} height={height} />
+                    <ToolDisplay
+                        toolId={toolId}
+                        height={height}
+                        electionBuff={electionBuff}
+                    />
                 )}
                 {showEnding && (
                     <motion.div
