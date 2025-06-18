@@ -269,6 +269,14 @@ export class StandardEvent {
         }
         return e;
     }
+
+    doesHaveElectionBuff(player: Player) {
+        return (
+            this.getCategory() === EventCategory.JXPY &&
+            player.getElectionBuff() !== 0
+        );
+    }
+
     public experienceCount = 0;
     specialEffect(resoluteRes: ResoluteEventRes, player: Player, year: number) {
         if (this.getID() === 14 && isSuccess(resoluteRes.resType)) {
@@ -434,7 +442,7 @@ export class GameSystem {
                 ? this.player.getElectionBuff()
                 : 0;
         this.lastContextLog.electionBuff = electionBuffProb;
-
+        if (electionBuffProb !== 0) this.player.clearElectionBuff(); // jxpyEvt选A后清除buff
         this.logger.info(
             "calcStandardSuccProb:",
             "evt" + evtProb,
@@ -444,7 +452,7 @@ export class GameSystem {
         return evtProb + humanBuffProb + electionBuffProb;
     }
     private calcSpecialSuccProb(evtID: number) {
-        // 卓博计划和人才工程强制保研成功
+        // 保研必定成功
         if (evtID === 17 && this.player.specialTag.has(保研百分百)) {
             this.logger.info("强制保研成功");
             this.lastContextLog.mustbePostGraduate = 1;
@@ -813,5 +821,4 @@ export interface ContextLog {
         finetuneEvtContribute?: FiveProps; // 在原本最终影响上系数微调
         rangeLimit?: FivePropsRange;
     };
-    addElectinoBuffBecauseEscape?: boolean; // 由于下次一定增加选举buff
 }

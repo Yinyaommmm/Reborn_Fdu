@@ -57,7 +57,7 @@ export const Debug: FC = () => {
             <div>选项结果: {debugInfo?.resType}</div>
             <div>玩家选择: {debugInfo?.playerChoice}</div>
             <div>
-                被动对属性变更的影响:{" "}
+                装备被动对属性变更的影响:{" "}
                 {fiveProps2string(debugInfo?.changeProp.itemPassiveContribute)}
             </div>
             <div>
@@ -75,11 +75,6 @@ export const Debug: FC = () => {
             <div>
                 真·最终(系数微调):{" "}
                 {fiveProps2string(debugInfo?.changeProp.finetuneEvtContribute)}
-            </div>
-
-            <div>
-                由于下次一定增加选举buff:{" "}
-                {debugInfo?.addElectinoBuffBecauseEscape}
             </div>
         </div>
     );
