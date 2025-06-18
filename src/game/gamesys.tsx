@@ -84,6 +84,7 @@ export class EventForShow {
     // endingAText: string[] = ["A结局1", "A结局2"];
     // endingBText: string = "B结局";
     highLightChoice: "A" | "AB" | "B" = "A";
+    electionBuff: boolean = false;
 }
 export class EventLog {
     // 时间、事件、选择、结果
@@ -210,14 +211,14 @@ export class StandardEvent {
         return this._readableEvt.upgrade;
     }
 
-    forShow(gender: "男" | "女", year: number): EventForShow {
+    forShow(player: Player, year: number): EventForShow {
         const e = new EventForShow();
         e.category = this._readableEvt.category;
         e.title = this._readableEvt.title;
         const startNum = String(this.getID() + 1).padStart(3, "0");
         e.imgSrc =
             this._readableEvt.bgCategory === BgCategory.CLOSEUP
-                ? `/${ImageType}/event/special/${startNum}-${e.title}-${gender}.${ImageType}`
+                ? `/${ImageType}/event/special/${startNum}-${e.title}-${player.gender}.${ImageType}`
                 : this._readableEvt.bgCategory === BgCategory.POSTER
                   ? `/${ImageType}/event/special/${startNum}-${e.title}.${ImageType}`
                   : `/${ImageType}/event/special/${startNum}-${e.title}.${ImageType}`;
@@ -267,6 +268,8 @@ export class StandardEvent {
         } else {
             e.highLightChoice = "A";
         }
+
+        e.electionBuff = this.doesHaveElectionBuff(player);
         return e;
     }
 
@@ -595,7 +598,6 @@ export class GameSystem {
         // 竞选事件下次一定补偿
         if (evt.getCategory() === EventCategory.JXPY) {
             this.player.setElectionBuff();
-            this.lastContextLog.addElectinoBuffBecauseEscape = true;
             this.logger.info("进行了竞选失败补偿");
         }
         // 使用
@@ -660,7 +662,7 @@ export class GameSystem {
     }
     // 前端展示事件调用该函数，根据信息去绘制展示该活动的页面
     showEvt(evtID: number) {
-        return this.allEvents[evtID].forShow(this.player.gender, this.year);
+        return this.allEvents[evtID].forShow(this.player, this.year);
     }
     resoluteEvt(
         evtID: number,
@@ -670,10 +672,8 @@ export class GameSystem {
     ) {
         this.contextLog.push({
             evtID,
-            evtTitle: this.allEvents[evtID].forShow(
-                this.player.gender,
-                this.year,
-            ).title,
+            evtTitle: this.allEvents[evtID].forShow(this.player, this.year)
+                .title,
             changeProp: {},
         });
         let res: ResoluteEventRes;
