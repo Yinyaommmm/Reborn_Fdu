@@ -5,6 +5,7 @@ import { twMerge } from "tailwind-merge";
 import { tools } from "../types/props";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
 
@@ -22,6 +23,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
     const [active, setActive] = useState<string | undefined>(
         chosenTool?.active,
     );
+    const { play: playClick } = useAudio("audio/01 点击.wav", 1);
 
     return (
         <motion.div
@@ -49,6 +51,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
                         adjustWidth={false}
                         key={`choose-props-${index}`}
                         onClick={() => {
+                            playClick();
                             setName(tool.name);
                             setDescription(tool.description);
                             setPassive(tool.passive);
@@ -76,6 +79,7 @@ export const ChooseProps: FC<HTMLMotionProps<"div">> = (props) => {
                         adjustWidth={false}
                         key={`choose-props-${index}`}
                         onClick={() => {
+                            playClick();
                             setName(tool.name);
                             setDescription(tool.description);
                             setPassive(tool.passive);

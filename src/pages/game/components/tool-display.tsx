@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { FC, PointerEventHandler, useRef, useState } from "react";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { gameModule } from "@/packages/game-module";
 import { tools } from "@/pages/birth/types/props";
 import { $Data } from "@/store/data";
@@ -13,6 +14,7 @@ interface ToolDisplayProps {
 }
 
 export const ToolDisplay: FC<ToolDisplayProps> = (props) => {
+    const { play: playClick } = useAudio("audio/01 点击.wav", 1);
     const { toolId, height, onUse } = props;
     const [left] = useState<number>(gameModule.toolLeft());
     const [available] = useState<boolean>(gameModule.toolAvailable());
@@ -22,6 +24,7 @@ export const ToolDisplay: FC<ToolDisplayProps> = (props) => {
     const [showIntro, setShowIntro] = useState<boolean>(false);
 
     const handlePointerDown: PointerEventHandler<HTMLDivElement> = () => {
+        playClick();
         if (available) {
             timeoutRef.current = setTimeout(() => {
                 setShowIntro(true);

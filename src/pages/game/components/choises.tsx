@@ -6,6 +6,7 @@ import { ChoiceUp } from "./up";
 import { CardColorMap } from "../utils/colors";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
@@ -29,6 +30,7 @@ const getPostmark = (et: EndingType) => {
 };
 
 export const GameChoices: FC = () => {
+    const { play: playClick } = useAudio("audio/01 点击.wav", 1);
     const { vw: viewportWidth, vh: viewportHeight } = useViewport();
     const height = Math.ceil(0.08 * viewportHeight);
     const slideDistanceScale = 1;
@@ -170,6 +172,7 @@ export const GameChoices: FC = () => {
                         key="choice-1"
                         onClick={() => {
                             if (!isAnimating) {
+                                playClick();
                                 $Game.update("trigger", (draft) => {
                                     draft.trigger = true;
                                     draft.exitDirection = "right";
@@ -256,6 +259,7 @@ export const GameChoices: FC = () => {
                         key="choice-2"
                         onClick={() => {
                             if (!isAnimating) {
+                                playClick();
                                 $Game.update("trigger", (draft) => {
                                     draft.trigger = true;
                                     draft.exitDirection = "left";

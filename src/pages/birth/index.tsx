@@ -19,16 +19,23 @@ interface BirthProps extends HTMLMotionProps<"div"> {
 
 export const Birth: FC<BirthProps> = ({ trigger, ...rest }) => {
     const [step, setStep] = useState<number>(1);
+    const { play: playClick } = useAudio("audio/01 点击.wav", 1);
     const { onClick: onClickStep1, onTouchEnd: onTouchEnd1 } = useFastClick(
-        () => setStep(1),
+        () => {
+            playClick();
+            setStep(1);
+        },
     );
     const { onClick: onClickStep2, onTouchEnd: onTouchEnd2 } = useFastClick(
-        () => setStep(2),
+        () => {
+            playClick();
+            setStep(2);
+        },
     );
-    const { play } = useAudio("audio/03 启动按钮.wav", 1);
+    const { play: playLaunch } = useAudio("audio/03 启动按钮.wav", 1);
     const { onClick: onClickStep3, onTouchEnd: onTouchEnd3 } = useFastClick(
         () => {
-            play();
+            playLaunch();
             setStep(3);
         },
     );
@@ -100,7 +107,7 @@ export const Birth: FC<BirthProps> = ({ trigger, ...rest }) => {
                     <GoCard
                         key={`step-3`}
                         onClick={(e) => {
-                            play();
+                            playLaunch();
                             gameModule.init();
                             gameModule.equip();
                             $Data.update("new semester", (draft) => {
