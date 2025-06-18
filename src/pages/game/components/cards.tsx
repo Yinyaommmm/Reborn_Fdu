@@ -434,7 +434,10 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                                     src={
                                         card === undefined
                                             ? getImagePath("")
-                                            : gameModule.getCard(card.id).imgSrc
+                                            : getImagePath(
+                                                  gameModule.getCard(card.id)
+                                                      .imgSrc,
+                                              )
                                     }
                                 />
                             </div>
