@@ -6,29 +6,12 @@ import { ToolDisplay } from "./tool-display";
 import { ChoiceUp } from "./up";
 import { CardColorMap } from "../utils/colors";
 
-import Image from "@/components/image";
 import { useAudio } from "@/hooks/useAudio";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
-import { $Game, EndingType } from "@/store/game";
+import { $Game } from "@/store/game";
 import { EventCategory } from "@/type/type";
-import { getImagePath } from "@/types/images";
-
-const getPostmark = (et: EndingType) => {
-    switch (et) {
-        case "B":
-            return getImagePath("pass");
-        case "Pass":
-            return getImagePath("pass");
-        case "Punish":
-            return getImagePath("punishment");
-        case "F":
-            return getImagePath("failure");
-        default:
-            return getImagePath("success");
-    }
-};
 
 export const GameChoices: FC = () => {
     const { play: playClick } = useAudio("audio/01 点击.wav", 1);
