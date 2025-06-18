@@ -13,7 +13,7 @@ export interface IntroductionProps extends HTMLMotionProps<"div"> {
 
 export const Introduction: FC<IntroductionProps> = (props) => {
     const { trigger, ...rest } = props;
-    const [current, setCurrent] = useState<number>(1);
+    const [current, setCurrent] = useState<number>(0);
     const { onClick, onTouchEnd } = useFastClick((e) => {
         let isTrigger = false;
         setCurrent((prev) => {
