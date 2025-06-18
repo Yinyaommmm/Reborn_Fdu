@@ -65,15 +65,18 @@ export const Debug: FC = () => {
                 {fiveProps2string(debugInfo?.changeProp.evtOriginContribute)}
             </div>
             <div>
-                最终影响:{" "}
-                {fiveProps2string(
-                    debugInfo?.changeProp.finallyContributeByClamp,
-                )}
-            </div>
-            <div>
                 属性改变范围:{" "}
                 {fivePropsRange2string(debugInfo?.changeProp.rangeLimit)}
             </div>
+            <div>
+                最终影响(Clamp之后):{" "}
+                {fiveProps2string(debugInfo?.changeProp.finallyClampContribute)}
+            </div>
+            <div>
+                真·最终(系数微调):{" "}
+                {fiveProps2string(debugInfo?.changeProp.finetuneEvtContribute)}
+            </div>
+
             <div>
                 由于下次一定增加选举buff:{" "}
                 {debugInfo?.addElectinoBuffBecauseEscape}

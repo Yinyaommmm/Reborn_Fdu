@@ -12,6 +12,7 @@ import {
     clampProb,
     cloneProps,
     didMeetRequireProps,
+    finetuneResolute,
     formatDialog,
     getTwoRandomItems,
     highLight,
@@ -532,8 +533,7 @@ export class GameSystem {
         this.lastContextLog.changeProp.evtOriginContribute =
             cloneProps(evtContribute);
         clampFiveProps_choiceA(dc, evt, this.player.props);
-        this.lastContextLog.changeProp.finallyContributeByClamp =
-            cloneProps(dc);
+        this.lastContextLog.changeProp.finallyClampContribute = cloneProps(dc);
         this.lastContextLog.changeProp.rangeLimit = {
             H: evt.getHRange_ChoiceA(),
             L: evt.getLRange_ChoiceA(),
@@ -541,9 +541,19 @@ export class GameSystem {
             C: evt.getCRange_ChoiceA(),
             M: evt.getMRange_ChoiceA(),
         };
-        this.logger.info("ChoiceA after clamp", dc.H, dc.L, dc.A, dc.C, dc.M);
+        const finetune = finetuneResolute(dc);
+        this.lastContextLog.changeProp.finetuneEvtContribute = finetune;
+        this.logger.info(
+            "ChoiceA finetune",
+            finetune.H,
+            finetune.L,
+            finetune.A,
+            finetune.C,
+            finetune.M,
+        );
+        ctx.deltaPropContext = finetune;
         return {
-            deltaProps: ctx.deltaPropContext!,
+            deltaProps: ctx.deltaPropContext,
             endingText: evt.getEndingA(resType),
             resType: res.resType,
         };
@@ -620,7 +630,7 @@ export class GameSystem {
             newLRange,
             this.player.props,
         );
-        this.lastContextLog.changeProp.finallyContributeByClamp = cloneProps(
+        this.lastContextLog.changeProp.finallyClampContribute = cloneProps(
             ctx.deltaPropContext!,
         );
         this.lastContextLog.changeProp.rangeLimit = {
@@ -630,9 +640,12 @@ export class GameSystem {
             C: evt.getCRange_ChoiceB(),
             M: evt.getMRange_ChoiceB(),
         };
-        this.logger.info("ChoiceB 真·中间随机结果", ctx.deltaPropContext);
+        const finetune = finetuneResolute(ctx.deltaPropContext!);
+        this.lastContextLog.changeProp.finetuneEvtContribute = finetune;
+        this.logger.info("ChoiceB finetune结果", finetune);
+        ctx.deltaPropContext = finetune;
         return {
-            deltaProps: ctx.deltaPropContext!,
+            deltaProps: ctx.deltaPropContext,
             endingText: evt.getEndingB(),
             resType: evt.isB_Punish() ? "Punish" : "B",
         };
@@ -796,7 +809,8 @@ export interface ContextLog {
     changeProp: {
         itemPassiveContribute?: FiveProps; // 被动对属性变更的影响
         evtOriginContribute?: FiveProps; // 事件本身对属性变更的影响
-        finallyContributeByClamp?: FiveProps; // 最终影响
+        finallyClampContribute?: FiveProps; // 原本最终影响
+        finetuneEvtContribute?: FiveProps; // 在原本最终影响上系数微调
         rangeLimit?: FivePropsRange;
     };
     addElectinoBuffBecauseEscape?: boolean; // 由于下次一定增加选举buff
