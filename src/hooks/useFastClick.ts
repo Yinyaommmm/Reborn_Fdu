@@ -1,6 +1,6 @@
 import { useRef, useEffect, useCallback } from "react";
 
-type AnyEvent = React.TouchEvent | React.MouseEvent;
+export type AnyEvent = React.TouchEvent | React.MouseEvent;
 
 export function useFastClick(onActivate: (e: AnyEvent) => void) {
     const touched = useRef(false);

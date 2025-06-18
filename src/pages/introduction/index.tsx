@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { useFastClick } from "@/hooks/useFastClick";
 import { getImagePath } from "@/types/images";
@@ -13,14 +14,18 @@ export interface IntroductionProps extends HTMLMotionProps<"div"> {
 
 export const Introduction: FC<IntroductionProps> = (props) => {
     const { trigger, ...rest } = props;
-    const [current, setCurrent] = useState<number>(0);
+    const { play: playStoryboard } = useAudio("audio/02 分镜.wav", 1);
+
+    const [current, setCurrent] = useState<number>(1);
+
     const { onClick, onTouchEnd } = useFastClick((e) => {
         let isTrigger = false;
         setCurrent((prev) => {
-            if (prev > 7) {
+            if (prev >= 7) {
                 isTrigger = true;
                 return prev;
             }
+            playStoryboard();
             return prev + 1;
         });
         if (isTrigger) trigger?.(e, "birth");

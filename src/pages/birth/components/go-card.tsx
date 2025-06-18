@@ -1,7 +1,8 @@
 import { HTMLMotionProps, motion } from "motion/react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { useViewport } from "@/hooks/useViewPort";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
@@ -10,6 +11,11 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
     const { ...rest } = props;
     const { vw, vh } = useViewport();
     const sex = $Data.use((state) => state.sex);
+    const { play: playStoryboard } = useAudio("audio/02 分镜.wav", 1);
+
+    useEffect(() => {
+        playStoryboard();
+    }, []);
 
     return (
         <motion.div
