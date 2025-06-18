@@ -29,11 +29,11 @@ export function useAudioPreloader(urls: string[]) {
                 cleanup();
             };
             const cleanup = () => {
-                audio.removeEventListener("canplaythrough", onLoaded);
+                audio.removeEventListener("loadedmetadata", onLoaded);
                 audio.removeEventListener("error", onError);
             };
 
-            audio.addEventListener("canplaythrough", onLoaded, { once: true });
+            audio.addEventListener("loadedmetadata", onLoaded, { once: true });
             audio.addEventListener("error", onError, { once: true });
         });
     }, [urls, start]);
