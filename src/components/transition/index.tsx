@@ -1,6 +1,10 @@
 import { motion, MotionStyle, Variants } from "motion/react";
 import { useState, useEffect, FC, useMemo, useRef, ReactNode } from "react";
+
 import "./index.css";
+import Image from "../image";
+
+import { getImagePath } from "@/types/images";
 interface CircleTransitionProps {
     isActive: boolean;
     cx: number;
@@ -113,6 +117,9 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
             variants={variants}
             transition={{ duration, ease: "easeInOut" }}
         >
+            <div className="absolute top-[80%] left-[60%] w-[40vw]">
+                <Image src={getImagePath("launch-logo")} square={false} />
+            </div>
             {children}
         </motion.div>
     );
