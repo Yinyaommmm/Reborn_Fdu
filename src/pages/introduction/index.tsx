@@ -17,7 +17,6 @@ export const Introduction: FC<IntroductionProps> = (props) => {
     const { trigger, ...rest } = props;
     const { play: playStoryboard } = useAudio("audio/02 分镜.wav", 1);
     const { play: playCrush } = useAudio("audio/撞车.mp3", 1);
-    const { play: playCar } = useAudio("audio/汽车鸣笛.wav", 1);
     const { play: playClock } = useAudio("audio/闹铃.mp3", 1);
     const { play: playRain } = useAudio("audio/雨.mp3", 1);
     const { play: playBird } = useAudio("audio/鸟叫.mp3", 1);
@@ -43,7 +42,6 @@ export const Introduction: FC<IntroductionProps> = (props) => {
             playRain();
         }
         if (current === 4) {
-            playCar();
             playCrush();
         }
         if (current === 5) {
