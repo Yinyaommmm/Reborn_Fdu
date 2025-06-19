@@ -1,9 +1,9 @@
-import { model } from "@/packages/model";
+// import { model } from "@/packages/model";
 
-export interface DebugModel {
-    isDebug: boolean;
-}
+// export interface DebugModel {
+//     isDebug: boolean;
+// }
 
-export const $Debug = model<DebugModel>("DEBUG", {
-    isDebug: false,
-});
+// export const $Debug = model<DebugModel>("DEBUG", {
+//     isDebug: false,
+// });

@@ -3,7 +3,6 @@ import { FC, useEffect, useState } from "react";
 import { ContextLog, FiveProps, FivePropsRange } from "@/game/gamesys";
 import { gameModule } from "@/packages/game-module";
 import { $Data } from "@/store/data";
-import { $Debug } from "@/store/debug";
 
 const fiveProps2string = (v: FiveProps | undefined) => {
     if (v === undefined) return "无";
@@ -15,7 +14,7 @@ const fivePropsRange2string = (v: FivePropsRange | undefined) => {
 };
 
 export const Debug: FC = () => {
-    const debug = $Debug.use((state) => state.isDebug);
+    // const debug = $Debug.use((state) => state.isDebug);
     const cards = $Data.use((state) => state.cards);
     const [debugInfo, setDebugInfo] = useState<ContextLog | undefined>(
         undefined,
@@ -25,7 +24,7 @@ export const Debug: FC = () => {
         setDebugInfo(gameModule.debug());
     }, [cards]);
 
-    if (!debug) return <></>;
+    // if (!debug) return <></>;
 
     return (
         <div className="fixed top-0 left-0 bg-amber-100 opacity-70 text-xs pointer-events-none z-[99999] font-bold">

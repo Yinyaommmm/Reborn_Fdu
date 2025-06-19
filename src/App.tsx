@@ -7,7 +7,6 @@ import { useCircularTransition } from "./hooks/useCircularTransition";
 import { useFontLoader } from "./hooks/useFontLoader";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
-import { Debug } from "./pages/debug";
 import { Dev } from "./pages/dev";
 import { Earphone } from "./pages/earphone";
 import { End } from "./pages/end";
@@ -15,7 +14,6 @@ import Game from "./pages/game";
 import { Graduation } from "./pages/graduation";
 import { Introduction } from "./pages/introduction";
 import { Launch } from "./pages/launch";
-import { $Debug } from "./store/debug";
 import { $UI } from "./store/ui";
 import { audios } from "./types/audios";
 
@@ -24,7 +22,7 @@ import "./App.css";
 function App() {
     const route = $UI.use((state) => state.route);
     const earphoneDisplay = $UI.use((state) => state.earphoneDisplay);
-    const debug = $Debug.use((state) => state.isDebug);
+    // const debug = $Debug.use((state) => state.isDebug);
     const { startLoading: audioStartLoading } = useAudioPreloader(audios);
     useFontLoader("FHLFont", "font/FHL.ttf");
 
@@ -57,7 +55,7 @@ function App() {
 
     return (
         <>
-            <div className="fixed top-0 left-0 flex items-center z-[99998]">
+            {/* <div className="fixed top-0 left-0 flex items-center z-[99998]">
                 Debug v0.1:{" "}
                 <input
                     className="ml-2"
@@ -69,11 +67,11 @@ function App() {
                         });
                     }}
                 />
-            </div>
+            </div> */}
             <AnimatePresence>{earphoneDisplay && <Earphone />}</AnimatePresence>
             {TransitionComponent}
             {TransitionComponentCards}
-            <Debug />
+            {/* <Debug /> */}
             {route === "game" && <Game key="Game" trigger={trigger} />}
             {route === "birth" && (
                 <Birth
