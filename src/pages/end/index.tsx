@@ -9,6 +9,7 @@ import { getImagePath } from "@/types/images";
 
 interface GraduationProps extends HTMLMotionProps<"div"> {
     trigger?: CircularTransitionTrigger;
+    dropout?: boolean;
 }
 
 const lines = [
@@ -25,7 +26,24 @@ const lines = [
     "——晨曦工作室",
 ];
 
-export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
+const dropoutLines = [
+    "Game Over",
+    "学海泛舟，诚信为楫",
+    "对待学业需心持敬畏",
+    "",
+    "奈何迷途触礁",
+    "你因作弊沉舟，憾别母校",
+    "",
+    "自此离港",
+    "愿行囊中盛着谆谆教诲",
+    "前路晦明，莫失心灯",
+];
+
+export const End: FC<GraduationProps> = ({
+    trigger,
+    dropout = false,
+    ...rest
+}) => {
     const { play: playLetter } = useAudio("audio/打开信封.mp3", 1);
 
     useEffect(() => {
@@ -80,9 +98,10 @@ export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
                 <div className="absolute top-[-6px] right-[-6px] h-[45%] w-decorate bg-decorate-border"></div>
                 <div className="absolute bottom-[6px] left-[6px] h-decorate w-[70%] bg-decorate-border"></div>
                 <StaggeredText
-                    className="w-full h-full px-[10%] flex flex-col gap-[1%] items-center justify-center"
-                    lines={lines}
-                    tailRightAlign
+                    className="w-full h-full px-[5%] flex flex-col gap-[1%] items-center justify-center"
+                    lines={dropout ? dropoutLines : lines}
+                    tailRightAlign={!dropout}
+                    emphasisHead={dropout}
                     delay={2}
                 />
             </motion.div>

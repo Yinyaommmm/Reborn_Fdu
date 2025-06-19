@@ -1,6 +1,8 @@
 import { HTMLMotionProps } from "motion/react";
 import { FC, useRef } from "react";
 
+import { End } from "../end";
+
 import Image from "@/components/image";
 import { StaggeredText } from "@/components/staggered-text";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
@@ -31,6 +33,10 @@ export const Graduation: FC<GraduationProps> = ({ trigger }) => {
     const eduDestination = $Data.use((state) => state.eduDestination);
     const gradDestination = $Data.use((state) => state.gradDestination);
     const triggerRef = useRef<NodeJS.Timeout>(undefined);
+
+    if (gradDestination === "退学") {
+        return <End dropout />;
+    }
 
     return (
         <div

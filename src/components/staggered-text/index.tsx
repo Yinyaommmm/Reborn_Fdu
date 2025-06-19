@@ -10,6 +10,7 @@ const itemVariants = {
 interface StaggeredTextProps extends HTMLMotionProps<"div"> {
     lines: string[];
     tailRightAlign?: boolean;
+    emphasisHead?: boolean;
     delay?: number;
 }
 
@@ -17,6 +18,7 @@ export const StaggeredText: FC<StaggeredTextProps> = (props) => {
     const {
         lines,
         tailRightAlign = false,
+        emphasisHead = false,
         delay = 0,
         className,
         ...rest
@@ -56,6 +58,7 @@ export const StaggeredText: FC<StaggeredTextProps> = (props) => {
                             idx === lines.length - 1 && tailRightAlign
                                 ? "text-right text-[#585858]"
                                 : "text-center",
+                            emphasisHead && idx === 0 && "text-2xl",
                         )}
                     >
                         {text}
