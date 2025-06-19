@@ -1,4 +1,4 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 
 import { useAudioEnabled } from "./useAudioEnabled";
 
@@ -22,10 +22,13 @@ export const useAudio = (
         }
     }, [repeat]);
 
-    const play = () => {
-        if (!enabled) return;
-        audioRef.current!.play().catch(console.error);
-    };
+    const play = useMemo(() => {
+        if (!enabled) return () => {};
+        return () => {
+            if (!enabled) return;
+            audioRef.current!.play().catch(console.error);
+        };
+    }, [enabled]);
 
     const pause = () => {
         audioRef.current!.pause();

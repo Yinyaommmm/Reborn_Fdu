@@ -14,6 +14,7 @@ export interface UIModel {
     messageType: "success" | "danger" | "warning";
     messageDisplay: boolean;
     route: UIRoute;
+    earphoneDisplay: boolean;
 }
 
 export const $UI = model<UIModel>("UI", {
@@ -21,4 +22,5 @@ export const $UI = model<UIModel>("UI", {
     messageType: "success",
     messageDisplay: false,
     route: "launch",
+    earphoneDisplay: true,
 });
