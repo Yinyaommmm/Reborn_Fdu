@@ -339,7 +339,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             setIsAnimating(true);
             setTimeout(() => {
                 setIsAnimating(false);
-            }, 300);
+            }, 400);
         };
 
         window.addEventListener("touchstart", handleTouchStart);
