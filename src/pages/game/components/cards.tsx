@@ -246,7 +246,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
         setTimeout(() => {
             setIsAnimating(false);
             x.set(0);
-        }, 500);
+        }, 600);
     };
 
     useEffect(() => {
