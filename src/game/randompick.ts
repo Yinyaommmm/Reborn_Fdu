@@ -118,14 +118,14 @@ export class RandomPickModule {
         }
 
         if (availablePools.length === 0) {
-            this.logger.warn("没有一个池子可以抽取，但是仍要强制抽取");
-            let s = "此时还剩余需求(池子中数量/还需要的数量)：";
-            for (const key of EventPoolKeyArr) {
-                s += `${configThisYear[key] > 0 ? "【警告】" : ""}${key}事件${this.pools[key].length}/${configThisYear[key]}   `;
-            }
-            console.warn(s);
-            console.log("最近至多8次有效的抽取事件ID:");
-            this.lastFiveEvtIDs.print();
+            // this.logger.warn("没有一个池子可以抽取，但是仍要强制抽取");
+            // let s = "此时还剩余需求(池子中数量/还需要的数量)：";
+            // for (const key of EventPoolKeyArr) {
+            //     s += `${configThisYear[key] > 0 ? "【警告】" : ""}${key}事件${this.pools[key].length}/${configThisYear[key]}   `;
+            // }
+            // console.warn(s);
+            // console.log("最近至多8次有效的抽取事件ID:");
+            // this.lastFiveEvtIDs.print();
 
             return null;
         }

@@ -80,7 +80,7 @@ export class TimelineModule {
         private gameSys: GameSystem,
     ) {
         // this.logger = new Logger("TIMELINE", gameSys.logger.getEnable());
-        this.logger = new Logger("TIMELINE", true);
+        this.logger = new Logger("TIMELINE", false);
         this.randpickMod = new RandomPickModule(player, gameSys, this);
     }
 
