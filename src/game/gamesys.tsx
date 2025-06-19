@@ -83,6 +83,7 @@ export class EventForShow {
     highLightChoice: "A" | "AB" | "B" = "A";
     electionBuff: boolean = false;
     beidaipants: boolean = false;
+    hufu: boolean = false;
 }
 export class EventLog {
     // 时间、事件、选择、结果
@@ -275,6 +276,9 @@ export class StandardEvent {
         e.beidaipants =
             itemManager.hasItem("Middle Part Pants") &&
             e.category === EventCategory.SZTZ;
+        e.hufu =
+            itemManager.hasItem("Skincare Set") &&
+            e.category === EventCategory.XYSJ;
         return e;
     }
 
