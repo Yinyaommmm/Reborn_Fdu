@@ -7,10 +7,12 @@ import { getImagePath } from "@/types/images";
 
 interface ChoiceUpProps {
     electionBuff?: boolean;
+    showBDToolBuff?: boolean;
+    showHFToolBuff?: boolean;
 }
 
 export const ChoiceUp: FC<ChoiceUpProps> = (props) => {
-    const { electionBuff } = props;
+    const { electionBuff, showBDToolBuff, showHFToolBuff } = props;
     const upContext = $Data.use((state) => state.upContext);
     const rotateControls = useAnimation();
 
@@ -47,7 +49,11 @@ export const ChoiceUp: FC<ChoiceUpProps> = (props) => {
             <motion.div animate={rotateControls} initial={{ rotate: 0 }}>
                 <Image src={getImagePath("up")} square={false} />
                 <div className="absolute left-[42%] top-[35%] rotate-[-7deg] w-[40%] h-[40%] bg-[#F0D399] flex items-center justify-center font-cursive text-sm">
-                    {upContext}
+                    {showBDToolBuff
+                        ? "必胜"
+                        : showHFToolBuff
+                          ? "💗💗💗"
+                          : upContext}
                 </div>
             </motion.div>
         </motion.div>

@@ -52,6 +52,14 @@ export const GameChoices: FC = () => {
         return gameModule.info()?.electionBuff ?? false;
     }, [cards]);
 
+    const showBDToolBuff = useMemo(() => {
+        return gameModule.info()?.beidaipants ?? false;
+    }, [cards]);
+
+    const showHFToolBuff = useMemo(() => {
+        return gameModule.info()?.hufu ?? false;
+    }, [cards]);
+
     const handleSwipeComplete = () => {
         setShowEnding(true);
     };
@@ -221,8 +229,15 @@ export const GameChoices: FC = () => {
                         </div>
                         <div className="absolute w-[40%] top-[-45%] left-[-5%]">
                             <AnimatePresence mode="sync">
-                                {(toolUsing || electionBuff) && (
-                                    <ChoiceUp electionBuff={electionBuff} />
+                                {(showBDToolBuff ||
+                                    showHFToolBuff ||
+                                    toolUsing ||
+                                    electionBuff) && (
+                                    <ChoiceUp
+                                        electionBuff={electionBuff}
+                                        showBDToolBuff={showBDToolBuff}
+                                        showHFToolBuff={showHFToolBuff}
+                                    />
                                 )}
                             </AnimatePresence>
                         </div>
@@ -310,9 +325,17 @@ export const GameChoices: FC = () => {
                         </div>
                         <div className="absolute w-[40%] top-[-45%] left-[-5%]">
                             <AnimatePresence mode="sync">
-                                {(toolUsing || electionBuff) && equal && (
-                                    <ChoiceUp electionBuff={electionBuff} />
-                                )}
+                                {(showBDToolBuff ||
+                                    showHFToolBuff ||
+                                    toolUsing ||
+                                    electionBuff) &&
+                                    equal && (
+                                        <ChoiceUp
+                                            electionBuff={electionBuff}
+                                            showBDToolBuff={showBDToolBuff}
+                                            showHFToolBuff={showHFToolBuff}
+                                        />
+                                    )}
                             </AnimatePresence>
                         </div>
                     </motion.div>
