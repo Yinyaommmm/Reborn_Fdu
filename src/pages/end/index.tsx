@@ -1,8 +1,9 @@
 import { HTMLMotionProps, motion } from "motion/react";
-import { FC } from "react";
+import { FC, useEffect } from "react";
 
 import Image from "@/components/image";
 import { StaggeredText } from "@/components/staggered-text";
+import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { getImagePath } from "@/types/images";
 
@@ -25,6 +26,14 @@ const lines = [
 ];
 
 export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
+    const { play: playLetter } = useAudio("audio/打开信封.mp3", 1);
+
+    useEffect(() => {
+        setTimeout(() => {
+            playLetter();
+        }, 1000);
+    }, []);
+
     return (
         <motion.div
             className="w-screen h-screen flex items-center justify-center game-background"

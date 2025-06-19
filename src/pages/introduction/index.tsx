@@ -20,6 +20,7 @@ export const Introduction: FC<IntroductionProps> = (props) => {
     const { play: playClock } = useAudio("audio/闹铃.mp3", 1);
     const { play: playRain } = useAudio("audio/雨.mp3", 1);
     const { play: playBird } = useAudio("audio/鸟叫.mp3", 1);
+    const { play: playClassroomAlert } = useAudio("audio/上课铃.mp3", 1);
 
     const [current, setCurrent] = useState<number>(1);
 
@@ -49,6 +50,9 @@ export const Introduction: FC<IntroductionProps> = (props) => {
         }
         if (current === 6) {
             playClock();
+        }
+        if (current === 7) {
+            playClassroomAlert();
         }
     }, [current]);
 

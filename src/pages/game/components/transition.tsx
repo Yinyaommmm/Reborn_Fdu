@@ -4,6 +4,7 @@ import { FC, Ref, useImperativeHandle } from "react";
 import { semester2Title } from "./cards";
 
 import Image from "@/components/image";
+import { useAudio } from "@/hooks/useAudio";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
 
@@ -16,8 +17,10 @@ export const CardsTransition: FC<{ ref: Ref<CardsTransitionHandler> }> = ({
 }) => {
     const controls = useAnimation();
     const semester = $Data.use((state) => state.semester);
+    const { play: playCalender } = useAudio("audio/撕日历.mp3", 1);
 
     const handleTear = async () => {
+        playCalender();
         await controls.start({
             rotate: -15,
             transformOrigin: "100% 0%",

@@ -25,7 +25,7 @@ interface PostmarkProps {
 }
 
 export const Postmark: FC<PostmarkProps> = ({ endingType }) => {
-    const { play: playSuccess } = useAudio("audio/04 成功.wav", 1);
+    const { play: playSuccess } = useAudio("audio/04 成功.mp3", 1);
     const { play: playFailed } = useAudio("audio/05 失败.wav", 1);
 
     useEffect(() => {
