@@ -7,15 +7,9 @@ const tools = [1, 2, 3, 4, 5, 6, 7, 8];
 
 export const ImageType: "png" | "webp" = "webp";
 
-const isDev = import.meta.env.MODE === "development";
-
-export const baseUrl =
-    "https://reborn-fdu-1306028870.cos.ap-shanghai.myqcloud.com";
-
 export const getImagePath = (path: string): string => {
-    const fullPath = `${ImageType}/${path}.${ImageType}`;
-    const encoded = encodeURIComponent(fullPath);
-    return isDev ? fullPath : `${baseUrl}/${encoded}`;
+    const fullPath = `/reborn/${ImageType}/${path}.${ImageType}`;
+    return fullPath;
 };
 
 export const ImageUrls = [

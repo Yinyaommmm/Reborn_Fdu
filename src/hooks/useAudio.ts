@@ -2,10 +2,6 @@ import { useRef, useEffect } from "react";
 
 import { useAudioEnabled } from "./useAudioEnabled";
 
-import { baseUrl } from "@/types/images";
-
-const isDev = import.meta.env.MODE === "development";
-
 export const useAudio = (
     url: string,
     volume: number = 1,
@@ -15,9 +11,7 @@ export const useAudio = (
     const { enabled } = useAudioEnabled();
 
     if (!audioRef.current) {
-        audioRef.current = new Audio(
-            isDev ? url : baseUrl + "/" + encodeURIComponent(url),
-        );
+        audioRef.current = new Audio(`/reborn/${url}`);
         audioRef.current.volume = volume;
         audioRef.current.loop = repeat;
     }
