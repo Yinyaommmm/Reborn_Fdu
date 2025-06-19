@@ -52,13 +52,6 @@ export const GameChoices: FC = () => {
         return gameModule.info()?.electionBuff ?? false;
     }, [cards]);
 
-    console.log(
-        "electionBuff",
-        electionBuff,
-        toolUsing,
-        toolUsing || electionBuff,
-    );
-
     const handleSwipeComplete = () => {
         setShowEnding(true);
     };
