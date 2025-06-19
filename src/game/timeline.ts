@@ -73,7 +73,7 @@ export class TimelineModule {
     private logger: Logger;
     private randpickMod: RandomPickModule;
     private luckyYear = new Map<number, number>();
-    public luckHappenProb = 0.08;
+    public luckHappenProb = 0.2;
 
     constructor(
         private player: Player,
