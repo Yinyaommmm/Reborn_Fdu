@@ -305,7 +305,7 @@ export class StandardEvent {
                 player.specialTag.add(跳过校招);
                 this.logger.info(17 + "触发免试研究生");
             } else if (resoluteRes.resType === "B") {
-                player.specialTag.add(跳过考研);
+                // player.specialTag.add(跳过考研);
                 this.logger.info(17 + "放弃免试研究生");
             }
         }
