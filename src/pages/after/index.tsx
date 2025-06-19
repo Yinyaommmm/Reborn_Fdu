@@ -24,7 +24,7 @@ export const After: FC<AfterProps> = ({ trigger }) => {
     const height = Math.ceil(0.035 * viewportHeight);
     const [items, setItems] = useState<YearItem[]>([]);
     const [displayItems, setDisplayItems] = useState<YearItem[]>([]);
-    const [autoPlay, setAutoPlay] = useState<number>(0);
+    const [autoPlay, setAutoPlay] = useState<number>(1);
     const containerRef = useRef<HTMLDivElement>(null);
     const autoPlayRef = useRef<NodeJS.Timeout>(undefined);
     const { play: playTriggerEvent } = useAudio(
