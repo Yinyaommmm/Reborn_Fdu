@@ -44,8 +44,10 @@ export const Introduction: FC<IntroductionProps> = (props) => {
             playCar();
             playCrush();
         }
-        if (current === 6) {
+        if (current === 5) {
             playBird();
+        }
+        if (current === 6) {
             playClock();
         }
     }, [current]);
