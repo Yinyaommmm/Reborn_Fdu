@@ -25,7 +25,6 @@ function App() {
     // const debug = $Debug.use((state) => state.isDebug);
     const { startLoading: audioStartLoading } = useAudioPreloader(audios);
     useFontLoader("FHLFont", "font/FHL.ttf");
-
     const { trigger, TransitionComponent } = useCircularTransition(
         undefined,
         0.6,

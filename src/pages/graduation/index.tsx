@@ -115,7 +115,7 @@ export const Graduation: FC<GraduationProps> = ({ trigger }) => {
                 />
             </div>
             <StaggeredText
-                className="absolute flex flex-col w-[90vw] gap-px top-[12%] left-[50%] -translate-x-1/2"
+                className="absolute flex flex-col w-[90vw] gap-px top-[16%] left-[50%] -translate-x-1/2"
                 lines={lines}
             />
             {/* <StaggeredText
