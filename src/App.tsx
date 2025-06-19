@@ -4,6 +4,7 @@ import { useAudio } from "./hooks/useAudio";
 import { AudioProvider } from "./hooks/useAudioEnabled";
 import { useAudioPreloader } from "./hooks/useAudioPreloader";
 import { useCircularTransition } from "./hooks/useCircularTransition";
+import { useFontLoader } from "./hooks/useFontLoader";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
 import { Debug } from "./pages/debug";
@@ -23,6 +24,7 @@ function App() {
     const route = $UI.use((state) => state.route);
     const debug = $Debug.use((state) => state.isDebug);
     const { startLoading: audioStartLoading } = useAudioPreloader(audios);
+    useFontLoader("FHLFont", "font/FHL.ttf");
 
     const { trigger, TransitionComponent } = useCircularTransition(
         undefined,

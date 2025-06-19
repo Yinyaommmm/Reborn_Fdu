@@ -62,7 +62,7 @@ export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
                 </div>
             </div>
             <motion.div
-                className="absolute top-[15vh] right-[10vw] z-30 w-[75vw] bg-[#EBCEBF] h-[45vh] py-[5%] flex items-center justify-center"
+                className="absolute top-[20vh] right-[10vw] z-30 w-[75vw] bg-[#EBCEBF] h-[45vh] py-[5%] flex items-center justify-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 1, duration: 0.8 }}
@@ -78,7 +78,7 @@ export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
                 />
             </motion.div>
             <motion.div
-                className="absolute left-[25vw] top-[51vh] w-[75vw]"
+                className="absolute left-[25vw] top-[56vh] w-[75vw]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 0.8 }}

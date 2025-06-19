@@ -14,7 +14,13 @@ interface StaggeredTextProps extends HTMLMotionProps<"div"> {
 }
 
 export const StaggeredText: FC<StaggeredTextProps> = (props) => {
-    const { lines, tailRightAlign = false, delay = 0, ...rest } = props;
+    const {
+        lines,
+        tailRightAlign = false,
+        delay = 0,
+        className,
+        ...rest
+    } = props;
 
     const containerVariants = {
         hidden: {},
@@ -28,6 +34,7 @@ export const StaggeredText: FC<StaggeredTextProps> = (props) => {
 
     return (
         <motion.div
+            className={twMerge("font-fhl text-blue-950", className)}
             variants={containerVariants}
             initial="hidden"
             animate="visible"
@@ -47,7 +54,7 @@ export const StaggeredText: FC<StaggeredTextProps> = (props) => {
                         className={twMerge(
                             "w-full",
                             idx === lines.length - 1 && tailRightAlign
-                                ? "text-right"
+                                ? "text-right text-[#585858]"
                                 : "text-center",
                         )}
                     >

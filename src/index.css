@@ -21,6 +21,7 @@ body, html {
   --width-decorate: 1px;
   
   --font-cursive: 'CursiveFont';
+  --font-fhl: 'FHLFont';
 }
 
 .game-background {
