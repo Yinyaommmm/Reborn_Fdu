@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { useAudio } from "./hooks/useAudio";
 import { AudioProvider } from "./hooks/useAudioEnabled";
+import { useAudioPreloader } from "./hooks/useAudioPreloader";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
@@ -14,12 +15,14 @@ import { Introduction } from "./pages/introduction";
 import { Launch } from "./pages/launch";
 import { $Debug } from "./store/debug";
 import { $UI } from "./store/ui";
+import { audios } from "./types/audios";
 
 import "./App.css";
 
 function App() {
     const route = $UI.use((state) => state.route);
     const debug = $Debug.use((state) => state.isDebug);
+    const { startLoading: audioStartLoading } = useAudioPreloader(audios);
 
     const { trigger, TransitionComponent } = useCircularTransition(
         undefined,
@@ -37,6 +40,7 @@ function App() {
     );
 
     useEffect(() => {
+        audioStartLoading();
         // GameModule.gamestart();
         const handleContextMenu = (e: Event) => {
             e.preventDefault();
@@ -51,7 +55,7 @@ function App() {
         <>
             <AudioProvider>
                 <div className="fixed top-0 left-0 flex items-center z-[99998]">
-                    Debug:{" "}
+                    Debug v0.1:{" "}
                     <input
                         className="ml-2"
                         type="checkbox"

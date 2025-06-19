@@ -19,7 +19,6 @@ export function useAudioPreloader(urls: string[]) {
             audio.preload = "auto";
             audio.src = isDev ? url : baseUrl + "/" + encodeURIComponent(url);
             audioMapRef.current[url] = audio;
-
             const onLoaded = () => {
                 setLoadedCount((c) => c + 1);
                 cleanup();
@@ -35,6 +34,7 @@ export function useAudioPreloader(urls: string[]) {
 
             audio.addEventListener("loadedmetadata", onLoaded, { once: true });
             audio.addEventListener("error", onError, { once: true });
+            audio.load();
         });
     }, [urls, start]);
 
