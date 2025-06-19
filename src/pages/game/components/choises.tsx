@@ -18,7 +18,7 @@ export const GameChoices: FC = () => {
     const { vw: viewportWidth, vh: viewportHeight } = useViewport();
     const height = Math.ceil(0.08 * viewportHeight);
     const slideDistanceScale = 1;
-    const triggerDistance = viewportWidth / 2;
+    const triggerDistance = viewportWidth / 3;
     const cards = $Data.use((state) => state.cards);
     const endingCard = $Data.use((state) => state.endingCard);
     const ending = $Data.use((state) => state.ending);

@@ -123,7 +123,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
 
     const activeRotate = 8;
     const rotates = [`-${activeRotate}deg`, "-2deg", "-14deg"];
-    const triggerDistance = viewportWidth / 2;
+    const triggerDistance = viewportWidth / 3;
 
     const x = useMotionValue(0);
     const delta = useTransform(x, (value) => {
@@ -339,7 +339,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             setIsAnimating(true);
             setTimeout(() => {
                 setIsAnimating(false);
-            }, 200);
+            }, 300);
         };
 
         window.addEventListener("touchstart", handleTouchStart);
