@@ -15,10 +15,12 @@ const lines = [
     "这一世，你因梦想而绚烂",
     "以勇气作舟，以底气为帆",
     "航向星辰大海",
+    "",
     "谨以此作，献给母校百廿华诞",
     "祝所有老师们桃李满园，教泽绵长",
     "愿全体毕业生乘风破浪，天地宽广",
     "望学弟学妹们传承开创，再续华章",
+    "",
     "——晨曦工作室",
 ];
 
@@ -59,7 +61,12 @@ export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
                     <Image src={getImagePath("petal-2")} square={false} />
                 </div>
             </div>
-            <motion.div className="absolute top-[15vh] right-[10vw] z-30 w-[75vw] bg-[#EBCEBF] h-[45vh] py-[5%] flex items-center justify-center">
+            <motion.div
+                className="absolute top-[15vh] right-[10vw] z-30 w-[75vw] bg-[#EBCEBF] h-[45vh] py-[5%] flex items-center justify-center"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 1, duration: 0.8 }}
+            >
                 <div className="absolute top-[-6px] right-[-6px] w-full h-full border-decorate border-decorate-border border-r-0 border-b-0"></div>
                 <div className="absolute top-[-6px] right-[-6px] h-[45%] w-decorate bg-decorate-border"></div>
                 <div className="absolute bottom-[6px] left-[6px] h-decorate w-[70%] bg-decorate-border"></div>
@@ -67,9 +74,15 @@ export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
                     className="w-full h-full px-[10%] flex flex-col gap-[1%] items-center justify-center"
                     lines={lines}
                     tailRightAlign
+                    delay={2}
                 />
             </motion.div>
-            <div className="absolute left-[25vw] top-[51vh] w-[75vw]">
+            <motion.div
+                className="absolute left-[25vw] top-[51vh] w-[75vw]"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.8 }}
+            >
                 <Image
                     className="absolute top-0 left-0 z-20"
                     src={getImagePath("letter-bottom")}
@@ -80,7 +93,7 @@ export const End: FC<GraduationProps> = ({ trigger, ...rest }) => {
                     src={getImagePath("letter")}
                     square={false}
                 />
-            </div>
+            </motion.div>
         </motion.div>
     );
 };
