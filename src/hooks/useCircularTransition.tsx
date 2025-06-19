@@ -65,6 +65,7 @@ export function useCircularTransition(
                     });
                 }
             }}
+            hideLogo={type === "cards"}
         >
             {type === "cards" && <CardsTransition ref={cardsRef} />}
         </CircleTransition>

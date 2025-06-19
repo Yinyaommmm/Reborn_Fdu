@@ -17,6 +17,7 @@ interface CircleTransitionProps {
     onComplete?: () => void;
     onEnter?: () => void;
     children?: ReactNode;
+    hideLogo?: boolean;
 }
 
 export const CircleTransition: FC<CircleTransitionProps> = ({
@@ -31,6 +32,7 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
     onComplete,
     onEnter,
     children,
+    hideLogo = false,
 }) => {
     const [phase, setPhase] = useState<"enter" | "exit" | null>(null);
     const enterTimer = useRef<number>(null);
@@ -117,9 +119,11 @@ export const CircleTransition: FC<CircleTransitionProps> = ({
             variants={variants}
             transition={{ duration, ease: "easeInOut" }}
         >
-            <div className="absolute top-[80%] left-[60%] w-[40vw]">
-                <Image src={getImagePath("launch-logo")} square={false} />
-            </div>
+            {!hideLogo && (
+                <div className="absolute top-[80%] left-[60%] w-[40vw]">
+                    <Image src={getImagePath("launch-logo")} square={false} />
+                </div>
+            )}
             {children}
         </motion.div>
     );
