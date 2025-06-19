@@ -2,6 +2,7 @@ import { HTMLMotionProps, motion } from "motion/react";
 import { FC, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
+import { IconSkip } from "@/assets";
 import Image from "@/components/image";
 import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
@@ -63,6 +64,17 @@ export const Introduction: FC<IntroductionProps> = (props) => {
             onTouchEnd={onTouchEnd}
             className="w-screen h-screen game-background"
         >
+            <div className="absolute right-[5%] top-[5%] z-[50]">
+                <IconSkip
+                    onClick={(e) => {
+                        trigger?.(e, "birth");
+                    }}
+                    className={twMerge(
+                        "text-4xl transition-colors",
+                        current >= 5 ? "text-[#7897B5]" : "text-white",
+                    )}
+                />
+            </div>
             {Array.from(
                 { length: current > 4 ? 4 : current },
                 (_, i) => i + 1,
