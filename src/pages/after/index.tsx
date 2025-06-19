@@ -27,6 +27,10 @@ export const After: FC<AfterProps> = ({ trigger }) => {
     const [autoPlay, setAutoPlay] = useState<number>(0);
     const containerRef = useRef<HTMLDivElement>(null);
     const autoPlayRef = useRef<NodeJS.Timeout>(undefined);
+    const { play: playTriggerEvent } = useAudio(
+        "audio/06 二阶段事件产生.wav",
+        1,
+    );
 
     useTapHandler(items, setDisplayItems);
 
@@ -69,11 +73,12 @@ export const After: FC<AfterProps> = ({ trigger }) => {
                             clearInterval(autoPlayRef.current);
                         }
                     }
+                    playTriggerEvent();
                     return prev.length < items.length
                         ? [...prev, items[prev.length]]
                         : prev;
                 });
-            }, 1000 / autoPlay);
+            }, 1100 / autoPlay);
         } else {
             if (autoPlayRef.current !== undefined) {
                 clearInterval(autoPlayRef.current);

@@ -20,5 +20,5 @@ export const $UI = model<UIModel>("UI", {
     messageContent: "",
     messageType: "success",
     messageDisplay: false,
-    route: "launch",
+    route: "after",
 });
