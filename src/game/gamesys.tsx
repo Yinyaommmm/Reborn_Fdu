@@ -80,10 +80,9 @@ export class EventForShow {
     mainText: ReactNode = "这里是主要内容";
     choiceAText: string = "A选项文本";
     choiceBText: string = "B选项文本";
-    // endingAText: string[] = ["A结局1", "A结局2"];
-    // endingBText: string = "B结局";
     highLightChoice: "A" | "AB" | "B" = "A";
     electionBuff: boolean = false;
+    beidaipants: boolean = false;
 }
 export class EventLog {
     // 时间、事件、选择、结果
@@ -210,7 +209,11 @@ export class StandardEvent {
         return this._readableEvt.upgrade;
     }
 
-    forShow(player: Player, year: number): EventForShow {
+    forShow(
+        player: Player,
+        year: number,
+        itemManager: ItemManager,
+    ): EventForShow {
         const e = new EventForShow();
         e.category = this._readableEvt.category;
         e.title = this._readableEvt.title;
@@ -269,6 +272,9 @@ export class StandardEvent {
         }
 
         e.electionBuff = this.doesHaveElectionBuff(player);
+        e.beidaipants =
+            itemManager.hasItem("Middle Part Pants") &&
+            e.category === EventCategory.SZTZ;
         return e;
     }
 
@@ -661,7 +667,11 @@ export class GameSystem {
     }
     // 前端展示事件调用该函数，根据信息去绘制展示该活动的页面
     showEvt(evtID: number) {
-        return this.allEvents[evtID].forShow(this.player, this.year);
+        return this.allEvents[evtID].forShow(
+            this.player,
+            this.year,
+            this.itemManager,
+        );
     }
     resoluteEvt(
         evtID: number,
@@ -671,8 +681,11 @@ export class GameSystem {
     ) {
         this.contextLog.push({
             evtID,
-            evtTitle: this.allEvents[evtID].forShow(this.player, this.year)
-                .title,
+            evtTitle: this.allEvents[evtID].forShow(
+                this.player,
+                this.year,
+                this.itemManager,
+            ).title,
             changeProp: {},
         });
         let res: ResoluteEventRes;
