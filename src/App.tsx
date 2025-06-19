@@ -37,7 +37,7 @@ function App() {
     } = useCircularTransition(undefined, 0.6, 2, "cards");
     const { play: playBackgroundMusic } = useAudio(
         "audio/今生永相伴.mp3",
-        0.5,
+        0.4,
         true,
     );
 
