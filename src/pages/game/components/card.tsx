@@ -1,7 +1,7 @@
 import { HTMLMotionProps, motion } from "motion/react";
 import { FC, ReactNode } from "react";
 import { twMerge } from "tailwind-merge";
-
+import "./backface.css";
 export interface GameCardProps extends HTMLMotionProps<"div"> {
     backgroundColor?: string;
     children?: ReactNode;
@@ -36,7 +36,7 @@ const GameCard: FC<GameCardProps> = (props) => {
             {...rest}
         >
             <div
-                className="absolute w-full h-full backface-hidden flex items-center justify-center"
+                className="absolute w-full h-full backface-hidden flex items-center justify-center backface-all-hidden"
                 style={{ backgroundColor }}
             >
                 {children}
@@ -58,7 +58,7 @@ const GameCard: FC<GameCardProps> = (props) => {
             </div>
 
             <div
-                className="absolute w-full h-full backface-hidden flex items-center justify-center rotate-y-180"
+                className="absolute w-full h-full backface-hidden flex items-center justify-center rotate-y-180 backface-all-hidden"
                 style={{ backgroundColor }}
             >
                 {backChildren ?? (

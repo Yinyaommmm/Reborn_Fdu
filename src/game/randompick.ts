@@ -6,7 +6,7 @@ import { TimelineModule } from "./timeline";
 import { filterEvts, isMainPropEvt, isReverseMainPropEvt } from "./util";
 import { EventCategory } from "../type/type";
 
-import { Logger } from "@/logger/logger";
+// import { Logger } from "@/logger/logger";
 
 // 培养方案，竞选评优，主属性，非主属性，素质拓展
 type EventPoolKey = "pyfa" | "jxpy" | "main" | "nonMain" | "sztz";
@@ -30,7 +30,7 @@ export class RandomPickModule {
         nonMain: [],
         sztz: [],
     };
-    private logger = new Logger("RANDOMPICK", true);
+    // private logger = new Logger("RANDOMPICK", true);
     private configPerYear: PoolConfig[] = [
         { pyfa: 2, jxpy: 0, main: 2, nonMain: 1, sztz: 2 },
         { pyfa: 2, jxpy: 1, main: 2, nonMain: 1, sztz: 1 },

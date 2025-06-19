@@ -66,7 +66,7 @@ export const GoCard: FC<GoCardProps> = (props) => {
                 }}
                 {...rest}
             >
-                <div className="backface-hidden">
+                <div className="backface-hidden backface-all-hidden">
                     <Image
                         className="absolute bottom-0 left-0 w-full"
                         src={getImagePath(
@@ -140,7 +140,7 @@ export const GoCard: FC<GoCardProps> = (props) => {
                     <div className="absolute -top-[3%] -left-[2%] w-full h-full border-decorate border-decorate-border border-b-0 border-r-0" />
                     <div className="absolute bottom-[3%] -left-[2%] w-[30%] h-decorate bg-decorate-border" />
                 </div>
-                <div className="backface-hidden transform-3d rotate-y-180 absolute top-0 left-0 w-full h-full">
+                <div className="backface-hidden backface-all-hidden transform-3d rotate-y-180 absolute top-0 left-0 w-full h-full">
                     <Image
                         className="absolute bottom-0 left-0 w-full"
                         src={getImagePath(
