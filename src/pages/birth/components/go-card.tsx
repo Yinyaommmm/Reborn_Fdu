@@ -19,9 +19,9 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
 
     return (
         <motion.div
-            className="fixed bg-[#9DCE9C] aspect-[16/10] h-[24vh] translate-x-1/2 translate-y-1/2"
+            className="fixed bg-[#9DCE9C] aspect-[16/10] h-[24vh] translate-x-1/2 translate-y-[105%]"
             initial={{ bottom: -200, right: 200, rotate: 0 }}
-            animate={{ bottom: vh / 2, right: vw / 2, rotate: 8 }}
+            animate={{ bottom: vh / 2, right: vw / 2, rotate: 6 }}
             transition={{ type: "spring", duration: 0.8 }}
             {...rest}
         >
@@ -30,7 +30,7 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
                 src={getImagePath("card-decoration")}
                 square={false}
             />
-            <div className="absolute top-[10%] right-[20%] font-cursive text-white">
+            <div className="absolute top-[10%] right-[20%] font-cursive text-white text-[26px]">
                 学生卡
             </div>
             <div className="px-3 py-4 flex items-end">
@@ -44,11 +44,11 @@ export const GoCard: FC<HTMLMotionProps<"div">> = (props) => {
                         adjustWidth={false}
                         square={false}
                     >
-                        <Image
-                            className="absolute -bottom-[20%] left-[50%] w-[50%]"
+                        {/* <Image
+                            className="absolute -bottom-[40%] left-[250%] w-[50%]"
                             src={getImagePath("card-go")}
                             square={false}
-                        />
+                        /> */}
                     </Image>
                 </div>
                 <div className="text-xs mb-4 ml-6">
