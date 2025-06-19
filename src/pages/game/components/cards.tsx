@@ -24,6 +24,7 @@ import {
 } from "@/hooks/useCircularTransition";
 import { useViewport } from "@/hooks/useViewPort";
 import { gameModule, PickRes } from "@/packages/game-module";
+import { GoCard } from "@/pages/birth/components/go-card";
 import { $Data } from "@/store/data";
 import { $Game } from "@/store/game";
 import { EventCategory } from "@/type/type";
@@ -139,6 +140,7 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
     const [title, setTitle] = useState<string>("");
     const initialRef = useRef<boolean>(false);
     const newSemesterRef = useRef<boolean>(false);
+    const [endCard, setEndCard] = useState<boolean>(false);
 
     const handleChoose = (delta: FiveProps) => {
         $Data.update("choose", (draft) => {
@@ -318,12 +320,12 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
             }
             if (!gameModule.alive()) {
                 console.log("trigger 游戏结束");
-
                 $Data.update("update ending", (draft) => {
                     draft.eduDestination = gameModule.end().eduDestination;
                     draft.gradDestination = gameModule.end().gradDestination;
                 });
-                triggerUI?.(e, "graduation");
+                setEndCard(true);
+                // triggerUI?.(e, "graduation");
             }
             if (cards.length === 0 && gameModule.alive()) {
                 trigger(e);
@@ -447,6 +449,14 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                         </div>
                     </GameCard>
                 ))}
+                {endCard && (
+                    <GoCard
+                        isGraduate
+                        onClick={(e) => {
+                            triggerUI?.(e, "graduation");
+                        }}
+                    />
+                )}
             </AnimatePresence>
         </div>
     );
