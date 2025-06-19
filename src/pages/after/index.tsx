@@ -4,7 +4,7 @@ import { twMerge } from "tailwind-merge";
 
 import { useTapHandler } from "./hooks/useTapHandler";
 
-import { IconArrowButton } from "@/assets";
+import { IconArrowButton, IconSkip } from "@/assets";
 import Image from "@/components/image";
 import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
@@ -146,7 +146,7 @@ export const After: FC<AfterProps> = ({ trigger }) => {
                 </div>
             </div>
             <div className="flex items-center justify-end -translate-y-[100%]">
-                <div className="mr-[15%] flex items-end">
+                <div className="mr-[2%] flex items-end">
                     <IconArrowButton
                         className={twMerge(
                             "text-5xl -scale-x-100",
@@ -162,12 +162,13 @@ export const After: FC<AfterProps> = ({ trigger }) => {
                 </div>
                 {items.length === displayItems.length && (
                     <div
+                        className="mr-[5%]"
                         onClick={(e) => {
                             playClick();
                             trigger?.(e, "end");
                         }}
                     >
-                        跳转
+                        <IconSkip className="text-6xl text-[#7897B5] transition-colors" />
                     </div>
                 )}
             </div>
