@@ -133,7 +133,6 @@ export class RandomPickModule {
         // 随机选择一个池
         const chosenPoolKey = this.randomPickArr(availablePools);
         const chosenPool = this.pools[chosenPoolKey];
-        console.log("dodo");
         const pickedEvent = this.weightedRandomPickArr(
             chosenPool,
             chosenPoolKey,
@@ -197,7 +196,6 @@ export class RandomPickModule {
                 break;
             }
         }
-        console.log("last5", this.lastFiveEvtIDs.toArray());
         if (this.lastFiveEvtIDs.isInQueue(finalEvt!.getID())) {
             console.warn(
                 `与最近5次产生了重复但是还选${finalEvt!.getID()}，当前池子${poolKey},rand/totalWeight: ${rand}/${totalWeight}具有的事件👉`,

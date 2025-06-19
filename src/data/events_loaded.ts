@@ -1126,7 +1126,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "A",
     "prerequisites": [],
-    "baseProbability": "HARD",
+    "baseProbability": "VERYHARD",
     "upgrade": false,
     "choiceA": "报名参与卓博计划（本选项可能开启研究生阶段）！",
     "endingA": [
@@ -1201,7 +1201,7 @@ export const events: ReadableEvent[] = [
     "prerequisites": [
       14
     ],
-    "baseProbability": "HARD",
+    "baseProbability": "VERYHARD",
     "upgrade": false,
     "choiceA": "报名参加人才工程，辅导员+学术max（本选项可能开启研究生阶段）！",
     "endingA": [
@@ -1274,7 +1274,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "A",
     "prerequisites": [],
-    "baseProbability": "HARD",
+    "baseProbability": "VERYHARD",
     "upgrade": false,
     "choiceA": "准备各项材料，向学院提交报名申请（本选项可能开启研究生阶段）。",
     "endingA": [
@@ -1347,7 +1347,7 @@ export const events: ReadableEvent[] = [
     },
     "mainProp": "A",
     "prerequisites": [],
-    "baseProbability": "HARD",
+    "baseProbability": "VERYHARD",
     "upgrade": false,
     "choiceA": "保不了就all in 考，3个月上岸F大不是梦（本选项可能开启研究生阶段）。",
     "endingA": [
