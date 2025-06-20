@@ -3,6 +3,7 @@ import { FC, useEffect, useState } from "react";
 import { twMerge } from "tailwind-merge";
 
 import Image from "@/components/image";
+import { EDUDESTINATION, GRADDESTINATION } from "@/game/player";
 import { useAudio } from "@/hooks/useAudio";
 import { useViewport } from "@/hooks/useViewPort";
 import { $Data } from "@/store/data";
@@ -10,6 +11,29 @@ import { getImagePath } from "@/types/images";
 
 interface GoCardProps extends HTMLMotionProps<"div"> {
     isGraduate?: boolean;
+}
+
+function beautifyEDU(edu: EDUDESTINATION) {
+    if (edu === "本科") {
+        return "学士";
+    } else {
+        return "博士";
+    }
+}
+function beautifyGRAD(grad: GRADDESTINATION) {
+    if (grad === "企业") {
+        return "企业大厂";
+    } else if (grad === "辅导员") {
+        return "专职辅导员";
+    } else if (grad === "青椒") {
+        return "青年教师";
+    } else if (grad === "选调") {
+        return "选调生";
+    } else if (grad === "灵活就业") {
+        return "灵活就业";
+    } else {
+        return grad;
+    }
 }
 
 export const GoCard: FC<GoCardProps> = (props) => {
@@ -155,11 +179,15 @@ export const GoCard: FC<GoCardProps> = (props) => {
                             </div>
                             <div>
                                 毕业学历:{" "}
-                                <span className="ml-2">{eduDestination}</span>
+                                <span className="ml-2">
+                                    {beautifyEDU(eduDestination)}
+                                </span>
                             </div>
                             <div>
                                 毕业去向:{" "}
-                                <span className="ml-2">{gradDestination}</span>
+                                <span className="ml-2">
+                                    {beautifyGRAD(gradDestination)}
+                                </span>
                             </div>
                         </div>
                     </div>
