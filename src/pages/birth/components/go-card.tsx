@@ -66,30 +66,31 @@ export const GoCard: FC<GoCardProps> = (props) => {
                 }}
                 {...rest}
             >
-                <div className="backface-hidden backface-all-hidden">
+                <div
+                    className={twMerge(
+                        "backface-hidden backface-all-hidden absolute top-0 left-0 w-full h-full",
+                        "bg-[#9DCE9C]",
+                    )}
+                >
                     <Image
                         className="absolute bottom-0 left-0 w-full"
-                        src={getImagePath(
-                            graduate
-                                ? "card-decoration-blue"
-                                : "card-decoration",
-                        )}
+                        src={getImagePath("card-decoration")}
                         square={false}
                     />
                     <div className="absolute top-[10%] right-[20%] font-cursive text-white text-[26px]">
-                        {graduate ? "校友卡" : "学生卡"}
+                        学生卡
                     </div>
                     <div className="px-3 py-4 flex items-end">
-                        <div className="p-1 w-[30%]">
+                        <div className="p-1 w-[30%] box-content">
                             <Image
-                                className="relative p-1 bg-white h-full aspect-[3/4]"
+                                className="relative p-1 bg-white h-full aspect-[3/4] "
                                 src={getImagePath(
                                     sex === 0
                                         ? "portrait-male"
                                         : "portrait-female",
                                 )}
-                                adjustHeight
-                                adjustWidth={false}
+                                adjustHeight={false}
+                                adjustWidth={true}
                                 square={false}
                             >
                                 {/* <Image
@@ -100,70 +101,45 @@ export const GoCard: FC<GoCardProps> = (props) => {
                             </Image>
                         </div>
                         <div className="text-xs mb-1 ml-6">
-                            {!graduate && (
-                                <div>
-                                    学号:{" "}
-                                    <span className="ml-2">52019050514</span>
-                                </div>
-                            )}
-                            {!graduate && (
-                                <div>
-                                    性别:{" "}
-                                    <span className="ml-2">
-                                        {sex === 0 ? "男" : "女"}
-                                    </span>
-                                </div>
-                            )}
-                            {graduate && (
-                                <div>
-                                    入校年份: <span className="ml-2">2025</span>
-                                </div>
-                            )}
-                            {graduate && (
-                                <div>
-                                    毕业学历:{" "}
-                                    <span className="ml-2">
-                                        {eduDestination}
-                                    </span>
-                                </div>
-                            )}
-                            {graduate && (
-                                <div>
-                                    毕业去向:{" "}
-                                    <span className="ml-2">
-                                        {gradDestination}
-                                    </span>
-                                </div>
-                            )}
+                            <div>
+                                学号: <span className="ml-2">52019050514</span>
+                            </div>
+                            <div>
+                                性别:{" "}
+                                <span className="ml-2">
+                                    {sex === 0 ? "男" : "女"}
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <div className="absolute -top-[3%] -left-[2%] w-full h-full border-decorate border-decorate-border border-b-0 border-r-0" />
                     <div className="absolute bottom-[3%] -left-[2%] w-[30%] h-decorate bg-decorate-border" />
                 </div>
-                <div className="backface-hidden backface-all-hidden transform-3d rotate-y-180 absolute top-0 left-0 w-full h-full">
+                <div
+                    className={twMerge(
+                        "backface-hidden backface-all-hidden transform-3d rotate-y-180 absolute top-0 left-0 w-full h-full",
+                        "bg-[#7392BF]",
+                    )}
+                >
                     <Image
                         className="absolute bottom-0 left-0 w-full"
-                        src={getImagePath(
-                            graduate
-                                ? "card-decoration-blue"
-                                : "card-decoration",
-                        )}
+                        src={getImagePath("card-decoration-blue")}
                         square={false}
                     />
                     <div className="absolute top-[10%] right-[20%] font-cursive text-white text-[26px]">
-                        {graduate ? "校友卡" : "学生卡"}
+                        校友卡
                     </div>
                     <div className="px-3 py-4 flex items-end">
                         <div className="p-1 w-[30%]">
                             <Image
-                                className="relative p-1 bg-white h-full aspect-[3/4]"
+                                className="relative p-1 bg-white h-full aspect-[3/4] "
                                 src={getImagePath(
                                     sex === 0
                                         ? "portrait-male"
                                         : "portrait-female",
                                 )}
-                                adjustHeight
-                                adjustWidth={false}
+                                adjustHeight={false}
+                                adjustWidth={true}
                                 square={false}
                             >
                                 {/* <Image
@@ -174,41 +150,17 @@ export const GoCard: FC<GoCardProps> = (props) => {
                             </Image>
                         </div>
                         <div className="text-xs mb-1 ml-6">
-                            {!graduate && (
-                                <div>
-                                    学号:{" "}
-                                    <span className="ml-2">52019050514</span>
-                                </div>
-                            )}
-                            {!graduate && (
-                                <div>
-                                    性别:{" "}
-                                    <span className="ml-2">
-                                        {sex === 0 ? "男" : "女"}
-                                    </span>
-                                </div>
-                            )}
-                            {graduate && (
-                                <div>
-                                    入校年份: <span className="ml-2">2025</span>
-                                </div>
-                            )}
-                            {graduate && (
-                                <div>
-                                    毕业学历:{" "}
-                                    <span className="ml-2">
-                                        {eduDestination}
-                                    </span>
-                                </div>
-                            )}
-                            {graduate && (
-                                <div>
-                                    毕业去向:{" "}
-                                    <span className="ml-2">
-                                        {gradDestination}
-                                    </span>
-                                </div>
-                            )}
+                            <div>
+                                入校年份: <span className="ml-2">2025</span>
+                            </div>
+                            <div>
+                                毕业学历:{" "}
+                                <span className="ml-2">{eduDestination}</span>
+                            </div>
+                            <div>
+                                毕业去向:{" "}
+                                <span className="ml-2">{gradDestination}</span>
+                            </div>
                         </div>
                     </div>
                     <div className="absolute -top-[3%] -left-[2%] w-full h-full border-decorate border-decorate-border border-b-0 border-r-0" />
