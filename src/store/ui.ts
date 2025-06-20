@@ -8,7 +8,8 @@ export type UIRoute =
     | "after"
     | "dev"
     | "introduction"
-    | "end";
+    | "end"
+    | "acknowledgement";
 export interface UIModel {
     messageContent: string;
     messageType: "success" | "danger" | "warning";
