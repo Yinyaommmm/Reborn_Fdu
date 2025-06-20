@@ -324,8 +324,11 @@ const GameCards: FC<GameCardsProps> = ({ trigger: triggerUI }) => {
                     draft.eduDestination = gameModule.end().eduDestination;
                     draft.gradDestination = gameModule.end().gradDestination;
                 });
-                setEndCard(true);
-                // triggerUI?.(e, "graduation");
+                if (gameModule.end().gradDestination === "退学") {
+                    triggerUI?.(e, "graduation");
+                } else {
+                    setEndCard(true);
+                }
             }
             if (cards.length === 0 && gameModule.alive()) {
                 trigger(e);
