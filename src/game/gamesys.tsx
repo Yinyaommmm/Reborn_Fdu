@@ -290,7 +290,12 @@ export class StandardEvent {
     }
 
     public experienceCount = 0;
-    specialEffect(resoluteRes: ResoluteEventRes, player: Player, year: number) {
+    specialEffect(
+        resoluteRes: ResoluteEventRes,
+        player: Player,
+        year: number,
+        choice: "A" | "B",
+    ) {
         if (this.getID() === 14 && isSuccess(resoluteRes.resType)) {
             // 入党志愿书修改党员信息
             player.isCCP = true;
@@ -336,8 +341,8 @@ export class StandardEvent {
             }
             this.logger.info(19 + "触发选调");
         }
-        if (this.getID() === 20 && isSuccess(resoluteRes.resType)) {
-            // 大厂校招
+        if (this.getID() === 20 && choice === "A") {
+            // 大厂校招,选A哪怕失败也是
             player.gradDestination = "企业";
             this.logger.info(20 + "触发企业");
         }
@@ -371,8 +376,8 @@ export class StandardEvent {
             player.specialTag.add(跳过招聘会);
             this.logger.info(89 + "触发青椒");
         }
-        if (this.getID() === 90 && isSuccess(resoluteRes.resType)) {
-            // 招聘会
+        if (this.getID() === 90 && choice === "A") {
+            // 招聘会，哪怕选A失败也是
             player.gradDestination = "企业";
             this.logger.info(90 + "触发企业");
         }
@@ -508,7 +513,7 @@ export class GameSystem {
             }
         }
         if (
-            [13, 21, 22, 27, 88, 124].map((i) => i - 1).includes(evtID) &&
+            [13, 21, 22, 27, 88, 91, 124].map((i) => i - 1).includes(evtID) &&
             evtResType.resType === "F"
         ) {
             // 这里是对特殊事件的判定-1是为了读取的与excel的不一样，失败为Pass
@@ -714,7 +719,12 @@ export class GameSystem {
         this.allEvents[evtID].experienceCount++; // 经历次数
         if (isSuccess(res.resType)) this.timelineMod.succEventIDs.add(evtID);
         // 特殊影响： 党员身份√、毕业去向、升学去向、删除后续活动
-        this.allEvents[evtID].specialEffect(res, this.player, this.getYear());
+        this.allEvents[evtID].specialEffect(
+            res,
+            this.player,
+            this.getYear(),
+            choice,
+        );
         // 清空lastItemID
         this.itemManager.resetLastItemID();
         return res;
