@@ -7,6 +7,7 @@ export const audios = [
     getAudioPath("audio/04 成功.mp3"),
     getAudioPath("audio/05 失败.wav"),
     getAudioPath("audio/06 二阶段事件产生.wav"),
+    getAudioPath("audio/07 毕业快乐.MP3v"),
     getAudioPath("audio/今生永相伴.mp3"),
     getAudioPath("audio/撞车.mp3"),
     getAudioPath("audio/闹铃.mp3"),

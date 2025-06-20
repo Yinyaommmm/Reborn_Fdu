@@ -13,6 +13,7 @@ import { End } from "../end";
 import { IconSkip } from "@/assets";
 import Image from "@/components/image";
 import { StaggeredText } from "@/components/staggered-text";
+import { useAudio } from "@/hooks/useAudio";
 import { CircularTransitionTrigger } from "@/hooks/useCircularTransition";
 import { $Data } from "@/store/data";
 import { getImagePath } from "@/types/images";
@@ -46,6 +47,7 @@ const hat3Points = 18;
 export const Graduation: FC<GraduationProps> = ({ trigger }) => {
     const gradDestination = $Data.use((state) => state.gradDestination);
     const triggerRef = useRef<NodeJS.Timeout>(undefined);
+    const { play: playGraduation } = useAudio("audio/07 毕业快乐.MP3", 1);
 
     const x1 = useMotionValue(0);
     const y1 = useTransform(
@@ -78,6 +80,7 @@ export const Graduation: FC<GraduationProps> = ({ trigger }) => {
 
     useEffect(() => {
         setTimeout(() => {
+            playGraduation();
             animate(x1, 140, { duration: 2, ease: "easeInOut" });
             animate(x2, -160, { duration: 2, ease: "easeInOut" });
             animate(x3, -170, { duration: 2, ease: "easeInOut" });
