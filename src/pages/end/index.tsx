@@ -56,7 +56,7 @@ export const End: FC<GraduationProps> = ({
         <motion.div
             className="w-screen h-screen flex items-center justify-center game-background"
             onClick={(e) => {
-                trigger?.(e, "launch");
+                trigger?.(e, "acknowledgement");
             }}
             {...rest}
         >

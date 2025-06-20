@@ -85,7 +85,7 @@ export const Graduation: FC<GraduationProps> = ({ trigger }) => {
     }, []);
 
     if (gradDestination === "退学") {
-        return <End dropout />;
+        return <End trigger={trigger} dropout />;
     }
 
     return (

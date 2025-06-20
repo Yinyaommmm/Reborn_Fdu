@@ -5,6 +5,7 @@ import { useAudio } from "./hooks/useAudio";
 import { useAudioPreloader } from "./hooks/useAudioPreloader";
 import { useCircularTransition } from "./hooks/useCircularTransition";
 import { useFontLoader } from "./hooks/useFontLoader";
+import { Acknowledgement } from "./pages/acknowledgement";
 import { After } from "./pages/after";
 import { Birth } from "./pages/birth";
 import { Dev } from "./pages/dev";
@@ -103,7 +104,10 @@ function App() {
                     exit={{ opacity: 0, display: "none" }}
                 />
             )}
-            {route === "dev" && <Dev />}
+            {route === "dev" && <Dev key="Dev" />}
+            {route === "acknowledgement" && (
+                <Acknowledgement key="Acknowledgement" trigger={trigger} />
+            )}
         </>
     );
 }
