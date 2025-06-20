@@ -89,6 +89,9 @@ export const Graduation: FC<GraduationProps> = ({ trigger }) => {
                 animate(x3, -170, { duration: 2, ease: "easeInOut" });
             }, 9000);
         }
+        return () => {
+            if (timeRef.current) clearTimeout(timeRef.current);
+        };
     }, [gradDestination]);
 
     if (gradDestination === "退学") {
