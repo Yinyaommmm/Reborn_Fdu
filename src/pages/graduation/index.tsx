@@ -48,6 +48,7 @@ export const Graduation: FC<GraduationProps> = ({ trigger }) => {
     const gradDestination = $Data.use((state) => state.gradDestination);
     const triggerRef = useRef<NodeJS.Timeout>(undefined);
     const { play: playGraduation } = useAudio("audio/07 毕业快乐.MP3", 1);
+    const timeRef = useRef<NodeJS.Timeout>(undefined);
 
     const x1 = useMotionValue(0);
     const y1 = useTransform(
@@ -79,13 +80,16 @@ export const Graduation: FC<GraduationProps> = ({ trigger }) => {
     const opacity3 = useTransform(x3, [0, -160, -170], [1, 1, 0]);
 
     useEffect(() => {
-        setTimeout(() => {
-            playGraduation();
-            animate(x1, 140, { duration: 2, ease: "easeInOut" });
-            animate(x2, -160, { duration: 2, ease: "easeInOut" });
-            animate(x3, -170, { duration: 2, ease: "easeInOut" });
-        }, 9000);
-    }, []);
+        if (timeRef.current) clearTimeout(timeRef.current);
+        if (gradDestination) {
+            timeRef.current = setTimeout(() => {
+                playGraduation();
+                animate(x1, 140, { duration: 2, ease: "easeInOut" });
+                animate(x2, -160, { duration: 2, ease: "easeInOut" });
+                animate(x3, -170, { duration: 2, ease: "easeInOut" });
+            }, 9000);
+        }
+    }, [gradDestination]);
 
     if (gradDestination === "退学") {
         return <End trigger={trigger} dropout />;
