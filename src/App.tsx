@@ -86,7 +86,7 @@ function App() {
                 <Graduation key="Graduation" trigger={trigger} />
             )}
             {route === "after" && <After key="After" trigger={trigger} />}
-            {route === "end" && <End />}
+            {route === "end" && <End trigger={trigger} />}
             {route === "launch" && (
                 <Launch
                     key="Launch"
